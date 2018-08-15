@@ -1,0 +1,9 @@
+Changelog:
+	Version Learn_0.2.0.131023
+		1.添加logback日志管理
+		
+	Version Learn_0.1.0.131021
+		1.添加maven
+
+	Version InfoAir-FBMS_3.156.8.131011 (2013-10-11)
+	

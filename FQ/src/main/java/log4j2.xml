@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration monitorInterval="180"
+	packages="cn.xxx.thread.common.log">
+
+	<properties>
+		<property name="LOG_HOME">${sys:catalina.base}/logs</property>
+		<property name="AUDIT_PATTERN">
+			%-5p^|%d{yyyy-MM-dd HH:mm:ss,SSS}^|thread^|%m%n
+		</property>
+		<property name="KEPLER_OUT_PATTERN">
+			%d{yyyy-MM-dd HH:mm:ss,SSS} (%t)[%C#%M:%L] %-5p %m%n
+		</property>
+		<property name="MONITOR_PATTERN">
+			%-5p^|%d{yyyy-MM-dd HH:mm:ss,SSS}^|kepler^|%C#%M:%L^|%m^|%t%n
+		</property>
+		<property name="CONSOLE_MONITOR_PATTERN">
+			%-5p^|%d{yyyy-MM-dd HH:mm:ss,SSS}^|thread^|%C#%M:%L^|-^|-^|-^|-^|%m^|%t%n
+		</property>
+	</properties>
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<!-- 控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） -->
+			<!-- <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY" /> -->
+			<!-- 这个都知道是输出日志的格式 -->
+			<PatternLayout pattern="${KEPLER_OUT_PATTERN}"/>
+		</Console>  
+		
+		<RollingFile name="RootMonitorLog" fileName="C:\Users\FengQing\Desktop\新建文件夹 (5)/kepler.monitor.log"
+			immediateFlush="false" filePattern="${LOG_HOME}/kepler.monitor.log.%d{yyyy-MM-dd}"
+			append="true" bufferedIO="true">
+			<PatternLayout pattern="${CONSOLE_MONITOR_PATTERN}" />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+
+		<!-- linjun 2016-07-12 根日志定位为WARN，确保不输出杂七杂八的日志 -->
+		<!-- <Root level="WARN" includeLocation="true"> <AppenderRef ref="Console" /> </Root> -->
+
+ 		<Logger name="learn.log.classify.NamedHierarchy" level="ERROR">
+			<AppenderRef ref="Console" />
+		</Logger>
+
+		<Logger name="learn.log.classify.HelloWorld" level="ERROR" additivity="true" >
+			<!-- <AppenderRef ref="Console" /> -->
+		</Logger>
+
+		<Root level="TRACE" includeLocation="true" >
+			 <AppenderRef ref="Console" /> 
+		</Root>
+	</Loggers>
+</Configuration>

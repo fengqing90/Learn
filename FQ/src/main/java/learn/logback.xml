@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+debug		调试模式
+scan		当配置文件修改后自动重新加载
+scanPeriod	属性控制扫描周期，其值可以带时间单位，包括：milliseconds、seconds、minutes和hours。
+ -->
+<configuration debug="true" scan="true" scanPeriod="3 seconds">
+	<timestamp key="bySecond" datePattern="yyyy-MM-dd HH:mm:ss"/>
+	<timestamp key="byDate" datePattern="yyyy-MM-dd"/>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<Pattern>${bySecond} [%thread] %-5level %logger{36} %method  - %msg%n</Pattern>
+		</encoder>
+		<!-- <layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>${bySecond} [%thread] %-5level %logger{36} %method - %msg%n</Pattern>
+		</layout> -->
+	</appender>
+	 
+	<appender name="FILE_DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${catalina.home}/logs/Learn_DEBUG.log</file>
+		<append>true</append>
+		<!-- 时间策略，每日以 fileNamePattern中的格式储存每日日志-->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${catalina.home}/logs/Learn_DEBUG.%d{yyyy-MM-dd}.log</fileNamePattern>
+		</rollingPolicy>
+		<!-- 过滤，只需要debug级别log -->
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>debug</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		
+		
+		<!-- 和encoder类似  -->
+		<!-- <layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>${bySecond} [%thread] %-5level %logger{36} %method - %msg%n</Pattern>
+		</layout> -->
+		
+		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder by default 
+			PatternLayoutEncoder是唯一有用的encoder，它基本上是封装了PatternLayout，让PatternLayout负责大多数工作
+			6. 	Encoder负责两件事，一是把事件转换为字节数组，二是把字节数组写入输出流。encoder不但可以完全控制待写出的字节的格式，而且可以控制字节何时及是否被写出。
+				在logback 0.9.19版之前没有encoder。Layout，只负责把事件转换为字符串。此外，因为layout不能控制事件何时被写出，所以不能成批地聚集事件。
+				相比之下，encoder不但可以完全控制待写出的字节的格式，而且可以控制字节何时及是否被写出。
+				目前，PatternLayoutEncoder是唯一有用的encoder，它基本上是封装了PatternLayout，让PatternLayout负责大多数工作
+				对于console 同样no longer admits a layout as a sub-component, set an encoder instead.
+
+			对于这个变化总的来说：既然PatternLayout是最常用的layout，logback便提供了PatternLayoutEncoder，它扩展了LayoutWrappingEncoder，且仅使用PatternLayout。
+			从logback 0.9.19版起，FileAppender或其子类在只要用到PattternLayout时，都必须换成PatternLayoutEncoder。
+			-->
+		<encoder>
+			<Pattern>${bySecond} [%thread] %-5level %logger{36} %method  - %msg%n</Pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="FILE_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${catalina.home}/logs/Learn_INFO.log</file>
+		时间策略，每日以 fileNamePattern中的格式储存每日日志
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${catalina.home}/logs/Learn_INFO.%d{yyyy-MM-dd}.log</fileNamePattern>
+		</rollingPolicy>
+		
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		
+		<encoder>
+			<Pattern>${bySecond} [%thread] %-5level %logger{36} %method - %msg%n</Pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="FILE_WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${catalina.home}/logs/Learn_WARN.log</file>
+		时间策略，每日以 fileNamePattern中的格式储存每日日志
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${catalina.home}/logs/Learn_WARN.%d{yyyy-MM-dd}.log</fileNamePattern>
+		</rollingPolicy>
+		
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>WARN</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<encoder>
+			<Pattern>${bySecond} [%thread] %-5level %logger{36} %method - %msg%n</Pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="FILE_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${catalina.home}/logs/Learn_ERROR.log</file>
+		时间策略，每日以 fileNamePattern中的格式储存每日日志
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${catalina.home}/logs/Learn_ERROR.%d{yyyy-MM-dd}.log</fileNamePattern>
+		</rollingPolicy>
+		
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<encoder>
+			<Pattern>${bySecond} [%thread] %-5level %logger{36} %method - %msg%n</Pattern>
+		</encoder>
+	</appender>
+	
+	<!-- 
+	 日志记录到数据 
+	 @link http://logback.qos.ch/manual/appenders.html#DBAppender
+	 These three tables are logging_event, logging_event_property and logging_event_exception. 
+	 They must exist before DBAppender can be used. Logback ships with SQL scripts that will create the tables. 
+	 They can be found under the logback-classic/src/main/java/ch/qos/logback/classic/db/script folder.
+	 -->
+     <appender name="DB" class="ch.qos.logback.classic.db.DBAppender">
+        <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+            <driverClass>com.mysql.jdbc.Driver</driverClass>
+            <url>jdbc:mysql://localhost:3306/oa?useUnicode=true&amp;characterEncoding=UTF-8</url>
+           	<user>root</user>
+            <password>root</password>
+        </connectionSource>
+     </appender> 
+ 
+	<!-- 设置输出日志级别 -->
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE_DEBUG"/>
+		<appender-ref ref="FILE_INFO"/>
+		<appender-ref ref="FILE_WARN"/>
+		<appender-ref ref="FILE_ERROR"/>
+		<appender-ref ref="DB"/>
+	</root>
+	<consolePlugin />
+</configuration>

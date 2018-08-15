@@ -1,0 +1,7 @@
+1）原始需求是任何人可以操作信息的create，update，delete，query操作。
+
+至此，没有涉及到cglib的内容，因为需求太简单了，但是接下来，需求发生了改变，要求：
+
+2）只有一个叫“maurice”的用户登录，才允许对信息进行create，update，delete，query的操作。
+怎么办？难道在每个方法前，都加上一个权限判断吗？这样重复逻辑太多了，于是乎想到了Proxy（代理模式），但是原先的InfoManager也没有实现接口，不能采用jdk的proxy。那么cglib在这边就要隆重登场。
+一旦使用cgblig，只需要添加一个MethodInterceptor的类以及修改factory代码就可以实现这个需求。
