@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <!--  logsavepath  -->
+    <logpath>D:\PythonLog</logpath>
+    <!-- logfilesizeMB -->
+    <logsize>8</logsize>
+    <!-- logfilenum -->
+    <lognum>3</lognum>
+</config>

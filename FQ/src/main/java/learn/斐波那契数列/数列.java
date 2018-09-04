@@ -1,4 +1,4 @@
-package learn.面试;
+package learn.斐波那契数列;
 
 public class 数列 {
 
