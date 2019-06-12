@@ -1,22 +1,196 @@
-package learn. Learn_synchronized;
+package learn.Learn_synchronized;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Stream;
 
 /**
  * @author yumin
- * 
  */
 public class RunnableMain {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
 
-		ExecutorService exec = Executors.newFixedThreadPool(2);
-		exec.execute(new RunnableTest());
-		exec.execute(new RunnableTest());
-		exec.shutdown();
-	}
+
+//        threadA();
+        threadAA();
+//        threadCD();
+////        threadABCD();
+////        threadB();
+////        threadBB();
+////        threadAB();
+////        threadAB_();
+////        threadAAAB();
+//        threadAAAB_();
+
+    }
+
+    /**
+     * AAA,B 同对象，锁不同，并行
+     */
+    private static void threadAAAB_() {
+
+        SyncTest syncTest = new SyncTest();
+        Thread aaa = new Thread(() -> syncTest.syncAAA());
+        Thread b = new Thread(() -> syncTest.syncB());
+
+        Runnable r = () -> Stream.iterate(1, i -> i + 1).limit(100).forEach(i -> System.out.println(Thread.currentThread().getId() + "__R__" + i));
+
+        ExecutorService exec = Executors.newFixedThreadPool(10);
+
+        exec.execute(aaa);
+        exec.execute(b);
+        exec.execute(r);
+        exec.shutdown();
+    }
+
+    /**
+     * AAA,B 不同对象，锁不同，并行
+     */
+    private static void threadAAAB() {
+
+        Thread aaa = new Thread(() -> new SyncTest().syncAAA());
+        Thread b = new Thread(() -> new SyncTest().syncB());
+        ExecutorService exec = Executors.newFixedThreadPool(10);
+
+        exec.execute(aaa);
+        exec.execute(b);
+        exec.shutdown();
+    }
+
+    /**
+     * A,AA,AAA 都属于对象锁，不同对象并发，并行
+     */
+    private static void threadA() {
+
+        Thread a = new Thread(() -> new SyncTest().syncA());
+        Thread aa = new Thread(() -> new SyncTest().syncAA());
+        Thread aaa = new Thread(() -> new SyncTest().syncAAA());
+        Thread A = new Thread(() -> new SyncTest().A());
+        ExecutorService exec = Executors.newFixedThreadPool(10);
+
+        exec.execute(A);
+        exec.execute(a);
+        exec.execute(aa);
+        exec.execute(aaa);
+        exec.shutdown();
+    }
+
+    /**
+     * A,AA,AAA 都属于对象锁，同一个对象并发，串行
+     */
+    private static void threadAA() {
+
+        SyncTest syncTest = new SyncTest();
+
+        Thread a = new Thread(() -> syncTest.syncA());
+        Thread aa = new Thread(() -> syncTest.syncAA());
+        Thread aaa = new Thread(() -> syncTest.syncAAA());
+        Thread A = new Thread(() -> syncTest.A());
+        ExecutorService exec = Executors.newFixedThreadPool(10);
+
+        exec.execute(A);
+        exec.execute(a);
+        exec.execute(aa);
+        exec.execute(aaa);
+        exec.shutdown();
+    }
+
+    /**
+     * AB，多个对象，锁不同，并行
+     */
+    private static void threadAB() {
+
+        Thread a = new Thread(() -> new SyncTest().syncA());
+        Thread b = new Thread(() -> new SyncTest().syncB());
+
+        ExecutorService exec = Executors.newFixedThreadPool(10);
+        exec.execute(a);
+        exec.execute(b);
+        exec.shutdown();
+    }
+
+    /**
+     * AB，1个对象，锁不同，并行
+     */
+    private static void threadAB_() {
+
+        SyncTest syncTest = new SyncTest();
+        Thread a = new Thread(() -> syncTest.syncA());
+        Thread b = new Thread(() -> syncTest.syncB());
+
+        ExecutorService exec = Executors.newFixedThreadPool(10);
+        exec.execute(a);
+        exec.execute(b);
+        exec.shutdown();
+    }
+
+    /**
+     * B，多个对象，同一个锁，并行
+     */
+    private static void threadB() {
+
+        Thread b = new Thread(() -> new SyncTest().syncB());
+        Thread bb = new Thread(() -> new SyncTest().syncB());
+        Thread bbb = new Thread(() -> new SyncTest().syncB());
+
+        ExecutorService exec = Executors.newFixedThreadPool(10);
+        exec.execute(b);
+        exec.execute(bb);
+        exec.execute(bbb);
+        exec.shutdown();
+    }
+
+    /**
+     * B，1个对象，同一个锁，串行
+     */
+    private static void threadBB() {
+
+        SyncTest syncTest = new SyncTest();
+        Thread b = new Thread(() -> syncTest.syncB());
+        Thread bb = new Thread(() -> syncTest.syncB());
+        Thread bbb = new Thread(() -> syncTest.syncB());
+
+        ExecutorService exec = Executors.newFixedThreadPool(10);
+        exec.execute(b);
+        exec.execute(bb);
+        exec.execute(bbb);
+        exec.shutdown();
+    }
+
+    /**
+     * CD 都属于类锁，无论多少个对象，CD始终串行
+     */
+    private static void threadCD() {
+
+        Thread c = new Thread(() -> new SyncTest().syncC());
+        Thread d = new Thread(() -> new SyncTest().syncD());
+
+        ExecutorService exec = Executors.newFixedThreadPool(10);
+        exec.execute(c);
+        exec.execute(d);
+        exec.shutdown();
+    }
+
+    /**
+     * ABCD 多个对象，AB并行，CD始终串行
+     */
+    private static void threadABCD() {
+
+        Thread a = new Thread(() -> new SyncTest().syncA());
+        Thread b = new Thread(() -> new SyncTest().syncB());
+        Thread c = new Thread(() -> new SyncTest().syncC());
+        Thread d = new Thread(() -> new SyncTest().syncD());
+
+        ExecutorService exec = Executors.newFixedThreadPool(10);
+        exec.execute(a);
+        exec.execute(b);
+        exec.execute(c);
+        exec.execute(d);
+        exec.shutdown();
+    }
+
 }

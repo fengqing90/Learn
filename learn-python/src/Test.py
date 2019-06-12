@@ -11,5 +11,11 @@ data = {
 
 # print(data)
 
-if 1:
-    print("aaa")
+# if 1:
+#     print("aaa")
+    
+    
+    
+s = '   iplaypython   '
+
+print(s.lstrip().rstrip())

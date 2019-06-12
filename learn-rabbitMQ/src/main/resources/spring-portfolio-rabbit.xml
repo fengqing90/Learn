@@ -1,0 +1,181 @@
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:rabbit="http://www.springframework.org/schema/rabbit" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/rabbit
+           http://www.springframework.org/schema/rabbit/spring-rabbit.xsd
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/task
+           http://www.springframework.org/schema/task/spring-task.xsd">
+
+	<!-- 配置：执行器 -->
+	 <task:executor id="rabbitExecutor" pool-size="300" keep-alive="60" rejection-policy="CALLER_RUNS" queue-capacity="2000" />
+	 
+	<!-- <bean id="rabbitExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"> 核心线程数，默认为1 <property 
+		name="corePoolSize" value="20" /> 最大线程数，默认为Integer.MAX_VALUE <property name="maxPoolSize" value="50" /> 队列最大长度，一般需要设置值>=notifyScheduledMainExecutor.maxNum；默认为Integer.MAX_VALUE 
+		<property name="queueCapacity" value="1000" /> 线程池维护线程所允许的空闲时间，默认为60s <property name="keepAliveSeconds" value="300" /> 线程池对拒绝任务（无线程可用）的处理策略，目前只支持AbortPolicy、CallerRunsPolicy；默认为后者 
+		<property name="rejectedExecutionHandler"> AbortPolicy:直接抛出java.util.concurrent.RejectedExecutionException异常 CallerRunsPolicy:主线程直接执行该任务，执行完之后尝试添加下一个任务到线程池中，可以有效降低向线程池内添加任务的速度 
+		DiscardOldestPolicy:抛弃旧的任务、暂不支持；会导致被丢弃的任务无法再次被执行 DiscardPolicy:抛弃当前任务、暂不支持；会导致被丢弃的任务无法再次被执行 <bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy" 
+		/> </property> </bean> -->
+
+
+	<!--配置：自己vhost 连接 CachingConnectionFactory -->
+	<rabbit:connection-factory id="rabbitConnectionFactory"
+		virtual-host="${spring.rabbitmq.virtual-host}" factory-timeout="30000" connection-timeout="30000"
+		requested-heartbeat="1" cache-mode="CHANNEL" channel-cache-size="100" addresses="${spring.rabbitmq.addresses}"
+		username="${spring.rabbitmq.username}" password="${spring.rabbitmq.password}" executor="rabbitExecutor" />
+
+	<!--配置：RabbitTemplate -->
+	<rabbit:template id="rabbitTemplate" connection-factory="rabbitConnectionFactory"
+		channel-transacted="true" message-converter="contentTypeConverter" />
+
+
+	<!-- 配置：kepler vhost 连接 CachingConnectionFactory -->
+	<rabbit:connection-factory id="keplerConnectionFactory"
+		virtual-host="vhost_accounting" factory-timeout="30000" connection-timeout="30000"
+		requested-heartbeat="15" cache-mode="CHANNEL" channel-cache-size="100" addresses="${spring.rabbitmq.addresses}"
+		username="${kepler.rabbitmq.username}" password="${kepler.rabbitmq.password}" />
+
+	<rabbit:template id="rabbitTemplateKepler" connection-factory="keplerConnectionFactory"
+		channel-transacted="true" message-converter="contentTypeConverter" />
+
+	<!--配置：RabbitAdmin ：used to manage exchange, queue and bindings. -->
+	<rabbit:admin connection-factory="rabbitConnectionFactory" />
+
+
+	<!-- 死信队列 -->
+	<rabbit:direct-exchange name="DLE.exchange">
+		<rabbit:bindings>
+			<rabbit:binding queue="DLQ.queue.test" key="DLQ_test" />
+			<rabbit:binding queue="DLQ.queue.test.object" key="DLQ_object" />
+		</rabbit:bindings>
+	</rabbit:direct-exchange>
+
+	<rabbit:queue name="DLQ.queue.test" />
+	<rabbit:queue name="DLQ.queue.test.object" />
+
+	<!-- direct ========================================= -->
+
+	<!--配置：direct类型exchange -->
+	<rabbit:direct-exchange name="exchange.direct">
+		<rabbit:bindings>
+			<rabbit:binding queue="queueTest" key="test" />
+			<rabbit:binding queue="queueTestObject" key="object" />
+		</rabbit:bindings>
+	</rabbit:direct-exchange>
+
+	<!--配置：队列 -->
+	<rabbit:queue id="queueTest" name="queue.test">
+		<rabbit:queue-arguments>
+			<!-- 镜像队列将会在整个集群中复制。当一个新的节点加入后，也会在这 个节点上复制一份。 -->
+			<entry key="x-ha-policy" value="all" />
+			<!-- 死信队列（被拒、过期、超过长度） -->
+			<entry key="x-dead-letter-exchange" value="DLE.exchange" />
+			<entry key="x-dead-letter-routing-key" value="DLQ_test" />
+		</rabbit:queue-arguments>
+	</rabbit:queue>
+
+	<!--配置：object队列 -->
+	<rabbit:queue id="queueTestObject" name="queue.test.object">
+		<rabbit:queue-arguments>
+			<!-- 镜像队列将会在整个集群中复制。当一个新的节点加入后，也会在这 个节点上复制一份。 -->
+			<entry key="x-ha-policy" value="all" />
+			<!-- 死信队列（被拒、过期、超过长度） -->
+			<entry key="x-dead-letter-exchange" value="DLE.exchange" />
+			<entry key="x-dead-letter-routing-key" value="DLQ_object" />
+		</rabbit:queue-arguments>
+	</rabbit:queue>
+
+	<!-- 事务配置 -->
+	<bean id="rabbitTxManager" class="org.springframework.amqp.rabbit.transaction.RabbitTransactionManager">
+		<property name="connectionFactory" ref="rabbitConnectionFactory" />
+	</bean>
+
+	<!--配置： 监听 -->
+	<rabbit:listener-container transaction-size="1" prefetch="1" advice-chain="retryAdvice"
+		channel-transacted="true" idle-event-interval="60000" concurrency="10" max-concurrency="10"
+		connection-factory="rabbitConnectionFactory"  task-executor="rabbitExecutor">
+		<rabbit:listener queue-names="queue.test" ref="xmlListenerContainer" method="onMessage" />
+	</rabbit:listener-container>
+
+	<!--配置： 监听 -->
+	<rabbit:listener-container idle-event-interval="60000" advice-chain="retryAdvice"
+		concurrency="10" max-concurrency="50" connection-factory="rabbitConnectionFactory">
+		<!-- <rabbit:listener queue-names="ERROR.queue.test" ref="rabbitErrorMessageListener" method="onMessage" /> -->
+		<rabbit:listener queue-names="queue.test.object" ref="rabbitMessage4ObjectListener" method="onMessage" />
+	</rabbit:listener-container>
+
+	<!-- 监听：处理keplervhost的队列 -->
+	<rabbit:listener-container idle-event-interval="60000" advice-chain="retryAdvice"
+		connection-factory="keplerConnectionFactory">
+		<rabbit:listener queue-names="queue.kepler.direct.autopay" ref="vhost1ProcessKeplerQueue" method="onMessage" />
+	</rabbit:listener-container>
+
+	<!-- 监听：处理keplervhost的队列 -->
+	<rabbit:listener-container transaction-size="1" prefetch="1" idle-event-interval="60000"
+		concurrency="5" max-concurrency="50" advice-chain="retryAdvice" connection-factory="keplerConnectionFactory">
+		<rabbit:listener queue-names="queue.kepler.direct.autopay" ref="vhost1ProcessKeplerQueue" method="onMessage" />
+	</rabbit:listener-container>
+	<!-- direct end ========================================= -->
+
+
+
+	<!-- fanout ========================================= -->
+	<!--配置：fanout-exchange 方法：RabbitMsgProcess.sendFanout()，分发到 queue.fanout、 queue.fanout2 中 -->
+	<rabbit:fanout-exchange name="exchange.fanout">
+		<rabbit:bindings>
+			<rabbit:binding queue="fanoutTest" />
+			<rabbit:binding queue="fanoutTest2" />
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+
+	<rabbit:queue id="fanoutTest" name="queue.fanout" />
+	<rabbit:queue id="fanoutTest2" name="queue.fanout2" />
+
+	<!--配置： 监听 fanout -->
+	<rabbit:listener-container>
+		<rabbit:listener queue-names="queue.fanout" ref="rabbitFanoutListener" method="onMessage" />
+		<!-- 当监听queue.fanout2的应用没起来时，消息会在队列中保存，不会丢失 -->
+		<!-- <rabbit:listener queue-names="queue.fanout2" ref="rabbitFanoutListener2" method="onMessage" /> -->
+	</rabbit:listener-container>
+	<!-- fanout end ========================================= -->
+
+
+	<!-- 配置：重试,修改重试次数，如用@rabbitlisenter 会通过spring boot 自动配置重试 -->
+	<bean id="retryAdvice"
+		class="org.springframework.amqp.rabbit.config.StatelessRetryOperationsInterceptorFactoryBean">
+		<property name="messageRecoverer" ref="fQRejectAndDontRequeueRecoverer" />
+		<property name="retryOperations">
+			<bean class="org.springframework.retry.support.RetryTemplate">
+				<property name="retryPolicy">
+					<bean class="org.springframework.retry.policy.SimpleRetryPolicy">
+						<property name="maxAttempts" value="4" />
+					</bean>
+				</property>
+				<property name="backOffPolicy">
+					<bean class="org.springframework.retry.backoff.ExponentialBackOffPolicy">
+						<property name="initialInterval" value="500" />
+						<property name="maxInterval" value="1000" />
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="fQRejectAndDontRequeueRecoverer" class="learn.rabbitmq.config.FQRejectAndDontRequeueRecoverer" />
+
+
+	<!-- 配置：可定义消息转换 https://docs.spring.io/spring-amqp/docs/1.7.7.RELEASE/reference/htmlsingle/#_contenttypedelegatingmessageconverter -->
+	<bean id="contentTypeConverter"
+		class="org.springframework.amqp.support.converter.ContentTypeDelegatingMessageConverter">
+		<property name="delegates">
+			<map>
+				<entry key="application/json" value-ref="jsonMessageConverter" />
+				<!-- <entry key="application/xml" value-ref="xmlMessageConverter" /> -->
+			</map>
+		</property>
+	</bean>
+	<bean id="jsonMessageConverter" class="org.springframework.amqp.support.converter.Jackson2JsonMessageConverter">
+		<!-- <property name="classMapper"> <bean class="org.springframework.amqp.support.converter.DefaultClassMapper" /> </property> 
+			<property name="defaultCharset" value="UTF-8"/> -->
+	</bean>
+
+</beans>

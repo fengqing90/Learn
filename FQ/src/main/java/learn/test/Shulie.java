@@ -1,5 +1,6 @@
-package learn. test;
+package learn.test;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -8,7 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations = "classpath:applicationContext.xml")
 public class Shulie {
 
-    @org.junit.Test
+    @Test
     public void test_recordLog() {
         // SysLogService service = (SysLogService)
         // SpringUtil.getBean("SysLogService");
