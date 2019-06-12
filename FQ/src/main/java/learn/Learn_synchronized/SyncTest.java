@@ -11,42 +11,56 @@ import java.util.stream.Stream;
  */
 public class SyncTest {
 
-    private String b = new String();
+    private final String b = new String();
 
-    public void A() {
+    void A() {
         Stream.iterate(1, i -> i + 1).limit(100).forEach(i -> System.out.println(Thread.currentThread().getId() + "__" + i));
     }
 
-    public synchronized void syncA() {
+    synchronized void syncA() {
         Stream.iterate(1, i -> i + 1).limit(100).forEach(i -> System.out.println(Thread.currentThread().getId() + "__A__" + i));
     }
 
 
-    public synchronized void syncAA() {
+    synchronized void syncAA() {
         Stream.iterate(1, i -> i + 1).limit(100).forEach(i -> System.out.println(Thread.currentThread().getId() + "__AA__" + i));
     }
 
 
-    public void syncAAA() {
+    void syncE() {
         synchronized (this) {
             Stream.iterate(1, i -> i + 1).limit(100).forEach(i -> System.out.println(Thread.currentThread().getId() + "__AAA__" + i));
         }
     }
 
-    public void syncB() {
+    void syncEE() {
+        System.out.println(Thread.currentThread().getId() + "@@@@@@@@@@________EE");
+        synchronized (this) {
+            Stream.iterate(1, i -> i + 1).limit(100).forEach(i -> System.out.println(Thread.currentThread().getId() + "__EE__" + i));
+        }
+    }
+
+    void syncB() {
         synchronized (this.b) {
             Stream.iterate(1, i -> i + 1).limit(100).forEach(i -> System.out.println(Thread.currentThread().getId() + "__B__" + i));
         }
     }
 
 
-    public void syncC() {
+    void syncC() {
         synchronized (SyncTest.class) {
             Stream.iterate(1, i -> i + 1).limit(100).forEach(i -> System.out.println(Thread.currentThread().getId() + "__C__" + i));
         }
     }
 
-    public synchronized static void syncD() {
+    synchronized static void syncD() {
         Stream.iterate(1, i -> i + 1).limit(100).forEach(i -> System.out.println(Thread.currentThread().getId() + "__D__" + i));
+    }
+
+
+    void testA(TestA testA) {
+        synchronized (testA) {
+            testA.add();
+        }
     }
 }

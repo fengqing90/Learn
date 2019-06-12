@@ -4,29 +4,60 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Stream;
 
-/**
- * @author yumin
- */
 public class RunnableMain {
 
-    /**
-     * @param args
-     */
     public static void main(String[] args) {
-
-
 //        threadA();
-        threadAA();
+//        threadAA();
 //        threadCD();
-////        threadABCD();
-////        threadB();
-////        threadBB();
-////        threadAB();
-////        threadAB_();
-////        threadAAAB();
+//        threadABCD();
+//        threadB();
+//        threadBB();
+//        threadAB();
+//        threadAB_();
+//        threadAAAB();
 //        threadAAAB_();
-
+//        testA();
+        threadE();
     }
+
+
+    /**
+     * E,EE 同对象，并行执行非synchronized部分，串行执行synchronized部分
+     * EEE  不同对象，并行执行
+     */
+    private static void threadE() {
+        SyncTest syncTest = new SyncTest();
+        Thread E = new Thread(() -> syncTest.syncEE());
+        Thread EE = new Thread(() -> syncTest.syncEE());
+        Thread EEE = new Thread(() -> new SyncTest().syncEE());
+        ExecutorService exec = Executors.newFixedThreadPool(10);
+
+        exec.execute(E);
+        exec.execute(EE);
+        exec.execute(EEE);
+        exec.shutdown();
+    }
+
+    /**
+     * a,aa 同对象，串行   b和 (a|aa) 并行，锁同一个 object
+     */
+    private static void testA() {
+        TestA testA = new TestA();
+        TestA testb = new TestA();
+        SyncTest syncTest = new SyncTest();
+
+        Thread a = new Thread(() -> syncTest.testA(testA), "A");
+        Thread b = new Thread(() -> syncTest.testA(testb), "B");
+        Thread aa = new Thread(() -> syncTest.testA(testA), "AA");
+        ExecutorService exec = Executors.newFixedThreadPool(10);
+
+        exec.execute(a);
+        exec.execute(b);
+        exec.execute(aa);
+        exec.shutdown();
+    }
+
 
     /**
      * AAA,B 同对象，锁不同，并行
@@ -34,7 +65,7 @@ public class RunnableMain {
     private static void threadAAAB_() {
 
         SyncTest syncTest = new SyncTest();
-        Thread aaa = new Thread(() -> syncTest.syncAAA());
+        Thread aaa = new Thread(() -> syncTest.syncE());
         Thread b = new Thread(() -> syncTest.syncB());
 
         Runnable r = () -> Stream.iterate(1, i -> i + 1).limit(100).forEach(i -> System.out.println(Thread.currentThread().getId() + "__R__" + i));
@@ -52,7 +83,7 @@ public class RunnableMain {
      */
     private static void threadAAAB() {
 
-        Thread aaa = new Thread(() -> new SyncTest().syncAAA());
+        Thread aaa = new Thread(() -> new SyncTest().syncE());
         Thread b = new Thread(() -> new SyncTest().syncB());
         ExecutorService exec = Executors.newFixedThreadPool(10);
 
@@ -68,7 +99,7 @@ public class RunnableMain {
 
         Thread a = new Thread(() -> new SyncTest().syncA());
         Thread aa = new Thread(() -> new SyncTest().syncAA());
-        Thread aaa = new Thread(() -> new SyncTest().syncAAA());
+        Thread aaa = new Thread(() -> new SyncTest().syncE());
         Thread A = new Thread(() -> new SyncTest().A());
         ExecutorService exec = Executors.newFixedThreadPool(10);
 
@@ -88,7 +119,7 @@ public class RunnableMain {
 
         Thread a = new Thread(() -> syncTest.syncA());
         Thread aa = new Thread(() -> syncTest.syncAA());
-        Thread aaa = new Thread(() -> syncTest.syncAAA());
+        Thread aaa = new Thread(() -> syncTest.syncE());
         Thread A = new Thread(() -> syncTest.A());
         ExecutorService exec = Executors.newFixedThreadPool(10);
 
