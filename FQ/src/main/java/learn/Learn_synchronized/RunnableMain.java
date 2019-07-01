@@ -17,8 +17,8 @@ public class RunnableMain {
 //        threadAB_();
 //        threadAAAB();
 //        threadAAAB_();
-//        testA();
-        threadE();
+        testA();
+//        threadE();
     }
 
 

@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: learn-jpa
+  datasource:
+    url: jdbc:mysql://172.16.2.132:3306/test_fq
+    username: root
+    password: 123456
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+
+
+
+server:
+  port: 8080
+  context-path: /learn-jpa
+
+
+logging:
+  level:
+    root: info
