@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class AccountUserServiceImpl extends BaseService<AccountUser, Long> {
+public class AccountUserServiceImpl extends AbstractBaseService<AccountUser, Long> implements IAccountUserService {
 
 
     public AccountUser testFindOne(Long id) {

@@ -1,6 +1,8 @@
 package learn.rabbitmq.demo;
 
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -39,7 +41,7 @@ public class TransactionApplication {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-        System.out.println(template.receiveAndConvert("foo", 0));
+//        System.out.println(template.receiveAndConvert("foo", 0));
 
         RabbitAdmin admin = context.getBean(RabbitAdmin.class);
         admin.deleteQueue("foo");
@@ -54,6 +56,10 @@ public class TransactionApplication {
         return rabbitTemplate;
     }
 
+    @RabbitListener(queues = "foo")
+    public void listener(Message message) {
+        System.out.println("listener@@@" + new String(message.getBody()));
+    }
     @Bean
     public Queue foo() {
         return new Queue("foo");
@@ -78,15 +84,12 @@ public class TransactionApplication {
     public static class Foo {
 
         @Autowired
-        private RabbitTemplate template;
+        private RabbitTemplate amqpTemplate;
 
         @Transactional
         public void send(String in) {
-            this.template.convertAndSend("foo", in);
-            if (in.equals("foo")) {
-                throw new RuntimeException("test");
-            }
-            this.template.convertAndSend("bar", in);
+            this.amqpTemplate.convertAndSend("foo", in);
+            this.amqpTemplate.convertAndSend("bar", in);
         }
 
         @Transactional
