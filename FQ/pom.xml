@@ -13,7 +13,7 @@
         <!-- <git.commitTime>${git.commit.time}</git.commitTime> -->
         <!-- <git.commiter>${git.commit.user.name}</git.commiter> -->
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
-        <spring.version>4.3.17.RELEASE</spring.version>
+        <spring.version>5.2.4.RELEASE</spring.version>
         <spring.security.version>4.0.3.RELEASE</spring.security.version>
         <org.aspectj>1.8.6</org.aspectj>
     </properties>
@@ -215,7 +215,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>4.3.17.RELEASE</version>
+            <version>5.2.4.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
