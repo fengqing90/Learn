@@ -1,20 +1,19 @@
-package com.ibg.account.funder.service.impl;
+package learn.rabbitmq.demo;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.concurrent.TimeoutException;
-
-import com.ibg.account.util.RandomStringUtils;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.MessageProperties;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 
-import com.ibg.account.util.DateUtils;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.MessageProperties;
+import java.io.IOException;
+import java.util.Date;
+import java.util.concurrent.TimeoutException;
 
 /**
  * @ClassName SendTest
@@ -49,7 +48,7 @@ public class SendTest {
         Channel channel = connection.createChannel();
 
         String message = "RabbitMQ Demo Test:"
-                + DateUtils.format(new Date(), DateUtils.DATE_PATTERN_YYYY_MM_DD_HH_MM_SS);
+                + DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
 
         channel.basicPublish(exchange, key, MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes());
 
@@ -77,7 +76,7 @@ public class SendTest {
 
 
         String message = "RabbitMQ Demo Test:"
-                + DateUtils.format(new Date(), DateUtils.DATE_PATTERN_YYYY_MM_DD_HH_MM_SS);
+                + DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
         rabbitTemplate.correlationConvertAndSend(message, new CorrelationData(RandomStringUtils.random(1)));
 
         System.out.println("doSpringSend end.");
