@@ -24,16 +24,19 @@ import java.util.Date;
 public class RabbitConfig {
     @Autowired
     private ThreadPoolTaskExecutor consumerRabbitExecutor;
+    @Autowired
+    private MQClientMonitor mqClientMonitor;
 
     @PostConstruct
     public void init() {
         Thread daemonTread = new Thread(() -> {
             while (true) {
-                System.out.println(consumerRabbitExecutor.getThreadPoolExecutor().toString() + "@ " + consumerRabbitExecutor.getThreadPoolExecutor().getMaximumPoolSize());
                 System.out.println(DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss") + " consumerThreadPool 统计 【线程活跃数】" + consumerRabbitExecutor.getActiveCount() + "【核心线程数】"
                         + consumerRabbitExecutor.getCorePoolSize() + "【线程处理队列长度】"
                         + consumerRabbitExecutor.getThreadPoolExecutor().getQueue().size() + "【最大线程池数量】"
                         + consumerRabbitExecutor.getMaxPoolSize() + "【总线程数】：" + consumerRabbitExecutor.getPoolSize());
+
+                mqClientMonitor.logInfoAll();
                 try {
                     Thread.sleep(1000 * 5L);
                 } catch (InterruptedException e) {
