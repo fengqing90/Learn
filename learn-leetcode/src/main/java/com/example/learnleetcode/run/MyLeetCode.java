@@ -267,11 +267,11 @@ public class MyLeetCode {
             while (left < right) {  // 注意
                 int mid = left + (right - left) / 2; // 注意
 
-                if (nums[mid] < target)
+                if (nums[mid] < target) {
                     left = mid + 1; // 注意
-                else if (nums[mid] > target)
+                } else if (nums[mid] > target) {
                     right = mid; // 注意
-                else {
+                } else {
                     return mid; // 注意
                 }
             }
@@ -375,9 +375,11 @@ public class MyLeetCode {
             int j = 1;
             for (int i = 0; i < nums.length - 1; i++) {
                 if (nums[i] == nums[i + 1]) // 如果两个相邻的元素相同,那么进行压缩，长度减少
+                {
                     length--;
-                else
+                } else {
                     nums[j++] = nums[i + 1]; //若两个相邻元素不同，那么对另外一个元素进行存储
+                }
 
             }
             System.out.println(ArrayUtils.toString(nums));
@@ -438,17 +440,18 @@ public class MyLeetCode {
      **/
     static class 有效的括号 {
         public static boolean isValid(String s) {
-            if (s.length() % 2 != 0)
+            if (s.length() % 2 != 0) {
                 return false;
+            }
             Stack<Character> stack = new Stack<>();
             for (char c : s.toCharArray()) {
-                if (c == '(')
+                if (c == '(') {
                     stack.push(')');
-                else if (c == '[')
+                } else if (c == '[') {
                     stack.push(']');
-                else if (c == '{')
+                } else if (c == '{') {
                     stack.push('}');
-                else if (stack.isEmpty() || c != stack.pop()) {
+                } else if (stack.isEmpty() || c != stack.pop()) {
                     return false;
                 }
             }
