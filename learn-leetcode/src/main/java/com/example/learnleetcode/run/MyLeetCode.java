@@ -2,6 +2,7 @@ package com.example.learnleetcode.run;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -16,6 +17,7 @@ public class MyLeetCode {
 
     public static void main(String[] args) {
 
+        System.out.println(ArrayUtils.toString(null));
         // System.out.println(有效的括号.isValid("{[]{[(){}()]}[]}"));
 
         // System.out.println(删除排序数组中的重复项
@@ -40,7 +42,40 @@ public class MyLeetCode {
         // System.out.println(ArrayUtils.toString(x的平方根.mySqrt(2)));
 
         // System.out.println(二进制求和.addBinary3("1010", "101"));
-        System.out.println(二进制求和.addOctal("1510", "171"));
+        // System.out.println(二进制求和.addOctal("1510", "171"));
+
+        System.out.println(Arrays.toString(合并两个有序数组.merge(new int[]{0, 1, 2, 3, 0, 0, 0}, 4, new int[]{2, 5, 6}, 3)));
+
+
+    }
+
+    static class 合并两个有序数组 {
+        // 前提：nums1 足够大，2个有序数组
+        public static int[] merge(int[] nums1, int m, int[] nums2, int n) {
+            // two get pointers for nums1 and nums2
+            int p1 = m - 1;
+            int p2 = n - 1;
+            // set pointer for nums1
+            // 结果数组总长度
+            int p = m + n - 1;
+
+            // while there are still elements to compare
+            // 下表 递减
+            while ((p1 >= 0) && (p2 >= 0))
+            // compare two elements from nums1 and nums2
+            // and add the largest one in nums1
+            {
+                // 倒序 比较值大小，给nums1赋值=  n1 < n2 : 用n2, 反之用n1
+                nums1[p--] = (nums1[p1] < nums2[p2]) ? nums2[p2--] : nums1[p1--];
+            }
+
+            // add missing elements from nums2
+            // 将nums2中未加入到nums1中的数放到头部
+            System.arraycopy(nums2, 0, nums1, 0, p2 + 1);
+
+            return nums1;
+        }
+
     }
 
     /**
