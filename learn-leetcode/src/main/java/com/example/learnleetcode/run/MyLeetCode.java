@@ -53,12 +53,23 @@ public class MyLeetCode {
             int l = 0, r = x, ans = -1;
 
             while (l <= r) {
-                // 求中间值：左标记+ (左-右)/2
+                // 求中间值：左标记 + (左-右)/2
                 int mid = l + (r - l) / 2;
+
+                // 两个中间值 相乘 与原值比较
+
+                // 小于等于: 1.记录值
+                // 2. 缩小 左范围(从中间值开始)
+                // 3. 再次循环  左右 
                 if ((long) mid * mid <= x) {
                     ans = mid;
                     l = mid + 1;
-                } else {
+                }
+                // 大于等于:
+                // 1.不记录值,应为超过原数值
+                // 2. 缩小 右范围 = 中间值-1
+                // 3. 再次循环  左右
+                else {
                     r = mid - 1;
                 }
             }
@@ -159,14 +170,17 @@ public class MyLeetCode {
     static class 最后一个单词的长度 {
         static int lengthOfLastWord(String s) {
             int len = s.length(), lastWordLen = 0;
-            if (len == 0)
+            if (len == 0) {
                 return 0;
+            }
 
             for (int i = len - 1; i >= 0; i--) {
-                if (s.charAt(i) != ' ')
+                if (s.charAt(i) != ' ') {
                     lastWordLen++;
-                if (s.charAt(i) == ' ' && lastWordLen > 0)
+                }
+                if (s.charAt(i) == ' ' && lastWordLen > 0) {
                     break;
+                }
             }
             return lastWordLen;
         }
