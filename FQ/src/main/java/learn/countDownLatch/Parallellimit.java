@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
  * @Date 2020/3/6 14:03
  */
 public class Parallellimit {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         ExecutorService pool = Executors.newCachedThreadPool();
         CountDownLatch cdl = new CountDownLatch(100);
         for (int i = 0; i < 100; i++) {
@@ -32,13 +32,13 @@ class CountRunnable implements Runnable {
     @Override
     public void run() {
         try {
-            synchronized (countDownLatch) {
+            synchronized (this.countDownLatch) {
                 /*** 每次减少一个容量*/
-                countDownLatch.countDown();
-                System.out.println("thread counts = " + (countDownLatch.getCount()));
+                this.countDownLatch.countDown();
+                System.out.println("thread counts = " + this.countDownLatch.getCount());
             }
-            countDownLatch.await();
-            System.out.println("concurrency counts = " + (100 - countDownLatch.getCount()));
+            this.countDownLatch.await();
+            System.out.println("concurrency counts = " + (100 - this.countDownLatch.getCount()));
         } catch (Exception e) {
             e.printStackTrace();
         }
