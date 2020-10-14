@@ -1,8 +1,11 @@
 package com.example.learnleetcode.run;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Stack;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -44,9 +47,69 @@ public class MyLeetCode {
         // System.out.println(二进制求和.addBinary3("1010", "101"));
         // System.out.println(二进制求和.addOctal("1510", "171"));
 
-        System.out.println(Arrays.toString(合并两个有序数组.merge(
-            new int[] { 0, 1, 2, 3, 0, 0, 0 }, 4, new int[] { 2, 5, 6 }, 3)));
+        // System.out.println(Arrays.toString(合并两个有序数组.merge(
+        //     new int[] { 0, 1, 2, 3, 0, 0, 0 }, 4, new int[] { 2, 5, 6 }, 3)));
 
+        二叉树的层次遍历II.TreeNode root = new 二叉树的层次遍历II.TreeNode(3);
+        二叉树的层次遍历II.TreeNode l2 = new 二叉树的层次遍历II.TreeNode(9);
+        二叉树的层次遍历II.TreeNode r2 = new 二叉树的层次遍历II.TreeNode(20);
+        二叉树的层次遍历II.TreeNode l3 = new 二叉树的层次遍历II.TreeNode(15);
+        二叉树的层次遍历II.TreeNode r3 = new 二叉树的层次遍历II.TreeNode(7);
+        r2.left = l3;
+        r2.right = r3;
+        root.left = l2;
+        root.right = r2;
+        System.out.println(二叉树的层次遍历II.levelOrderBottom(root));
+
+    }
+
+    // 107. 二叉树的层次遍历 II
+    static class 二叉树的层次遍历II {
+        public static List<List<Integer>> levelOrderBottom(TreeNode root) {
+            List<List<Integer>> levelOrder = new LinkedList<>();
+            if (root == null) {
+                return levelOrder;
+            }
+            // 转成queue,把每层数据都加入到queue中,利用queue处理
+            Queue<TreeNode> queue = new LinkedList<>();
+            queue.offer(root);
+
+            while (!queue.isEmpty()) {
+                List<Integer> level = new ArrayList<>();
+
+                // 当前层大小
+                int size = queue.size();
+
+                // 遍历 左右
+                for (int i = 0; i < size; i++) {
+                    // 获取第一个& 删除
+                    TreeNode node = queue.poll();
+                    level.add(node.val);
+
+                    TreeNode left = node.left, right = node.right;
+                    // 左右不等于null 加入队列中
+                    if (left != null) {
+                        queue.offer(left);
+                    }
+                    if (right != null) {
+                        queue.offer(right);
+                    }
+                }
+                // 倒序,最高层先入
+                levelOrder.add(0, level);
+            }
+            return levelOrder;
+        }
+
+        public static class TreeNode {
+            int val;
+            TreeNode left;
+            TreeNode right;
+
+            TreeNode(int x) {
+                val = x;
+            }
+        }
     }
 
     static class 二叉树的最大深度 {
