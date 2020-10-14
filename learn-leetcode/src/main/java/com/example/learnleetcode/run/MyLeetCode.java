@@ -49,6 +49,35 @@ public class MyLeetCode {
 
     }
 
+    static class 二叉树的最大深度 {
+
+        // max(l,r)+1
+        public int maxDepth(TreeNode root) {
+            // 等于null 说明到底
+            if (root == null) {
+                return 0;
+            }
+
+            // 获取 左 深度
+            int lc = maxDepth(root.left);
+            // 获取 右 深度
+            int rc = maxDepth(root.right);
+
+            // 深度 = max(左,右)+1
+            return Math.max(lc, rc) + 1;
+        }
+
+        public class TreeNode {
+            int val;
+            TreeNode left;
+            TreeNode right;
+
+            TreeNode(int x) {
+                val = x;
+            }
+        }
+    }
+
     static class 对称二叉树 {
 
         public boolean isSymmetric(TreeNode root) {
