@@ -49,6 +49,38 @@ public class MyLeetCode {
 
     }
 
+    static class 相同的树 {
+
+
+        public boolean isSameTree(TreeNode p, TreeNode q) {
+            if (p == null && q == null) {
+                return true;
+            } else if (p == null || q == null) {
+                return false;
+            } else if (q.val == p.val) {
+                return true;
+            } else {
+                return this.isSameTree(p.left, q.left) && this.isSameTree(p.right, q.right);
+            }
+        }
+
+        public class TreeNode {
+            int val;
+            TreeNode left;
+            TreeNode right;
+
+            TreeNode(int val) {
+                this.val = val;
+            }
+
+            TreeNode(int val, TreeNode left, TreeNode right) {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+    }
+
     static class 合并两个有序数组 {
         // 前提：nums1 足够大，2个有序数组
         public static int[] merge(int[] nums1, int m, int[] nums2, int n) {
