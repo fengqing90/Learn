@@ -49,6 +49,35 @@ public class MyLeetCode {
 
     }
 
+    static class 对称二叉树 {
+
+        public boolean isSymmetric(TreeNode root) {
+            return check(root, root);
+        }
+
+        public boolean check(TreeNode p, TreeNode q) {
+            if (p == null && q == null) {
+                return true;
+            } else if (p == null || q == null) {
+                return false;
+            } else {
+                // 左和右值必须相等，递归
+                return (p.val == q.val) && check(p.left, q.right)
+                    && check(p.right, q.left);
+            }
+        }
+
+        public class TreeNode {
+            int val;
+            TreeNode left;
+            TreeNode right;
+
+            TreeNode(int x) {
+                val = x;
+            }
+        }
+    }
+
     static class 相同的树 {
 
         public boolean isSameTree(TreeNode p, TreeNode q) {
@@ -59,6 +88,8 @@ public class MyLeetCode {
             } else if (q.val == p.val) {
                 return true;
             } else {
+                // 两个数的左节点是否相等
+                // 两个数的右节点是否相等
                 return this.isSameTree(p.left, q.left)
                     && this.isSameTree(p.right, q.right);
             }
