@@ -1,11 +1,11 @@
 package com.example.learnleetcode.run;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * MyLeetCode
@@ -44,13 +44,12 @@ public class MyLeetCode {
         // System.out.println(二进制求和.addBinary3("1010", "101"));
         // System.out.println(二进制求和.addOctal("1510", "171"));
 
-        System.out.println(Arrays.toString(合并两个有序数组.merge(new int[]{0, 1, 2, 3, 0, 0, 0}, 4, new int[]{2, 5, 6}, 3)));
-
+        System.out.println(Arrays.toString(合并两个有序数组.merge(
+            new int[] { 0, 1, 2, 3, 0, 0, 0 }, 4, new int[] { 2, 5, 6 }, 3)));
 
     }
 
     static class 相同的树 {
-
 
         public boolean isSameTree(TreeNode p, TreeNode q) {
             if (p == null && q == null) {
@@ -60,7 +59,8 @@ public class MyLeetCode {
             } else if (q.val == p.val) {
                 return true;
             } else {
-                return this.isSameTree(p.left, q.left) && this.isSameTree(p.right, q.right);
+                return this.isSameTree(p.left, q.left)
+                    && this.isSameTree(p.right, q.right);
             }
         }
 
@@ -98,7 +98,8 @@ public class MyLeetCode {
             // and add the largest one in nums1
             {
                 // 倒序 比较值大小，给nums1赋值=  n1 < n2 : 用n2, 反之用n1
-                nums1[p--] = (nums1[p1] < nums2[p2]) ? nums2[p2--] : nums1[p1--];
+                nums1[p--] = (nums1[p1] < nums2[p2]) ? nums2[p2--]
+                    : nums1[p1--];
             }
 
             // add missing elements from nums2
@@ -155,7 +156,7 @@ public class MyLeetCode {
             int ca = 0;
             // 递减
             for (int i = a.length() - 1, j = b.length() - 1; i >= 0
-                    || j >= 0; i--, j--) {
+                || j >= 0; i--, j--) {
                 int sum = ca;
                 // 递减:相加 
                 sum += (i >= 0 ? a.charAt(i) - '0' : 0);
@@ -175,7 +176,7 @@ public class MyLeetCode {
             StringBuilder ans = new StringBuilder();
             int ca = 0;
             for (int i = a.length() - 1, j = b.length() - 1; i >= 0
-                    || j >= 0; i--, j--) {
+                || j >= 0; i--, j--) {
                 int sum = ca;
                 sum += (i >= 0 ? a.charAt(i) - '0' : 0);
                 sum += (j >= 0 ? b.charAt(j) - '0' : 0);
@@ -188,7 +189,7 @@ public class MyLeetCode {
 
         public String addBinary(String a, String b) {
             return Integer.toBinaryString(
-                    Integer.parseInt(a, 2) + Integer.parseInt(b, 2));
+                Integer.parseInt(a, 2) + Integer.parseInt(b, 2));
         }
 
         public String addBinary2(String a, String b) {
@@ -197,9 +198,9 @@ public class MyLeetCode {
             int n = Math.max(a.length(), b.length()), carry = 0;
             for (int i = 0; i < n; ++i) {
                 carry += i < a.length() ? (a.charAt(a.length() - 1 - i) - '0')
-                        : 0;
+                    : 0;
                 carry += i < b.length() ? (b.charAt(b.length() - 1 - i) - '0')
-                        : 0;
+                    : 0;
                 ans.append((char) (carry % 2 + '0'));
                 carry /= 2;
             }
@@ -222,8 +223,9 @@ public class MyLeetCode {
             for (int i = len - 1; i >= 0; i--) {
                 digits[i]++;
                 digits[i] %= 10;
-                if (digits[i] != 0)
+                if (digits[i] != 0) {
                     return digits;
+                }
             }
             digits = new int[len + 1];
             digits[0] = 1;
@@ -410,7 +412,7 @@ public class MyLeetCode {
          **/
         public int removeElement2(int[] nums, int val) {
             int ans = nums.length;
-            for (int i = 0; i < ans; ) {
+            for (int i = 0; i < ans;) {
                 if (nums[i] == val) {
                     nums[i] = nums[ans - 1];
                     ans--;
@@ -487,10 +489,12 @@ public class MyLeetCode {
         }
 
         public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-            if (l1 == null)
+            if (l1 == null) {
                 return l2;
-            if (l2 == null)
+            }
+            if (l2 == null) {
                 return l1;
+            }
 
             if (l1.val < l2.val) {
                 l1.next = this.mergeTwoLists(l1.next, l2);
@@ -531,18 +535,21 @@ public class MyLeetCode {
      **/
     static class 最长公共前缀 {
         public String longestCommonPrefix(String[] strs) {
-            if (strs.length == 0)
+            if (strs.length == 0) {
                 return "";
+            }
             String ans = strs[0];
             for (int i = 1; i < strs.length; i++) {
                 int j = 0;
                 for (; j < ans.length() && j < strs[i].length(); j++) {
-                    if (ans.charAt(j) != strs[i].charAt(j))
+                    if (ans.charAt(j) != strs[i].charAt(j)) {
                         break;
+                    }
                 }
                 ans = ans.substring(0, j);
-                if (ans.equals(""))
+                if (ans.equals("")) {
                     return ans;
+                }
             }
             return ans;
         }
@@ -616,7 +623,7 @@ public class MyLeetCode {
             for (int i = 0; i < nums.length; i++) {
                 for (int j = i + 1; j < nums.length; j++) {
                     if (target == nums[j] + nums[i]) {
-                        return new int[]{i, j};
+                        return new int[] { i, j };
                     }
                 }
             }
@@ -631,7 +638,7 @@ public class MyLeetCode {
                 if (map.get(target - data) == null) {
                     map.put(data, i);
                 } else {
-                    return new int[]{(int) map.get(target - data), i};
+                    return new int[] { (int) map.get(target - data), i };
                 }
             }
             throw new IllegalArgumentException("No two sum solution");
@@ -650,11 +657,11 @@ public class MyLeetCode {
                 x = x / 10;
 
                 if (rev > Integer.MAX_VALUE / 10
-                        || (rev == Integer.MAX_VALUE / 10 && pop > 7)) {
+                    || (rev == Integer.MAX_VALUE / 10 && pop > 7)) {
                     return 0;
                 }
                 if (rev < Integer.MIN_VALUE / 10
-                        || (rev == Integer.MIN_VALUE / 10 && pop < -8)) {
+                    || (rev == Integer.MIN_VALUE / 10 && pop < -8)) {
                     return 0;
                 }
 
