@@ -1,4 +1,6 @@
-package learn.设计模式.命令模式new;
+package learn.设计模式.命令模式new.命令;
+
+import learn.设计模式.命令模式new.实物.Stereo;
 
 public class StereoOffCommand implements Command {
     private Stereo stereo;
@@ -9,13 +11,13 @@ public class StereoOffCommand implements Command {
 
     @Override
     public void execute() {
-        stereo.off();
+        this.stereo.off();
     }
 
     @Override
     public void undo() {
-        stereo.on();
-        stereo.setCD();
-        stereo.setVolume();
+        this.stereo.on();
+        this.stereo.setCD();
+        this.stereo.setVolume();
     }
 }

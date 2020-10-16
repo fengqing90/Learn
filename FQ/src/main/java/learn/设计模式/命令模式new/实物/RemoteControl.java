@@ -1,6 +1,9 @@
-package learn.设计模式.命令模式new;
+package learn.设计模式.命令模式new.实物;
 
 import java.util.Arrays;
+
+import learn.设计模式.命令模式new.命令.Command;
+import learn.设计模式.命令模式new.命令.NoCommand;
 
 /**
  * 调用者：遥控器
@@ -33,7 +36,7 @@ public class RemoteControl {
             this.offCommands[i] = noCommand;
         }
 
-//一开始没有所谓的前一个命令，所以默认无指令
+        //一开始没有所谓的前一个命令，所以默认无指令
 
         this.undoCommand = noCommand;
 
@@ -87,8 +90,9 @@ public class RemoteControl {
 
     @Override
     public String toString() {
-        return "RemoteControl{" + "onCommands=" + Arrays.toString(this.onCommands)
-            + ", offCommands=" + Arrays.toString(this.offCommands) + '}';
+        return "RemoteControl{" + "onCommands="
+            + Arrays.toString(this.onCommands) + ", offCommands="
+            + Arrays.toString(this.offCommands) + '}';
     }
 
 }

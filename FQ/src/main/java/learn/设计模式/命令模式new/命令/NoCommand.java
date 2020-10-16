@@ -1,4 +1,4 @@
-package learn.设计模式.命令模式new;
+package learn.设计模式.命令模式new.命令;
 
 /**
  * TODO

@@ -1,5 +1,13 @@
 package learn.设计模式.命令模式new;
 
+import learn.设计模式.命令模式new.命令.LightOffCommand;
+import learn.设计模式.命令模式new.命令.LightOnCommand;
+import learn.设计模式.命令模式new.命令.StereoOffCommand;
+import learn.设计模式.命令模式new.命令.StereoOnCommand;
+import learn.设计模式.命令模式new.实物.Light;
+import learn.设计模式.命令模式new.实物.RemoteControl;
+import learn.设计模式.命令模式new.实物.Stereo;
+
 /** * 客户端角色 */
 public class CommandClient {
     public static void main(String[] args) {   //创建一个遥控器-调用者角
@@ -11,7 +19,8 @@ public class CommandClient {
         LightOnCommand lightOnCommand = new LightOnCommand();
         lightOnCommand.setLight(light);
         LightOffCommand lightOffCommand = new LightOffCommand();
-        lightOffCommand.setLight(light);     //调用者设置电灯插槽以及对应的开关按键指令-调用者角色
+        lightOffCommand.setLight(light);
+        //调用者设置电灯插槽以及对应的开关按键指令-调用者角色
         remoteControl.setCommand(0, lightOnCommand, lightOffCommand);
 
         // 2. 设置音响插槽与对应按键指令
@@ -20,8 +29,9 @@ public class CommandClient {
         stereoOnCommand.setStereo(stereo);
         StereoOffCommand stereoOffCommand = new StereoOffCommand();
         stereoOffCommand.setStereo(stereo);
-        remoteControl.setCommand(1, stereoOnCommand, stereoOffCommand);     //3. 空调
+        remoteControl.setCommand(1, stereoOnCommand, stereoOffCommand);
 
+        //3. 空调
         // AirConditioning airConditioning = new AirConditioning();
         // AirConditioningOnCommand airConditioningOnCommand = new AirConditioningOnCommand();
         // airConditioningOnCommand.setAirConditioning(airConditioning);
