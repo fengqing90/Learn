@@ -66,16 +66,11 @@ public class MyLeetCode {
         // System.out.println(Arrays.toString(合并两个有序数组.merge(
         //     new int[] { 0, 1, 2, 3, 0, 0, 0 }, 4, new int[] { 2, 5, 6 }, 3)));
 
-        二叉树的层次遍历II.TreeNode root = new 二叉树的层次遍历II.TreeNode(3);
-        二叉树的层次遍历II.TreeNode l2 = new 二叉树的层次遍历II.TreeNode(9);
-        二叉树的层次遍历II.TreeNode r2 = new 二叉树的层次遍历II.TreeNode(20);
-        二叉树的层次遍历II.TreeNode l3 = new 二叉树的层次遍历II.TreeNode(15);
-        二叉树的层次遍历II.TreeNode r3 = new 二叉树的层次遍历II.TreeNode(7);
-        r2.left = l3;
-        r2.right = r3;
-        root.left = l2;
-        root.right = r2;
-        System.out.println(二叉树的层次遍历II.levelOrderBottom(root));
+        // System.out
+        //     .println(二叉树的层次遍历II.levelOrderBottom(二叉树的层次遍历II.getTreeNode()));
+
+        System.out.println(最大子序和.maxSubArray3(new int[] { -2, 3 - 1, 1, -3 }));
+        System.out.println(最大子序和.maxSubArray2(new int[] { -2, 3 - 1, 1, -3 }));
 
     }
 
@@ -106,6 +101,20 @@ public class MyLeetCode {
 
     // 107. 二叉树的层次遍历 II
     static class 二叉树的层次遍历II {
+
+        private static 二叉树的层次遍历II.TreeNode getTreeNode() {
+            二叉树的层次遍历II.TreeNode root = new 二叉树的层次遍历II.TreeNode(3);
+            二叉树的层次遍历II.TreeNode l2 = new 二叉树的层次遍历II.TreeNode(9);
+            二叉树的层次遍历II.TreeNode r2 = new 二叉树的层次遍历II.TreeNode(20);
+            二叉树的层次遍历II.TreeNode l3 = new 二叉树的层次遍历II.TreeNode(15);
+            二叉树的层次遍历II.TreeNode r3 = new 二叉树的层次遍历II.TreeNode(7);
+            r2.left = l3;
+            r2.right = r3;
+            root.left = l2;
+            root.right = r2;
+            return root;
+        }
+
         public static List<List<Integer>> levelOrderBottom(TreeNode root) {
             List<List<Integer>> levelOrder = new LinkedList<>();
             if (root == null) {
@@ -424,9 +433,22 @@ public class MyLeetCode {
      * [53]最大子序和
      **/
     static class 最大子序和 {
+        /**
+         * 方案:分治
+         */
         public static class Status {
             public int lSum, rSum, mSum, iSum;
 
+            /**
+             * @param lSum
+             *        表示 [l, r] 内以 l 为左端点的最大子段和
+             * @param rSum
+             *        表示 [l, r] 内以 r 为右端点的最大子段和
+             * @param mSum
+             *        表示 [l, r] 内的最大子段和
+             * @param iSum
+             *        表示 [l, r] 的区间和
+             */
             public Status(int lSum, int rSum, int mSum, int iSum) {
                 this.lSum = lSum;
                 this.rSum = rSum;
@@ -435,10 +457,16 @@ public class MyLeetCode {
             }
         }
 
+        /**
+         * 方案:分治
+         */
         public static int maxSubArray(int[] nums) {
             return getInfo(nums, 0, nums.length - 1).mSum;
         }
 
+        /**
+         * 方案:分治
+         */
         public static Status getInfo(int[] a, int l, int r) {
             if (l == r) {
                 return new Status(a[l], a[l], a[l], a[l]);
@@ -449,6 +477,9 @@ public class MyLeetCode {
             return pushUp(lSub, rSub);
         }
 
+        /**
+         * 方案:分治
+         */
         public static Status pushUp(Status l, Status r) {
             int iSum = l.iSum + r.iSum;
             int lSum = Math.max(l.lSum, l.iSum + r.lSum);
@@ -461,7 +492,7 @@ public class MyLeetCode {
          * 方案：动态规划，
          **/
         public static int maxSubArray3(int[] nums) {
-            int ans = nums[0];
+            int max = nums[0];
             int sum = 0;
             for (int num : nums) {
                 if (sum > 0) {
@@ -469,9 +500,9 @@ public class MyLeetCode {
                 } else {
                     sum = num;
                 }
-                ans = Math.max(ans, sum);
+                max = Math.max(max, sum);
             }
-            return ans;
+            return max;
         }
 
         /**
@@ -479,12 +510,14 @@ public class MyLeetCode {
          **/
         public static int maxSubArray2(int[] nums) {
             // 初始化第一次结果值 和 最大值
-            int sum = nums[0], ans = nums[0];
+            int sum = nums[0], max = nums[0];
             for (int i = 1; i < nums.length; i++) {
+                // 第i个 和 第i+(i-1) 取大
                 sum = Math.max(nums[i], sum + nums[i]);
-                ans = Math.max(ans, sum);
+                // 取大后与现在最大比较
+                max = Math.max(max, sum);
             }
-            return ans;
+            return max;
         }
     }
 
@@ -622,8 +655,9 @@ public class MyLeetCode {
 
         // 方式2 ： 双指针
         public static int removeDuplicates2(int[] nums) {
-            if (nums == null || nums.length == 0)
+            if (nums == null || nums.length == 0) {
                 return 0;
+            }
             int p = 0;
             int q = 1;
             while (q < nums.length) {
