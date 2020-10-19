@@ -41,9 +41,81 @@ public class 树 {
         // System.out
         //     .println(二叉树的锯齿形层次遍历.zigzagLevelOrder(二叉树的锯齿形层次遍历.getTreeNode2()));
 
-        System.out.println(平衡二叉树.isBalanced(平衡二叉树.getTreeNode()));
+        // System.out.println(平衡二叉树.isBalanced(平衡二叉树.getTreeNode()));
 
-        System.out.println(二叉树的最小深度.minDepth(二叉树的最小深度.getTreeNode()));
+        // System.out.println(二叉树的最小深度.minDepth(二叉树的最小深度.getTreeNode()));
+
+        System.out.println(路径总和.hasPathSum(路径总和.getTreeNode(), 22));
+        System.out.println(路径总和.hasPathSum2(路径总和.getTreeNode(), 26));
+    }
+
+    /** 112. 路径总和 **/
+    static class 路径总和 {
+        public static TreeNode getTreeNode() {
+            return new TreeNode(5,
+                new TreeNode(4,
+                    new TreeNode(11, new TreeNode(7), new TreeNode(2)), null),
+                new TreeNode(8, new TreeNode(13),
+                    new TreeNode(4, null, new TreeNode(1))));
+        }
+
+        /** DFS 深度优先 **/
+        public static boolean hasPathSum(TreeNode root, int sum) {
+            if (root == null) {
+                return false;
+            }
+
+            // 到达叶子节点时，递归终止，判断 减后的 sum 是否符合条件。
+            if (root.left == null && root.right == null) {
+                return root.val == sum;
+            }
+
+            // 有叶子节点 会将sum减去该节点
+            // 递归地判断root节点的左孩子和右孩子。
+            return hasPathSum(root.left, sum - root.val)
+                || hasPathSum(root.right, sum - root.val);
+        }
+
+        /** BFS 广度优先 **/
+        public static boolean hasPathSum2(TreeNode root, int sum) {
+            if (root == null) {
+                return false;
+            }
+            Queue<TreeNode> queNode = new LinkedList<>();
+            Queue<Integer> queVal = new LinkedList<>();
+
+            // 节点队列
+            queNode.offer(root);
+
+            // 值队列
+            queVal.offer(root.val);
+
+            while (!queNode.isEmpty()) {
+                TreeNode now = queNode.poll();
+
+                int temp = queVal.poll();
+
+                // 如果 左右 没有子节点,直接比较值
+                if (now.left == null && now.right == null) {
+                    if (temp == sum) {
+                        return true;
+                    }
+                    // 如果 不相等,跳出
+                    continue;
+                }
+
+                if (now.left != null) {
+                    queNode.offer(now.left);
+                    queVal.offer(now.left.val + temp);
+                }
+
+                if (now.right != null) {
+                    queNode.offer(now.right);
+                    queVal.offer(now.right.val + temp);
+                }
+            }
+            return false;
+        }
     }
 
     /**
