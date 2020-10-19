@@ -1,4 +1,4 @@
-package com.example.learnleetcode.run;
+package com.learnleetcode.run;
 
 import java.util.ArrayList;
 import java.util.HashMap;

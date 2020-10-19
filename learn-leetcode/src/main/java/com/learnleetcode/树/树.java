@@ -1,4 +1,4 @@
-package com.example.learnleetcode.树;
+package com.learnleetcode.树;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
  * @author fengqing
  * @date 2020/10/16 11:02
  */
-public class Tree {
+public class 树 {
     public static class TreeNode {
         int val;
         TreeNode left;
@@ -21,8 +21,8 @@ public class Tree {
 
         @Override
         public String toString() {
-            return "TreeNode{" + "val=" + val + ", left=" + left + ", right="
-                + right + '}';
+            return "TreeNode{" + "val=" + this.val + ", left=" + this.left
+                + ", right=" + this.right + '}';
         }
     }
 
