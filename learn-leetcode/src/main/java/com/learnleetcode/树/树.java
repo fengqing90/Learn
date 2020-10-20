@@ -51,7 +51,56 @@ public class 树 {
         // System.out.println(路径总和.hasPathSum(路径总和.getTreeNode(), 22));
         // System.out.println(路径总和.hasPathSum2(路径总和.getTreeNode(), 26));
 
-        System.out.println(翻转二叉树.invertTree(翻转二叉树.getTreeNode()));
+        // System.out.println(翻转二叉树.invertTree(翻转二叉树.getTreeNode()));
+
+        System.out.println(二叉树的最近公共祖先.lowestCommonAncestor(
+            二叉树的最近公共祖先.getTreeNode(), new TreeNode(2), new TreeNode(8)));
+
+        System.out.println(二叉树的最近公共祖先.lowestCommonAncestor(
+            二叉树的最近公共祖先.getTreeNode(), new TreeNode(2), new TreeNode(4)));
+    }
+
+    /** 236. 二叉树的最近公共祖先 **/
+    static class 二叉树的最近公共祖先 {
+
+        public static TreeNode getTreeNode() {
+            return new TreeNode(6,
+                new TreeNode(2, new TreeNode(0),
+                    new TreeNode(4, new TreeNode(3), new TreeNode(5))),
+                new TreeNode(8, new TreeNode(7), new TreeNode(9)));
+        }
+
+        public static TreeNode getTreeNode2() {
+            return new TreeNode(3,
+                new TreeNode(5, new TreeNode(6),
+                    new TreeNode(2, new TreeNode(7), new TreeNode(4))),
+                new TreeNode(1, new TreeNode(0), new TreeNode(8)));
+        }
+
+        public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode l,
+                TreeNode r) {
+
+            if (root == null) {
+                return null;
+            }
+            if (root.val == l.val || root.val == r.val) {
+                return root;
+            }
+            // 应为是二叉搜索树,左边的节点都比跟节点小,右边的节点都比根节点大
+
+            // 当前节点 > 左节点 > 右节点  ： 当前节点往右偏移
+            // 当前节点 < 左节点 < 右节点  ： 当前节点往左偏移
+            // 当前节点 > 左节点 < 右节点  ： 即公共节点
+            if (root.val < l.val && root.val < r.val) {
+                return lowestCommonAncestor(root.right, l, r);
+            } else if (root.val > l.val && root.val > r.val) {
+                return lowestCommonAncestor(root.left, l, r);
+            } else if (root.val > l.val && root.val < r.val) {
+                return root;
+            }
+
+            return root;
+        }
     }
 
     /** 226. 翻转二叉树 **/
