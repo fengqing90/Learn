@@ -29,8 +29,11 @@ public class 树 {
 
         @Override
         public String toString() {
-            return "TreeNode{" + "val=" + this.val + ", left=" + this.left
-                + ", right=" + this.right + '}';
+
+            return this.val + " (" + (this.left == null ? "" : this.left)
+                + " | " + (this.right == null ? "" : this.right) + ")";
+            // return "TreeNode{" + "val=" + this.val + ", left=" + this.left
+            //     + ", right=" + this.right + '}';
         }
     }
 
@@ -45,8 +48,34 @@ public class 树 {
 
         // System.out.println(二叉树的最小深度.minDepth(二叉树的最小深度.getTreeNode()));
 
-        System.out.println(路径总和.hasPathSum(路径总和.getTreeNode(), 22));
-        System.out.println(路径总和.hasPathSum2(路径总和.getTreeNode(), 26));
+        // System.out.println(路径总和.hasPathSum(路径总和.getTreeNode(), 22));
+        // System.out.println(路径总和.hasPathSum2(路径总和.getTreeNode(), 26));
+
+        System.out.println(翻转二叉树.invertTree(翻转二叉树.getTreeNode()));
+    }
+
+    /** 226. 翻转二叉树 **/
+    static class 翻转二叉树 {
+
+        public static TreeNode getTreeNode() {
+            return new TreeNode(4,
+                new TreeNode(2, new TreeNode(1), new TreeNode(3)),
+                new TreeNode(7, new TreeNode(6), new TreeNode(9)));
+        }
+
+        public static TreeNode invertTree(TreeNode root) {
+
+            if (root == null) {
+                return null;
+            }
+
+            TreeNode left = invertTree(root.left);
+            TreeNode right = invertTree(root.right);
+
+            root.left = right;
+            root.right = left;
+            return root;
+        }
     }
 
     /** 112. 路径总和 **/
