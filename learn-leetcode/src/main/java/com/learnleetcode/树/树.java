@@ -53,11 +53,79 @@ public class 树 {
 
         // System.out.println(翻转二叉树.invertTree(翻转二叉树.getTreeNode()));
 
-        System.out.println(二叉树的最近公共祖先.lowestCommonAncestor(
-            二叉树的最近公共祖先.getTreeNode(), new TreeNode(2), new TreeNode(8)));
+        // System.out.println(二叉树的最近公共祖先.lowestCommonAncestor(
+        //     二叉树的最近公共祖先.getTreeNode(), new TreeNode(2), new TreeNode(8)));
+        //
+        // System.out.println(二叉树的最近公共祖先.lowestCommonAncestor(
+        //     二叉树的最近公共祖先.getTreeNode(), new TreeNode(2), new TreeNode(4)));
 
-        System.out.println(二叉树的最近公共祖先.lowestCommonAncestor(
-            二叉树的最近公共祖先.getTreeNode(), new TreeNode(2), new TreeNode(4)));
+        System.out.println(二叉树的所有路径.binaryTreePaths(二叉树的所有路径.getTreeNode()));
+        System.out.println(二叉树的所有路径.binaryTreePaths2(二叉树的所有路径.getTreeNode()));
+    }
+
+    /** 257. 二叉树的所有路径 **/
+    static class 二叉树的所有路径 {
+        public static TreeNode getTreeNode() {
+            return new TreeNode(1, new TreeNode(2, null, new TreeNode(5)),
+                new TreeNode(3));
+        }
+
+        public static List<String> binaryTreePaths(TreeNode root) {
+            List<String> paths = new ArrayList<String>();
+            constructPaths(root, "", paths);
+            return paths;
+        }
+
+        public static void constructPaths(TreeNode root, String path,
+                List<String> paths) {
+            if (root != null) {
+                StringBuffer pathSB = new StringBuffer(path);
+                pathSB.append(root.val);
+                if (root.left == null && root.right == null) {  // 当前节点是叶子节点
+                    paths.add(pathSB.toString());  // 把路径加入到答案中
+                } else {
+                    pathSB.append("->");  // 当前节点不是叶子节点，继续递归遍历
+                    constructPaths(root.left, pathSB.toString(), paths);
+                    constructPaths(root.right, pathSB.toString(), paths);
+                }
+            }
+        }
+
+        public static List<String> binaryTreePaths2(TreeNode root) {
+            List<String> paths = new ArrayList<>();
+
+            if (root == null) {
+                return paths;
+            }
+
+            Queue<TreeNode> nodeQueue = new LinkedList<>();
+            Queue<String> pathQueue = new LinkedList<>();
+
+            nodeQueue.offer(root);
+            pathQueue.offer(Integer.toString(root.val));
+
+            while (!nodeQueue.isEmpty()) {
+                TreeNode node = nodeQueue.poll();
+                String path = pathQueue.poll();
+
+                if (node.left == null && node.right == null) {
+                    paths.add(0, path);  // 叶子节点,加入path
+                } else {
+
+                    if (node.left != null) {
+                        nodeQueue.offer(node.left);
+                        pathQueue.offer(path + "->" + node.left.val);
+                    }
+
+                    if (node.right != null) {
+                        nodeQueue.offer(node.right);
+                        pathQueue.offer(path + "->" + node.right.val);
+                    }
+                }
+            }
+            return paths;
+        }
+
     }
 
     /** 236. 二叉树的最近公共祖先 **/
