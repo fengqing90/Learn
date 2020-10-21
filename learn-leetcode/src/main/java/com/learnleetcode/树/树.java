@@ -59,8 +59,63 @@ public class 树 {
         // System.out.println(二叉树的最近公共祖先.lowestCommonAncestor(
         //     二叉树的最近公共祖先.getTreeNode(), new TreeNode(2), new TreeNode(4)));
 
-        System.out.println(二叉树的所有路径.binaryTreePaths(二叉树的所有路径.getTreeNode()));
-        System.out.println(二叉树的所有路径.binaryTreePaths2(二叉树的所有路径.getTreeNode()));
+        // System.out.println(二叉树的所有路径.binaryTreePaths(二叉树的所有路径.getTreeNode()));
+        // System.out.println(二叉树的所有路径.binaryTreePaths2(二叉树的所有路径.getTreeNode()));
+
+        System.out.println(左叶子之和.sumOfLeftLeaves(左叶子之和.getTreeNode()));
+        System.out.println(左叶子之和.sumOfLeftLeaves(左叶子之和.getTreeNode2()));
+    }
+
+    /** 404. 左叶子之和 **/
+    static class 左叶子之和 {
+
+        public static TreeNode getTreeNode() {
+            return new TreeNode(3, new TreeNode(9),
+                new TreeNode(20, new TreeNode(15), new TreeNode(7)));
+        }
+
+        public static TreeNode getTreeNode2() {
+            return new TreeNode(1);
+        }
+
+        public static int sumOfLeftLeaves(TreeNode root) {
+
+            if (root == null) {
+                return 0;
+            }
+
+            Queue<TreeNode> nodeQ = new LinkedList<>();
+            nodeQ.offer(root);
+
+            int sum = 0;
+            while (!nodeQ.isEmpty()) {
+
+                TreeNode node = nodeQ.poll();
+
+                // 左节点不为空
+                if (node.left != null) {
+                    // 左节点是否叶子节点,是加值,不是继续看左节点下面节点
+                    if (isLeafNode(node.left)) {
+                        sum += node.left.val;
+                    } else {
+                        nodeQ.offer(node.left);
+                    }
+                }
+
+                // 右节点不为空, 右节点不是叶子节点继续看右节点下是否有左节点
+                if (node.right != null && !isLeafNode(node.right)) {
+                    nodeQ.offer(node.right);
+                }
+
+            }
+
+            return sum;
+        }
+
+        public static boolean isLeafNode(TreeNode node) {
+            return node.left == null && node.right == null;
+        }
+
     }
 
     /** 257. 二叉树的所有路径 **/
