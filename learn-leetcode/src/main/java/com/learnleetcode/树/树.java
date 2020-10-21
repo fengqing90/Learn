@@ -62,8 +62,11 @@ public class 树 {
         // System.out.println(二叉树的所有路径.binaryTreePaths(二叉树的所有路径.getTreeNode()));
         // System.out.println(二叉树的所有路径.binaryTreePaths2(二叉树的所有路径.getTreeNode()));
 
+        // System.out.println(左叶子之和.sumOfLeftLeaves4BFS(左叶子之和.getTreeNode())); // 24
+        // System.out.println(左叶子之和.sumOfLeftLeaves4BFS(左叶子之和.getTreeNode2()));// 0
         System.out.println(左叶子之和.sumOfLeftLeaves(左叶子之和.getTreeNode()));
         System.out.println(左叶子之和.sumOfLeftLeaves(左叶子之和.getTreeNode2()));
+        System.out.println(左叶子之和.sumOfLeftLeaves(左叶子之和.getTreeNode3()));
     }
 
     /** 404. 左叶子之和 **/
@@ -78,7 +81,34 @@ public class 树 {
             return new TreeNode(1);
         }
 
+        public static TreeNode getTreeNode3() {
+            return new TreeNode(1, new TreeNode(5), null);
+        }
+
         public static int sumOfLeftLeaves(TreeNode root) {
+
+            if (root == null) {
+                return 0;
+            }
+
+            int lsum = 0;
+            int rsum = 0;
+            if (root.left != null) {
+                if (isLeafNode(root.left)) {
+                    lsum = root.left.val;
+                } else {
+                    lsum = sumOfLeftLeaves(root.left);
+                }
+            }
+
+            if (root.right != null && !isLeafNode(root.right)) {
+                rsum = sumOfLeftLeaves(root.right);
+            }
+
+            return lsum + rsum;
+        }
+
+        public static int sumOfLeftLeaves4BFS(TreeNode root) {
 
             if (root == null) {
                 return 0;
