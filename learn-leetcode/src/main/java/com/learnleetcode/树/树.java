@@ -85,6 +85,7 @@ public class 树 {
             return new TreeNode(1, new TreeNode(5), null);
         }
 
+        /** DFS **/
         public static int sumOfLeftLeaves(TreeNode root) {
 
             if (root == null) {
@@ -108,6 +109,7 @@ public class 树 {
             return lsum + rsum;
         }
 
+        /** BFS **/
         public static int sumOfLeftLeaves4BFS(TreeNode root) {
 
             if (root == null) {
