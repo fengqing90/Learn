@@ -64,9 +64,53 @@ public class 树 {
 
         // System.out.println(左叶子之和.sumOfLeftLeaves4BFS(左叶子之和.getTreeNode())); // 24
         // System.out.println(左叶子之和.sumOfLeftLeaves4BFS(左叶子之和.getTreeNode2()));// 0
-        System.out.println(左叶子之和.sumOfLeftLeaves(左叶子之和.getTreeNode()));
-        System.out.println(左叶子之和.sumOfLeftLeaves(左叶子之和.getTreeNode2()));
-        System.out.println(左叶子之和.sumOfLeftLeaves(左叶子之和.getTreeNode3()));
+        // System.out.println(左叶子之和.sumOfLeftLeaves(左叶子之和.getTreeNode()));
+        // System.out.println(左叶子之和.sumOfLeftLeaves(左叶子之和.getTreeNode2()));
+        // System.out.println(左叶子之和.sumOfLeftLeaves(左叶子之和.getTreeNode3()));
+
+        System.out.println(
+            二叉树中第二小的节点.findSecondMinimumValue(二叉树中第二小的节点.getTreeNode()));
+    }
+
+    /** 671. 二叉树中第二小的节点 **/
+    static class 二叉树中第二小的节点 {
+        public static TreeNode getTreeNode() {
+            return new TreeNode(2, new TreeNode(2),
+                new TreeNode(5, new TreeNode(5), new TreeNode(7)));
+        }
+
+        public static int findSecondMinimumValue(TreeNode root) {
+
+            if (root == null) {
+                return -1;
+            }
+
+            return help(root, root.val);
+        }
+
+        private static int help(TreeNode root, int min) {
+            if (root == null) {
+                return -1;
+            }
+
+            // 是否大于最小节点
+            if (root.val > min) {
+                return root.val;
+            }
+
+            // 左节点 第二小
+            int left = help(root.left, min);
+            // 右节点 第二小
+            int right = help(root.right, min);
+
+            if (left == -1) {
+                return right;
+            }
+            if (right == -1) {
+                return left;
+            }
+            return Math.min(left, right);
+        }
     }
 
     /** 404. 左叶子之和 **/
