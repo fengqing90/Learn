@@ -48,7 +48,10 @@ public class RebuildCacheThread implements Runnable {
 				System.out.println("existed product info is null......");   
 			}
 			
+			cacheService.saveProductInfo2LocalCache(productInfo);
 			cacheService.saveProductInfo2ReidsCache(productInfo);  
+			
+			zkSession.releaseDistributedLock(productInfo.getId()); 
 		}
 	}
 

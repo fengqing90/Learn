@@ -69,10 +69,9 @@ public class KafkaMessageProcessor implements Runnable {
 		// 你从一个课程里，还是学到的是里面围绕的讲解的一些核心的知识
 		// 缓存架构：高并发、高性能、海量数据，等场景
 		
-		String productInfoJSON = "{\"id\": 2, \"name\": \"iphone7手机\", \"price\": 5599, \"pictureList\":\"a.jpg,b.jpg\", \"specification\": \"iphone7的规格\", \"service\": \"iphone7的售后服务\", \"color\": \"红色,白色,黑色\", \"size\": \"5.5\", \"shopId\": 1, \"modified_time\": \"2017-01-01 12:00:00\"}";
+		String productInfoJSON = "{\"id\": 5, \"name\": \"iphone7手机\", \"price\": 5599, \"pictureList\":\"a.jpg,b.jpg\", \"specification\": \"iphone7的规格\", \"service\": \"iphone7的售后服务\", \"color\": \"红色,白色,黑色\", \"size\": \"5.5\", \"shopId\": 1, \"modifiedTime\": \"2017-01-01 12:00:00\"}";
 		ProductInfo productInfo = JSONObject.parseObject(productInfoJSON, ProductInfo.class);
-		cacheService.saveProductInfo2LocalCache(productInfo);
-		System.out.println("===================获取刚保存到本地缓存的商品信息：" + cacheService.getProductInfoFromLocalCache(productId));  
+		
 		
 		// 加代码，在将数据直接写入redis缓存之前，应该先获取一个zk的分布式锁
 		ZooKeeperSession zkSession = ZooKeeperSession.getInstance();
@@ -100,6 +99,14 @@ public class KafkaMessageProcessor implements Runnable {
 			System.out.println("existed product info is null......");   
 		}
 		
+		try {
+			Thread.sleep(10 * 1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		cacheService.saveProductInfo2LocalCache(productInfo);
+		System.out.println("===================获取刚保存到本地缓存的商品信息：" + cacheService.getProductInfoFromLocalCache(productId));  
 		cacheService.saveProductInfo2ReidsCache(productInfo);  
 		
 		// 释放分布式锁

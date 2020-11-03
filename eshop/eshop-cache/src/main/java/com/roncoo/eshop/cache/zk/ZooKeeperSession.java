@@ -69,12 +69,12 @@ public class ZooKeeperSession {
 			int count = 0;
 			while(true) {
 				try {
-					Thread.sleep(20); 
+					Thread.sleep(1000); 
 					zookeeper.create(path, "".getBytes(), 
 							Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
 				} catch (Exception e2) {
-					e2.printStackTrace();
 					count++;
+					System.out.println("the " + count + " times try to acquire lock for product[id=" + productId + "]......");
 					continue;
 				}
 				System.out.println("success to acquire lock for product[id=" + productId + "] after " + count + " times try......");
@@ -91,6 +91,7 @@ public class ZooKeeperSession {
 		String path = "/product-lock-" + productId;
 		try {
 			zookeeper.delete(path, -1); 
+			System.out.println("release the lock for product[id=" + productId + "]......");  
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

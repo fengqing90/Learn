@@ -14,7 +14,7 @@ public class JedisTest {
         jedisClusterNodes.add(new HostAndPort("192.168.31.19", 7004));
         jedisClusterNodes.add(new HostAndPort("192.168.31.227", 7006));
         JedisCluster jedisCluster = new JedisCluster(jedisClusterNodes);
-        System.out.println(jedisCluster.get("product_info_1"));   
+        System.out.println(jedisCluster.get("product_info_5"));   
         System.out.println(jedisCluster.get("shop_info_1"));  
 	}
 
