@@ -109,7 +109,10 @@ public class CacheServiceImpl implements CacheService {
 	public ProductInfo getProductInfoFromReidsCache(Long productId) {
 		String key = "product_info_" + productId;
 		String json = jedisCluster.get(key);
-		return JSONObject.parseObject(json, ProductInfo.class);
+		if(json != null) {
+			return JSONObject.parseObject(json, ProductInfo.class);
+		}
+		return null;
 	}
 	
 	/**
@@ -119,7 +122,10 @@ public class CacheServiceImpl implements CacheService {
 	public ShopInfo getShopInfoFromReidsCache(Long shopId) {
 		String key = "shop_info_" + shopId;
 		String json = jedisCluster.get(key);
-		return JSONObject.parseObject(json, ShopInfo.class);
+		if(json != null) {
+			return JSONObject.parseObject(json, ShopInfo.class);
+		}
+		return null;
 	}
 	
 }
