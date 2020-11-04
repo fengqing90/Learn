@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.roncoo.eshop.cache.model.ProductInfo;
 import com.roncoo.eshop.cache.model.ShopInfo;
+import com.roncoo.eshop.cache.prewarm.CachePrewarmThread;
 import com.roncoo.eshop.cache.rebuild.RebuildCacheQueue;
 import com.roncoo.eshop.cache.service.CacheService;
 
@@ -79,6 +80,12 @@ public class CacheController {
 		}
 		
 		return shopInfo;
+	}
+	
+	@RequestMapping("/prewarmCache")
+	@ResponseBody
+	public void prewarmCache() {
+		new CachePrewarmThread().start();
 	}
 	
 }
