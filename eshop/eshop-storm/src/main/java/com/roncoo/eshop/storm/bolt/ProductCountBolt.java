@@ -12,6 +12,8 @@ import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.trident.util.LRUMap;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.utils.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.roncoo.eshop.storm.zk.ZooKeeperSession;
 
@@ -23,6 +25,8 @@ import com.roncoo.eshop.storm.zk.ZooKeeperSession;
 public class ProductCountBolt extends BaseRichBolt {
 
 	private static final long serialVersionUID = -8761807561458126413L;
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProductCountBolt.class);
 
 	private LRUMap<Long, Long> productCountMap = new LRUMap<Long, Long>(1000);
 	private ZooKeeperSession zkSession;
@@ -49,7 +53,9 @@ public class ProductCountBolt extends BaseRichBolt {
 		
 		zkSession.acquireDistributedLock();
 		
+		zkSession.createNode("/taskid-list");  
 		String taskidList = zkSession.getNodeData();
+		LOGGER.info("【ProductCountBolt获取到taskid list】taskidList=" + taskidList);  
 		if(!"".equals(taskidList)) {
 			taskidList += "," + taskid;
 		} else {
@@ -57,6 +63,7 @@ public class ProductCountBolt extends BaseRichBolt {
 		}
 		
 		zkSession.setNodeData("/taskid-list", taskidList);  
+		LOGGER.info("【ProductCountBolt设置taskid list】taskidList=" + taskidList);  
 		
 		zkSession.releaseDistributedLock();
 	}
@@ -65,53 +72,70 @@ public class ProductCountBolt extends BaseRichBolt {
 		
 		public void run() {
 			List<Map.Entry<Long, Long>> topnProductList = new ArrayList<Map.Entry<Long, Long>>();   
+			List<Long> productidList = new ArrayList<Long>();
 			
 			while(true) {
-				topnProductList.clear();
-				
-				int topn = 3;
-				
-				if(productCountMap.size() == 0) {
-					Utils.sleep(100);
-					continue;
-				}
-				
-				for(Map.Entry<Long, Long> productCountEntry : productCountMap.entrySet()) {
-					if(topnProductList.size() == 0) {
-						topnProductList.add(productCountEntry);
-					} else {
-						// 比较大小，生成最热topn的算法有很多种
-						// 但是我这里为了简化起见，不想引入过多的数据结构和算法的的东西
-						// 很有可能还是会有漏洞，但是我已经反复推演了一下了，而且也画图分析过这个算法的运行流程了
-						boolean bigger = false;
-						
-						for(int i = 0; i < topnProductList.size(); i++){
-							Map.Entry<Long, Long> topnProductCountEntry = topnProductList.get(i);
+				try {
+					topnProductList.clear();
+					productidList.clear();
+					
+					int topn = 3;
+					
+					if(productCountMap.size() == 0) {
+						Utils.sleep(100);
+						continue;
+					}
+					
+					LOGGER.info("【ProductCountThread打印productCountMap的长度】size=" + productCountMap.size());
+					
+					for(Map.Entry<Long, Long> productCountEntry : productCountMap.entrySet()) {
+						if(topnProductList.size() == 0) {
+							topnProductList.add(productCountEntry);
+						} else {
+							// 比较大小，生成最热topn的算法有很多种
+							// 但是我这里为了简化起见，不想引入过多的数据结构和算法的的东西
+							// 很有可能还是会有漏洞，但是我已经反复推演了一下了，而且也画图分析过这个算法的运行流程了
+							boolean bigger = false;
 							
-							if(productCountEntry.getValue() > topnProductCountEntry.getValue()) {
-								int lastIndex = topnProductList.size() < topn ? topnProductList.size() - 1 : topn - 2;
-								for(int j = lastIndex; j >= i; j--) {
-									topnProductList.set(j + 1, topnProductList.get(j));  
+							for(int i = 0; i < topnProductList.size(); i++){
+								Map.Entry<Long, Long> topnProductCountEntry = topnProductList.get(i);
+								
+								if(productCountEntry.getValue() > topnProductCountEntry.getValue()) {
+									int lastIndex = topnProductList.size() < topn ? topnProductList.size() - 1 : topn - 2;
+									for(int j = lastIndex; j >= i; j--) {
+										if(j + 1 == topnProductList.size()) {
+											topnProductList.add(null);
+										}
+										topnProductList.set(j + 1, topnProductList.get(j));  
+									}
+									topnProductList.set(i, productCountEntry);
+									bigger = true;
+									break;
 								}
-								topnProductList.set(i, productCountEntry);
-								bigger = true;
-								break;
 							}
-						}
-						
-						if(!bigger) {
-							if(topnProductList.size() < topn) {
-								topnProductList.add(productCountEntry);
+							
+							if(!bigger) {
+								if(topnProductList.size() < topn) {
+									topnProductList.add(productCountEntry);
+								}
 							}
 						}
 					}
+					
+					// 获取到一个topn list
+					for(Map.Entry<Long, Long> topnProductEntry : topnProductList) {
+						productidList.add(topnProductEntry.getKey());
+					}
+					
+					String topnProductListJSON = JSONArray.toJSONString(productidList);
+					zkSession.createNode("/task-hot-product-list-" + taskid); 
+					zkSession.setNodeData("/task-hot-product-list-" + taskid, topnProductListJSON);
+					LOGGER.info("【ProductCountThread计算出一份top3热门商品列表】zk path=" + ("/task-hot-product-list-" + taskid) + ", topnProductListJSON=" + topnProductListJSON);  
+					
+					Utils.sleep(5000); 
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				
-				// 获取到一个topn list
-				String topnProductListJSON = JSONArray.toJSONString(topnProductList);
-				zkSession.setNodeData("/task-hot-product-list-" + taskid, topnProductListJSON);
-				
-				Utils.sleep(5000); 
 			}
 		}
 		
@@ -120,6 +144,8 @@ public class ProductCountBolt extends BaseRichBolt {
 	public void execute(Tuple tuple) {
 		Long productId = tuple.getLongByField("productId"); 
 		
+		LOGGER.info("【ProductCountBolt接收到一个商品id】 productId=" + productId);  
+		
 		Long count = productCountMap.get(productId);
 		if(count == null) {
 			count = 0L;
@@ -127,6 +153,8 @@ public class ProductCountBolt extends BaseRichBolt {
 		count++;
 		
 		productCountMap.put(productId, count);
+		
+		LOGGER.info("【ProductCountBolt完成商品访问次数统计】productId=" + productId + ", count=" + count); 
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {

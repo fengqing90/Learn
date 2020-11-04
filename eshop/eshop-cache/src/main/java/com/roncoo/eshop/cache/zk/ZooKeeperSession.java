@@ -173,6 +173,14 @@ public class ZooKeeperSession {
 		}
 	}
 	
+	public void createNode(String path) {
+		try {
+			zookeeper.create(path, "".getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+		} catch (Exception e) {
+			
+		}
+	}
+	
 	/**
 	 * 建立zk session的watcher
 	 * @author Administrator
