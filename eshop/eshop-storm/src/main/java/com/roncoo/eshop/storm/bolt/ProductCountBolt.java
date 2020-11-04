@@ -38,6 +38,7 @@ public class ProductCountBolt extends BaseRichBolt {
 		this.taskid = context.getThisTaskId();
 		
 		new Thread(new ProductCountThread()).start();
+		new Thread(new HotProductFindThread()).start();
 		
 		// 1、将自己的taskid写入一个zookeeper node中，形成taskid的列表
 		// 2、然后每次都将自己的热门商品列表，写入自己的taskid对应的zookeeper节点
@@ -66,6 +67,90 @@ public class ProductCountBolt extends BaseRichBolt {
 		LOGGER.info("【ProductCountBolt设置taskid list】taskidList=" + taskidList);  
 		
 		zkSession.releaseDistributedLock();
+	}
+	
+	private class HotProductFindThread implements Runnable {
+
+		public void run() {
+			List<Map.Entry<Long, Long>> productCountList = new ArrayList<Map.Entry<Long, Long>>();
+			List<Long> hotProductIdList = new ArrayList<Long>();
+			
+			while(true) {
+				// 1、将LRUMap中的数据按照访问次数，进行全局的排序
+				// 2、计算95%的商品的访问次数的平均值
+				// 3、遍历排序后的商品访问次数，从最大的开始
+				// 4、如果某个商品比如它的访问量是平均值的10倍，就认为是缓存的热点
+				try {
+					productCountList.clear();
+					hotProductIdList.clear();
+					
+					if(productCountMap.size() == 0) {
+						Utils.sleep(100);
+						continue;
+					}
+					
+					LOGGER.info("【HotProductFindThread打印productCountMap的长度】size=" + productCountMap.size());
+					
+					// 1、先做全局的排序
+					
+					for(Map.Entry<Long, Long> productCountEntry : productCountMap.entrySet()) {
+						if(productCountList.size() == 0) {
+							productCountList.add(productCountEntry);
+						} else {
+							// 比较大小，生成最热topn的算法有很多种
+							// 但是我这里为了简化起见，不想引入过多的数据结构和算法的的东西
+							// 很有可能还是会有漏洞，但是我已经反复推演了一下了，而且也画图分析过这个算法的运行流程了
+							boolean bigger = false;
+							
+							for(int i = 0; i < productCountList.size(); i++){
+								Map.Entry<Long, Long> topnProductCountEntry = productCountList.get(i);
+								
+								if(productCountEntry.getValue() > topnProductCountEntry.getValue()) {
+									int lastIndex = productCountList.size() < productCountMap.size() ? productCountList.size() - 1 : productCountMap.size() - 2;
+									for(int j = lastIndex; j >= i; j--) {
+										if(j + 1 == productCountList.size()) {
+											productCountList.add(null);
+										}
+										productCountList.set(j + 1, productCountList.get(j));  
+									}
+									productCountList.set(i, productCountEntry);
+									bigger = true;
+									break;
+								}
+							}
+							
+							if(!bigger) {
+								if(productCountList.size() < productCountMap.size()) {
+									productCountList.add(productCountEntry);
+								}
+							}
+						}
+					}
+					
+					// 2、计算出95%的商品的访问次数的平均值
+					int calculateCount = (int)Math.floor(productCountList.size() * 0.95);
+					
+					Long totalCount = 0L;
+					for(int i = productCountList.size() - 1; i >= productCountList.size() - calculateCount; i--) {
+						totalCount += productCountList.get(i).getValue();
+					}
+					
+					Long avgCount = totalCount / calculateCount;
+					
+					// 3、从第一个元素开始遍历，判断是否是平均值得10倍
+					for(Map.Entry<Long, Long> productCountEntry : productCountList) {
+						if(productCountEntry.getValue() > 10 * avgCount) {
+							hotProductIdList.add(productCountEntry.getKey());
+						}
+					}
+					
+					Utils.sleep(5000); 
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
 	}
 	
 	private class ProductCountThread implements Runnable {
