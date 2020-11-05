@@ -15,6 +15,7 @@ import org.apache.storm.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.roncoo.eshop.storm.http.HttpClientUtils;
 import com.roncoo.eshop.storm.zk.ZooKeeperSession;
 
 /**
@@ -141,6 +142,23 @@ public class ProductCountBolt extends BaseRichBolt {
 					for(Map.Entry<Long, Long> productCountEntry : productCountList) {
 						if(productCountEntry.getValue() > 10 * avgCount) {
 							hotProductIdList.add(productCountEntry.getKey());
+							
+							// 将缓存热点反向推送到流量分发的nginx中
+							String distributeNginxURL = "http://192.168.31.227/hot?productId=" + productCountEntry.getKey();
+							HttpClientUtils.sendGetRequest(distributeNginxURL);
+							
+							// 将缓存热点，那个商品对应的完整的缓存数据，发送请求到缓存服务去获取，反向推送到所有的后端应用nginx服务器上去
+							String cacheServiceURL = "http://192.168.31.179:8080/getProductInfo?productId=" + productCountEntry.getKey();
+							String response = HttpClientUtils.sendGetRequest(cacheServiceURL);
+						
+							String[] appNginxURLs = new String[]{
+									"http://192.168.31.187/hot?productId=" + productCountEntry.getKey() + "&productInfo=" + response,
+									"http://192.168.31.19/hot?productId=" + productCountEntry.getKey() + "&productInfo=" + response
+							};
+							
+							for(String appNginxURL : appNginxURLs) {
+								HttpClientUtils.sendGetRequest(appNginxURL);
+							}
 						}
 					}
 					
