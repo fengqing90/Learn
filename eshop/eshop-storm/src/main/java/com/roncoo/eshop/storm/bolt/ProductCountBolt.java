@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
 import org.apache.storm.shade.org.json.simple.JSONArray;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
@@ -72,9 +76,11 @@ public class ProductCountBolt extends BaseRichBolt {
 	
 	private class HotProductFindThread implements Runnable {
 
+		@SuppressWarnings("deprecation")
 		public void run() {
 			List<Map.Entry<Long, Long>> productCountList = new ArrayList<Map.Entry<Long, Long>>();
 			List<Long> hotProductIdList = new ArrayList<Long>();
+			List<Long> lastTimeHotProductIdList = new ArrayList<Long>();
 			
 			while(true) {
 				// 1、将LRUMap中的数据按照访问次数，进行全局的排序
@@ -128,6 +134,8 @@ public class ProductCountBolt extends BaseRichBolt {
 						}
 					}
 					
+					LOGGER.info("【HotProductFindThread全局排序后的结果】productCountList=" + productCountList); 
+					
 					// 2、计算出95%的商品的访问次数的平均值
 					int calculateCount = (int)Math.floor(productCountList.size() * 0.95);
 					
@@ -138,27 +146,66 @@ public class ProductCountBolt extends BaseRichBolt {
 					
 					Long avgCount = totalCount / calculateCount;
 					
+					LOGGER.info("【HotProductFindThread计算出95%的商品的访问次数平均值】avgCount=" + avgCount); 
+					
 					// 3、从第一个元素开始遍历，判断是否是平均值得10倍
 					for(Map.Entry<Long, Long> productCountEntry : productCountList) {
 						if(productCountEntry.getValue() > 10 * avgCount) {
+							LOGGER.info("【HotProductFindThread发现一个热点】productCountEntry=" + productCountEntry); 
 							hotProductIdList.add(productCountEntry.getKey());
 							
-							// 将缓存热点反向推送到流量分发的nginx中
-							String distributeNginxURL = "http://192.168.31.227/hot?productId=" + productCountEntry.getKey();
-							HttpClientUtils.sendGetRequest(distributeNginxURL);
-							
-							// 将缓存热点，那个商品对应的完整的缓存数据，发送请求到缓存服务去获取，反向推送到所有的后端应用nginx服务器上去
-							String cacheServiceURL = "http://192.168.31.179:8080/getProductInfo?productId=" + productCountEntry.getKey();
-							String response = HttpClientUtils.sendGetRequest(cacheServiceURL);
-						
-							String[] appNginxURLs = new String[]{
-									"http://192.168.31.187/hot?productId=" + productCountEntry.getKey() + "&productInfo=" + response,
-									"http://192.168.31.19/hot?productId=" + productCountEntry.getKey() + "&productInfo=" + response
-							};
-							
-							for(String appNginxURL : appNginxURLs) {
-								HttpClientUtils.sendGetRequest(appNginxURL);
+							if(!lastTimeHotProductIdList.contains(productCountEntry.getKey())) {
+								// 将缓存热点反向推送到流量分发的nginx中
+								String distributeNginxURL = "http://192.168.31.227/hot?productId=" + productCountEntry.getKey();
+								HttpClientUtils.sendGetRequest(distributeNginxURL);
+								
+								// 将缓存热点，那个商品对应的完整的缓存数据，发送请求到缓存服务去获取，反向推送到所有的后端应用nginx服务器上去
+								String cacheServiceURL = "http://192.168.31.179:8080/getProductInfo?productId=" + productCountEntry.getKey();
+								String response = HttpClientUtils.sendGetRequest(cacheServiceURL);
+								
+								List<NameValuePair> params = new ArrayList<NameValuePair>();  
+								params.add(new BasicNameValuePair("productInfo", response));    
+						        String productInfo = URLEncodedUtils.format(params, HTTP.UTF_8);
+								
+								String[] appNginxURLs = new String[]{
+										"http://192.168.31.187/hot?productId=" + productCountEntry.getKey() + "&" + productInfo,
+										"http://192.168.31.19/hot?productId=" + productCountEntry.getKey() + "&" + productInfo
+								};
+								
+								for(String appNginxURL : appNginxURLs) {
+									HttpClientUtils.sendGetRequest(appNginxURL);
+								}
 							}
+						}
+					}
+					
+					// 4、实时感知热点数据的消失
+					if(lastTimeHotProductIdList.size() == 0) {
+						if(hotProductIdList.size() > 0) {
+							for(Long productId : hotProductIdList) {
+								lastTimeHotProductIdList.add(productId);
+							}
+							LOGGER.info("【HotProductFindThread保存上次热点数据】lastTimeHotProductIdList=" + lastTimeHotProductIdList);
+						}
+					} else {
+						for(Long productId : lastTimeHotProductIdList) {
+							if(!hotProductIdList.contains(productId)) {
+								LOGGER.info("【HotProductFindThread发现一个热点消失了】productId=" + productId); 
+								// 说明上次的那个商品id的热点，消失了
+								// 发送一个http请求给到流量分发的nginx中，取消热点缓存的标识
+								String url = "http://192.168.31.227/cancel_hot?productId=" + productId;
+								HttpClientUtils.sendGetRequest(url);
+							}
+						}
+						
+						if(hotProductIdList.size() > 0) {
+							lastTimeHotProductIdList.clear();
+							for(Long productId : hotProductIdList) {
+								lastTimeHotProductIdList.add(productId);
+							}
+							LOGGER.info("【HotProductFindThread保存上次热点数据】lastTimeHotProductIdList=" + lastTimeHotProductIdList);
+						} else {
+							lastTimeHotProductIdList.clear();
 						}
 					}
 					
