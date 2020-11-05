@@ -10,6 +10,7 @@ import rx.Observer;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixObservableCommand;
 import com.roncoo.eshop.cache.ha.http.HttpClientUtils;
+import com.roncoo.eshop.cache.ha.hystrix.command.GetCityNameCommand;
 import com.roncoo.eshop.cache.ha.hystrix.command.GetProductInfoCommand;
 import com.roncoo.eshop.cache.ha.hystrix.command.GetProductInfosCommand;
 import com.roncoo.eshop.cache.ha.model.ProductInfo;
@@ -48,6 +49,11 @@ public class CacheController {
 		// 用HttpClient去调用商品服务的http接口
 		HystrixCommand<ProductInfo> getProductInfoCommand = new GetProductInfoCommand(productId);
 		ProductInfo productInfo = getProductInfoCommand.execute();
+		
+		Long cityId = productInfo.getCityId();
+		GetCityNameCommand getCityNameCommand = new GetCityNameCommand(cityId);
+		String cityName = getCityNameCommand.execute();
+		productInfo.setCityName(cityName); 
 		
 //		Future<ProductInfo> future = getProductInfoCommand.queue();
 //		try {
