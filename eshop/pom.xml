@@ -12,9 +12,16 @@
 
 
 	<modules>
+
 		<module>eshop-inventory</module>
 		<module>eshop-cache</module>
 		<module>eshop-storm</module>
+
+		<!-- hystix -->
+		<module>eshop-cache-ha</module>
+		<module>eshop-product-ha</module>
+
+		<!-- strom 样例 -->
 		<module>storm-helloworld</module>
 	</modules>
 
