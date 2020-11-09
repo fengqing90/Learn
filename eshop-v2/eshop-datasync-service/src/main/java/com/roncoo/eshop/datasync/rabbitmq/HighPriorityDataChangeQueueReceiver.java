@@ -1,9 +1,7 @@
 package com.roncoo.eshop.datasync.rabbitmq;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
@@ -14,7 +12,6 @@ import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.roncoo.eshop.datasync.service.EshopProductService;
 
@@ -29,8 +26,8 @@ import com.roncoo.eshop.datasync.service.EshopProductService;
  *
  */
 @Component  
-@RabbitListener(queues = "data-change-queue")  
-public class DataChangeQueueReceiver {  
+@RabbitListener(queues = "high-priority-data-change-queue")  
+public class HighPriorityDataChangeQueueReceiver {  
 	
 	@Autowired
 	private EshopProductService eshopProductService;
@@ -42,9 +39,7 @@ public class DataChangeQueueReceiver {
 	private Set<String> dimDataChangeMessageSet = 
 			Collections.synchronizedSet(new HashSet<String>()); 
 	
-	private List<JSONObject> brandDataChangeMessageList = new ArrayList<JSONObject>();
-	
-	public DataChangeQueueReceiver() {
+	public HighPriorityDataChangeQueueReceiver() {
 		new SendThread().start();
 	}
 	
@@ -75,48 +70,17 @@ public class DataChangeQueueReceiver {
     	String eventType = messageJSONObject.getString("event_type"); 
     	
     	if("add".equals(eventType) || "update".equals(eventType)) { 
-    		brandDataChangeMessageList.add(messageJSONObject);
-    		
-    		System.out.println("【将品牌数据放入内存list中】,list.size=" + brandDataChangeMessageList.size()); 
-    		
-    		if(brandDataChangeMessageList.size() >= 2) {
-    			System.out.println("【将品牌数据内存list大小大于等于2，开始执行批量调用】"); 
-    			
-    			String ids = "";
-    			
-    			for(int i = 0; i < brandDataChangeMessageList.size(); i++) {
-    				ids += brandDataChangeMessageList.get(i).getLong("id");   
-    				if(i < brandDataChangeMessageList.size() - 1) {
-    					ids += ",";
-    				}
-    			}
-    			
-    			System.out.println("【品牌数据ids生成】ids=" + ids); 
-    			
-    			JSONArray brandJSONArray = JSONArray.parseArray(eshopProductService.findBrandByIds(ids));
-    			
-    			System.out.println("【通过批量调用获取到品牌数据】jsonArray=" + brandJSONArray.toJSONString()); 
-    			
-    			for(int i = 0; i < brandJSONArray.size(); i++) {
-    				JSONObject dataJSONObject = brandJSONArray.getJSONObject(i);
-    				
-    				Jedis jedis = jedisPool.getResource();
-            		jedis.set("brand_" + dataJSONObject.getLong("id"), dataJSONObject.toJSONString());
-            		
-            		System.out.println("【将品牌数据写入redis】brandId=" + dataJSONObject.getLong("id"));
-            		
-            		dimDataChangeMessageSet.add("{\"dim_type\": \"brand\", \"id\": " + dataJSONObject.getLong("id") + "}");
-    			
-            		System.out.println("【将品牌数据写入内存去重set中】brandId=" + dataJSONObject.getLong("id"));
-    			}
-        		
-        		brandDataChangeMessageList.clear();
-    		}
+    		JSONObject dataJSONObject = JSONObject.parseObject(eshopProductService.findBrandById(id));  
+    		Jedis jedis = jedisPool.getResource();
+    		jedis.set("brand_" + dataJSONObject.getLong("id"), dataJSONObject.toJSONString());
     	} else if ("delete".equals(eventType)) {
     		Jedis jedis = jedisPool.getResource();
     		jedis.del("brand_" + id);
-    		dimDataChangeMessageSet.add("{\"dim_type\": \"brand\", \"id\": " + id + "}");
     	}
+    	  
+    	dimDataChangeMessageSet.add("{\"dim_type\": \"brand\", \"id\": " + id + "}");
+    	
+    	System.out.println("【品牌维度数据变更消息被放入内存Set中】,brandId=" + id);
     }
     
     private void processCategoryDataChangeMessage(JSONObject messageJSONObject) {
@@ -209,7 +173,8 @@ public class DataChangeQueueReceiver {
     		while(true) {
     			if(!dimDataChangeMessageSet.isEmpty()) {
     				for(String message : dimDataChangeMessageSet) {
-    					rabbitMQSender.send("aggr-data-change-queue", message);   
+    					rabbitMQSender.send("high-priority-aggr-data-change-queue", message);   
+    					System.out.println("【将去重后的维度数据变更消息发送到下一个queue】,message=" + message); 
     				}
     				dimDataChangeMessageSet.clear();
     			}

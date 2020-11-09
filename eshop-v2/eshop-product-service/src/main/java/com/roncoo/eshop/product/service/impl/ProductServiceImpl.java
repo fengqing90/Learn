@@ -17,19 +17,52 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private RabbitMQSender rabbitMQSender;
 	
-	public void add(Product product) {
+	public void add(Product product, String operationType) {
 		productMapper.add(product); 
-		rabbitMQSender.send(RabbitQueue.DATA_CHANGE_QUEUE, "{\"event_type\": \"add\", \"data_type\": \"product\", \"id\": " + product.getId() + "}");
+		
+		String queue = null;
+		
+		if(operationType == null || "".equals(operationType)) {
+			queue = RabbitQueue.DATA_CHANGE_QUEUE;
+		} else if("refresh".equals(operationType)) {
+			queue = RabbitQueue.REFRESH_DATA_CHANGE_QUEUE;
+		} else if("high".equals(operationType)) {
+			queue = RabbitQueue.HIGH_PRIORITY_DATA_CHANGE_QUEUE;
+		}
+		
+		rabbitMQSender.send(queue, "{\"event_type\": \"add\", \"data_type\": \"product\", \"id\": " + product.getId() + "}");
 	}
 
-	public void update(Product product) {
-		productMapper.update(product); 
-		rabbitMQSender.send(RabbitQueue.DATA_CHANGE_QUEUE, "{\"event_type\": \"update\", \"data_type\": \"product\", \"id\": " + product.getId() + "}");
+	public void update(Product product, String operationType) {
+		productMapper.update(product);
+		
+		String queue = null;
+		
+		if(operationType == null || "".equals(operationType)) {
+			queue = RabbitQueue.DATA_CHANGE_QUEUE;
+		} else if("refresh".equals(operationType)) {
+			queue = RabbitQueue.REFRESH_DATA_CHANGE_QUEUE;
+		} else if("high".equals(operationType)) {
+			queue = RabbitQueue.HIGH_PRIORITY_DATA_CHANGE_QUEUE;
+		}
+		
+		rabbitMQSender.send(queue, "{\"event_type\": \"update\", \"data_type\": \"product\", \"id\": " + product.getId() + "}");
 	}
 
-	public void delete(Long id) {
+	public void delete(Long id, String operationType) {
 		productMapper.delete(id); 
-		rabbitMQSender.send(RabbitQueue.DATA_CHANGE_QUEUE, "{\"event_type\": \"delete\", \"data_type\": \"product\", \"id\": " + id + "}");
+		
+		String queue = null;
+		
+		if(operationType == null || "".equals(operationType)) {
+			queue = RabbitQueue.DATA_CHANGE_QUEUE;
+		} else if("refresh".equals(operationType)) {
+			queue = RabbitQueue.REFRESH_DATA_CHANGE_QUEUE;
+		} else if("high".equals(operationType)) {
+			queue = RabbitQueue.HIGH_PRIORITY_DATA_CHANGE_QUEUE;
+		}
+		
+		rabbitMQSender.send(queue, "{\"event_type\": \"delete\", \"data_type\": \"product\", \"id\": " + id + "}");
 	}
 
 	public Product findById(Long id) {

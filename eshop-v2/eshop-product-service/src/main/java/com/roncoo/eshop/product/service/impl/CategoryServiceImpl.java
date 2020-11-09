@@ -17,19 +17,52 @@ public class CategoryServiceImpl implements CategoryService {
 	@Autowired
 	private RabbitMQSender rabbitMQSender;
 	
-	public void add(Category category) {
+	public void add(Category category, String operationType) {
 		categoryMapper.add(category); 
-		rabbitMQSender.send(RabbitQueue.DATA_CHANGE_QUEUE, "{\"event_type\": \"add\", \"data_type\": \"category\", \"id\": " + category.getId() + "}");
+		
+		String queue = null;
+		
+		if(operationType == null || "".equals(operationType)) {
+			queue = RabbitQueue.DATA_CHANGE_QUEUE;
+		} else if("refresh".equals(operationType)) {
+			queue = RabbitQueue.REFRESH_DATA_CHANGE_QUEUE;
+		} else if("high".equals(operationType)) {
+			queue = RabbitQueue.HIGH_PRIORITY_DATA_CHANGE_QUEUE;
+		}
+		
+		rabbitMQSender.send(queue, "{\"event_type\": \"add\", \"data_type\": \"category\", \"id\": " + category.getId() + "}");
 	}
 
-	public void update(Category category) {
+	public void update(Category category, String operationType) {
 		categoryMapper.update(category); 
-		rabbitMQSender.send(RabbitQueue.DATA_CHANGE_QUEUE, "{\"event_type\": \"update\", \"data_type\": \"category\", \"id\": " + category.getId() + "}");
+		
+		String queue = null;
+		
+		if(operationType == null || "".equals(operationType)) {
+			queue = RabbitQueue.DATA_CHANGE_QUEUE;
+		} else if("refresh".equals(operationType)) {
+			queue = RabbitQueue.REFRESH_DATA_CHANGE_QUEUE;
+		} else if("high".equals(operationType)) {
+			queue = RabbitQueue.HIGH_PRIORITY_DATA_CHANGE_QUEUE;
+		}
+		
+		rabbitMQSender.send(queue, "{\"event_type\": \"update\", \"data_type\": \"category\", \"id\": " + category.getId() + "}");
 	}
 
-	public void delete(Long id) {
+	public void delete(Long id, String operationType) {
 		categoryMapper.delete(id);
-		rabbitMQSender.send(RabbitQueue.DATA_CHANGE_QUEUE, "{\"event_type\": \"delete\", \"data_type\": \"category\", \"id\": " + id + "}");
+		
+		String queue = null;
+		
+		if(operationType == null || "".equals(operationType)) {
+			queue = RabbitQueue.DATA_CHANGE_QUEUE;
+		} else if("refresh".equals(operationType)) {
+			queue = RabbitQueue.REFRESH_DATA_CHANGE_QUEUE;
+		} else if("high".equals(operationType)) {
+			queue = RabbitQueue.HIGH_PRIORITY_DATA_CHANGE_QUEUE;
+		}
+		
+		rabbitMQSender.send(queue, "{\"event_type\": \"delete\", \"data_type\": \"category\", \"id\": " + id + "}");
 	}
 
 	public Category findById(Long id) {

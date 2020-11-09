@@ -17,9 +17,9 @@ public class CategoryController {
 	
 	@RequestMapping("/add") 
 	@ResponseBody
-	public String add(Category category) {
+	public String add(Category category, String operationType) {
 		try {
-			categoryService.add(category);
+			categoryService.add(category, operationType);
 		} catch (Exception e) {
 			e.printStackTrace(); 
 			return "error";
@@ -29,9 +29,9 @@ public class CategoryController {
 	
 	@RequestMapping("/update") 
 	@ResponseBody
-	public String update(Category category) {
+	public String update(Category category, String operationType) {
 		try {
-			categoryService.update(category); 
+			categoryService.update(category, operationType); 
 		} catch (Exception e) {
 			e.printStackTrace(); 
 			return "error";
@@ -41,9 +41,9 @@ public class CategoryController {
 	
 	@RequestMapping("/delete") 
 	@ResponseBody
-	public String delete(Long id) {
+	public String delete(Long id, String operationType) {
 		try {
-			categoryService.delete(id); 
+			categoryService.delete(id, operationType); 
 		} catch (Exception e) {
 			e.printStackTrace(); 
 			return "error";

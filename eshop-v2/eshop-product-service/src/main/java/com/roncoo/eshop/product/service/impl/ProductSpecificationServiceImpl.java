@@ -17,20 +17,53 @@ public class ProductSpecificationServiceImpl implements ProductSpecificationServ
 	@Autowired
 	private RabbitMQSender rabbitMQSender;
 	
-	public void add(ProductSpecification productSpecification) {
+	public void add(ProductSpecification productSpecification, String operationType) {
 		productSpecificationMapper.add(productSpecification); 
-		rabbitMQSender.send(RabbitQueue.DATA_CHANGE_QUEUE, "{\"event_type\": \"add\", \"data_type\": \"product_specification\", \"id\": " + productSpecification.getId() + ", \"product_id\": " + productSpecification.getProductId() + "}");
+		
+		String queue = null;
+		
+		if(operationType == null || "".equals(operationType)) {
+			queue = RabbitQueue.DATA_CHANGE_QUEUE;
+		} else if("refresh".equals(operationType)) {
+			queue = RabbitQueue.REFRESH_DATA_CHANGE_QUEUE;
+		} else if("high".equals(operationType)) {
+			queue = RabbitQueue.HIGH_PRIORITY_DATA_CHANGE_QUEUE;
+		}
+		
+		rabbitMQSender.send(queue, "{\"event_type\": \"add\", \"data_type\": \"product_specification\", \"id\": " + productSpecification.getId() + ", \"product_id\": " + productSpecification.getProductId() + "}");
 	}
 
-	public void update(ProductSpecification productSpecification) {
+	public void update(ProductSpecification productSpecification, String operationType) {
 		productSpecificationMapper.update(productSpecification); 
-		rabbitMQSender.send(RabbitQueue.DATA_CHANGE_QUEUE, "{\"event_type\": \"update\", \"data_type\": \"product_specification\", \"id\": " + productSpecification.getId() + ", \"product_id\": " + productSpecification.getProductId() + "}");
+		
+		String queue = null;
+		
+		if(operationType == null || "".equals(operationType)) {
+			queue = RabbitQueue.DATA_CHANGE_QUEUE;
+		} else if("refresh".equals(operationType)) {
+			queue = RabbitQueue.REFRESH_DATA_CHANGE_QUEUE;
+		} else if("high".equals(operationType)) {
+			queue = RabbitQueue.HIGH_PRIORITY_DATA_CHANGE_QUEUE;
+		}
+		
+		rabbitMQSender.send(queue, "{\"event_type\": \"update\", \"data_type\": \"product_specification\", \"id\": " + productSpecification.getId() + ", \"product_id\": " + productSpecification.getProductId() + "}");
 	}
 
-	public void delete(Long id) {
+	public void delete(Long id, String operationType) {
 		ProductSpecification productSpecification = findById(id);
 		productSpecificationMapper.delete(id); 
-		rabbitMQSender.send(RabbitQueue.DATA_CHANGE_QUEUE, "{\"event_type\": \"delete\", \"data_type\": \"product_specification\", \"id\": " + id + ", \"product_id\": " + productSpecification.getProductId() + "}");
+		
+		String queue = null;
+		
+		if(operationType == null || "".equals(operationType)) {
+			queue = RabbitQueue.DATA_CHANGE_QUEUE;
+		} else if("refresh".equals(operationType)) {
+			queue = RabbitQueue.REFRESH_DATA_CHANGE_QUEUE;
+		} else if("high".equals(operationType)) {
+			queue = RabbitQueue.HIGH_PRIORITY_DATA_CHANGE_QUEUE;
+		}
+		
+		rabbitMQSender.send(queue, "{\"event_type\": \"delete\", \"data_type\": \"product_specification\", \"id\": " + id + ", \"product_id\": " + productSpecification.getProductId() + "}");
 	}
 
 	public ProductSpecification findById(Long id) {
