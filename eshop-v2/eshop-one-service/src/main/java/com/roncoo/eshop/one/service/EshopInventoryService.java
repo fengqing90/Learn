@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(value = "eshop-inventory-service")
+import com.roncoo.eshop.one.service.fallback.EshopInventoryServiceFallback;
+
+@FeignClient(value = "eshop-inventory-service", fallback = EshopInventoryServiceFallback.class)
 public interface EshopInventoryService {
 
     @RequestMapping(value = "/product-inventory/findByProductId",method = RequestMethod.GET)
