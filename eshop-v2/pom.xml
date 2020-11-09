@@ -23,6 +23,7 @@
 		<module>greeting-service</module>
 		<module>user-service</module>
 		<module>eshop-product-service</module>
+		<module>eshop-price-service</module>
 
 
 		<module>say-hello-service</module>
