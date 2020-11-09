@@ -17,10 +17,11 @@
 		<module>eureka-server</module>
 		<module>zuul-server</module>
 		<module>sleuth-server</module>
+		<module>hystrix-terbine-server</module>
 
 
 		<module>greeting-service</module>
-		<module>hystrix-terbine-server</module>
+		<module>user-service</module>
 
 
 		<module>say-hello-service</module>
