@@ -12,4 +12,6 @@ public interface ProductPropertyService {
 	
 	public ProductProperty findById(Long id);
 	
+	public ProductProperty findByProductId(Long productId);
+	
 }

@@ -69,5 +69,9 @@ public class ProductSpecificationServiceImpl implements ProductSpecificationServ
 	public ProductSpecification findById(Long id) {
 		return productSpecificationMapper.findById(id);
 	}
+	
+	public ProductSpecification findByProductId(Long productId) {
+		return productSpecificationMapper.findById(productId);
+	}
 
 }

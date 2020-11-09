@@ -27,6 +27,7 @@
 		<module>eshop-inventory-service</module>
 		<module>eshop-datasync-service</module>
 		<module>eshop-dataaggr-service</module>
+		<module>eshop-datalink-service</module>
 
 
 		<module>say-hello-service</module>
