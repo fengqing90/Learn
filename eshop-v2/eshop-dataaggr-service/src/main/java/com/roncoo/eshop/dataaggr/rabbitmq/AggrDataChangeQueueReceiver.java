@@ -1,7 +1,5 @@
 package com.roncoo.eshop.dataaggr.rabbitmq;
 
-import java.util.List;
-
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,19 +89,17 @@ public class AggrDataChangeQueueReceiver {
     	
     	Jedis jedis = jedisPool.getResource();
     	
-    	List<String> results = jedis.mget("product_" + id, "product_property_" + id, "product_specification_" + id);
-    	
-    	String productDataJSON = results.get(0);
+    	String productDataJSON = jedis.get("product_" + id);
     	
     	if(productDataJSON != null && !"".equals(productDataJSON)) {
     		JSONObject productDataJSONObject = JSONObject.parseObject(productDataJSON);
     		
-    		String productPropertyDataJSON = results.get(1);
+    		String productPropertyDataJSON = jedis.get("product_property_" + id);
     		if(productPropertyDataJSON != null && !"".equals(productPropertyDataJSON)) {
     			productDataJSONObject.put("product_property", JSONObject.parse(productPropertyDataJSON));
     		} 
     		
-    		String productSpecificationDataJSON = results.get(2);
+    		String productSpecificationDataJSON = jedis.get("product_specification_" + id);
     		if(productSpecificationDataJSON != null && !"".equals(productSpecificationDataJSON)) {
     			productDataJSONObject.put("product_specification", JSONObject.parse(productSpecificationDataJSON));
     		}
