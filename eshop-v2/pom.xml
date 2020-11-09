@@ -15,6 +15,10 @@
 
 		<module>eureka-server</module>
 
+
+		<module>greeting-service</module>
+
+
 		<module>say-hello-service</module>
 
 
