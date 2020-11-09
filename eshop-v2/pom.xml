@@ -16,6 +16,7 @@
 		<module>config-server</module>
 		<module>eureka-server</module>
 		<module>zuul-server</module>
+		<module>sleuth-server</module>
 
 
 		<module>greeting-service</module>
