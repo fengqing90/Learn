@@ -25,6 +25,7 @@
 		<module>eshop-product-service</module>
 		<module>eshop-price-service</module>
 		<module>eshop-inventory-service</module>
+		<module>eshop-datasync-service</module>
 
 
 		<module>say-hello-service</module>
