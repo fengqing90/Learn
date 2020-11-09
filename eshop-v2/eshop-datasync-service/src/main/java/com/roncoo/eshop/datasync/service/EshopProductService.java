@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(value = "eshop-product-service")
+import com.roncoo.eshop.datasync.service.fallback.EshopProductServiceFallback;
+
+@FeignClient(value = "eshop-product-service", fallback = EshopProductServiceFallback.class)
 public interface EshopProductService {
 
     @RequestMapping(value = "/brand/findById",method = RequestMethod.GET)

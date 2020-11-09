@@ -77,11 +77,7 @@ public class DataChangeQueueReceiver {
     	if("add".equals(eventType) || "update".equals(eventType)) { 
     		brandDataChangeMessageList.add(messageJSONObject);
     		
-    		System.out.println("【将品牌数据放入内存list中】,list.size=" + brandDataChangeMessageList.size()); 
-    		
     		if(brandDataChangeMessageList.size() >= 2) {
-    			System.out.println("【将品牌数据内存list大小大于等于2，开始执行批量调用】"); 
-    			
     			String ids = "";
     			
     			for(int i = 0; i < brandDataChangeMessageList.size(); i++) {
@@ -91,23 +87,17 @@ public class DataChangeQueueReceiver {
     				}
     			}
     			
-    			System.out.println("【品牌数据ids生成】ids=" + ids); 
-    			
     			JSONArray brandJSONArray = JSONArray.parseArray(eshopProductService.findBrandByIds(ids));
-    			
-    			System.out.println("【通过批量调用获取到品牌数据】jsonArray=" + brandJSONArray.toJSONString()); 
     			
     			for(int i = 0; i < brandJSONArray.size(); i++) {
     				JSONObject dataJSONObject = brandJSONArray.getJSONObject(i);
     				
+    				System.out.println(dataJSONObject.toJSONString()); 
+    				
     				Jedis jedis = jedisPool.getResource();
             		jedis.set("brand_" + dataJSONObject.getLong("id"), dataJSONObject.toJSONString());
             		
-            		System.out.println("【将品牌数据写入redis】brandId=" + dataJSONObject.getLong("id"));
-            		
             		dimDataChangeMessageSet.add("{\"dim_type\": \"brand\", \"id\": " + dataJSONObject.getLong("id") + "}");
-    			
-            		System.out.println("【将品牌数据写入内存去重set中】brandId=" + dataJSONObject.getLong("id"));
     			}
         		
         		brandDataChangeMessageList.clear();
