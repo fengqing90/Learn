@@ -17,6 +17,7 @@
 
 
 		<module>greeting-service</module>
+		<module>hystrix-terbine-server</module>
 
 
 		<module>say-hello-service</module>
