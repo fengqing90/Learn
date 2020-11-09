@@ -13,6 +13,11 @@
 
 	<modules>
 
+		<module>eureka-server</module>
+
+		<module>say-hello-service</module>
+
+
 		<module>springboot-helloworld</module>
 	</modules>
 </project>
