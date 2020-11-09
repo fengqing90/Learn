@@ -31,7 +31,7 @@ build/
 .vscode/
 
 .mvn
-
+.git
 
 /FQ/src/main/resources/rebel.xml
 /learn-jpa/src/main/resources/rebel.xml
