@@ -68,8 +68,49 @@ public class 树 {
         // System.out.println(左叶子之和.sumOfLeftLeaves(左叶子之和.getTreeNode2()));
         // System.out.println(左叶子之和.sumOfLeftLeaves(左叶子之和.getTreeNode3()));
 
-        System.out.println(
-            二叉树中第二小的节点.findSecondMinimumValue(二叉树中第二小的节点.getTreeNode()));
+        // System.out.println(
+        //     二叉树中第二小的节点.findSecondMinimumValue(二叉树中第二小的节点.getTreeNode()));
+
+        System.out.println(二叉搜索树中的搜索.searchBST(二叉搜索树中的搜索.getTreeNode(), 2));
+        System.out.println(二叉搜索树中的搜索.searchBST(二叉搜索树中的搜索.getTreeNode(), 5));
+        System.out.println(二叉搜索树中的搜索.searchBST(二叉搜索树中的搜索.getTreeNode2(), 63));
+
+    }
+
+    /** 700. 二叉搜索树中的搜索 **/
+    static class 二叉搜索树中的搜索 {
+        public static TreeNode getTreeNode() {
+            return new TreeNode(4,
+                new TreeNode(2, new TreeNode(1), new TreeNode(3)),
+                new TreeNode(7));
+        }
+
+        public static TreeNode getTreeNode2() {
+            return new TreeNode(18, new TreeNode(2), new TreeNode(22, null,
+                new TreeNode(63, null, new TreeNode(84))));
+        }
+
+        public static TreeNode searchBST(TreeNode root, int val) {
+
+            if (root == null) {
+                return null;
+            }
+
+            if (root.val == val) {
+                return root;
+            }
+
+            TreeNode tmp = null;
+            if (root.left != null) {
+                tmp = searchBST(root.left, val);
+            }
+
+            if (tmp == null && root.right != null) {
+                tmp = searchBST(root.right, val);
+            }
+
+            return tmp;
+        }
     }
 
     /** 671. 二叉树中第二小的节点 **/
