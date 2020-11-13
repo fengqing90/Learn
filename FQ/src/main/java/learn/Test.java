@@ -45,5 +45,10 @@ public class Test {
             //			System.out.println(a);
             System.out.println(b);
         }
+
+        System.out.println(10 & 15);
+        System.out.println(11 & 15);
+        System.out.println(9 & 15);
+        System.out.println(String.valueOf(10).hashCode() & 15);
     }
 }
