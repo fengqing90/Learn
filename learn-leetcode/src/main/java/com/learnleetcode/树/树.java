@@ -1,6 +1,7 @@
 package com.learnleetcode.树;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -71,13 +72,61 @@ public class 树 {
         // System.out.println(
         //     二叉树中第二小的节点.findSecondMinimumValue(二叉树中第二小的节点.getTreeNode()));
 
-        System.out.println(二叉搜索树中的搜索.searchBST(二叉搜索树中的搜索.getTreeNode(), 2));
-        System.out.println(二叉搜索树中的搜索.searchBST(二叉搜索树中的搜索.getTreeNode(), 5));
-        System.out.println(二叉搜索树中的搜索.searchBST(二叉搜索树中的搜索.getTreeNode2(), 63));
+        // System.out.println(二叉搜索树中的搜索.searchBST(二叉搜索树中的搜索.getTreeNode(), 2));
+        // System.out.println(二叉搜索树中的搜索.searchBST(二叉搜索树中的搜索.getTreeNode(), 5));
+        // System.out.println(二叉搜索树中的搜索.searchBST(二叉搜索树中的搜索.getTreeNode2(), 63));
+
+        System.out.println(二叉搜索树节点最小距离.minDiffInBST(二叉搜索树节点最小距离.getTreeNode()));
+        System.out
+            .println(二叉搜索树节点最小距离.minDiffInBST(二叉搜索树节点最小距离.getTreeNode2()));
+    }
+
+    /**
+     * 783. 二叉搜索树节点最小距离
+     **/
+    static class 二叉搜索树节点最小距离 {
+
+        public static TreeNode getTreeNode() {
+            return new TreeNode(4,
+                new TreeNode(2, new TreeNode(1), new TreeNode(3)),
+                new TreeNode(6));
+        }
+
+        public static TreeNode getTreeNode2() {
+            return new TreeNode(10,
+                new TreeNode(3, new TreeNode(1), new TreeNode(5)),
+                new TreeNode(8));
+        }
+
+        static List<Integer> vals;
+
+        public static int minDiffInBST(TreeNode root) {
+            vals = new ArrayList();
+            dfs(root);
+            Collections.sort(vals);
+
+            int ans = Integer.MAX_VALUE;
+            for (int i = 0; i < vals.size() - 1; ++i) {
+                ans = Math.min(ans, vals.get(i + 1) - vals.get(i));
+            }
+
+            return ans;
+        }
+
+        public static void dfs(TreeNode node) {
+            if (node == null) {
+                return;
+            }
+            vals.add(node.val);
+            dfs(node.left);
+            dfs(node.right);
+        }
 
     }
 
-    /** 700. 二叉搜索树中的搜索 **/
+    /**
+     * 700. 二叉搜索树中的搜索
+     **/
     static class 二叉搜索树中的搜索 {
         public static TreeNode getTreeNode() {
             return new TreeNode(4,
@@ -113,7 +162,9 @@ public class 树 {
         }
     }
 
-    /** 671. 二叉树中第二小的节点 **/
+    /**
+     * 671. 二叉树中第二小的节点
+     **/
     static class 二叉树中第二小的节点 {
         public static TreeNode getTreeNode() {
             return new TreeNode(2, new TreeNode(2),
@@ -154,7 +205,9 @@ public class 树 {
         }
     }
 
-    /** 404. 左叶子之和 **/
+    /**
+     * 404. 左叶子之和
+     **/
     static class 左叶子之和 {
 
         public static TreeNode getTreeNode() {
@@ -170,7 +223,9 @@ public class 树 {
             return new TreeNode(1, new TreeNode(5), null);
         }
 
-        /** DFS **/
+        /**
+         * DFS
+         **/
         public static int sumOfLeftLeaves(TreeNode root) {
 
             if (root == null) {
@@ -194,7 +249,9 @@ public class 树 {
             return lsum + rsum;
         }
 
-        /** BFS **/
+        /**
+         * BFS
+         **/
         public static int sumOfLeftLeaves4BFS(TreeNode root) {
 
             if (root == null) {
@@ -235,7 +292,9 @@ public class 树 {
 
     }
 
-    /** 257. 二叉树的所有路径 **/
+    /**
+     * 257. 二叉树的所有路径
+     **/
     static class 二叉树的所有路径 {
         public static TreeNode getTreeNode() {
             return new TreeNode(1, new TreeNode(2, null, new TreeNode(5)),
@@ -300,7 +359,9 @@ public class 树 {
 
     }
 
-    /** 236. 二叉树的最近公共祖先 **/
+    /**
+     * 236. 二叉树的最近公共祖先
+     **/
     static class 二叉树的最近公共祖先 {
 
         public static TreeNode getTreeNode() {
@@ -343,7 +404,9 @@ public class 树 {
         }
     }
 
-    /** 226. 翻转二叉树 **/
+    /**
+     * 226. 翻转二叉树
+     **/
     static class 翻转二叉树 {
 
         public static TreeNode getTreeNode() {
@@ -367,7 +430,9 @@ public class 树 {
         }
     }
 
-    /** 112. 路径总和 **/
+    /**
+     * 112. 路径总和
+     **/
     static class 路径总和 {
         public static TreeNode getTreeNode() {
             return new TreeNode(5,
@@ -377,7 +442,9 @@ public class 树 {
                     new TreeNode(4, null, new TreeNode(1))));
         }
 
-        /** DFS 深度优先 **/
+        /**
+         * DFS 深度优先
+         **/
         public static boolean hasPathSum(TreeNode root, int sum) {
             if (root == null) {
                 return false;
@@ -394,7 +461,9 @@ public class 树 {
                 || hasPathSum(root.right, sum - root.val);
         }
 
-        /** BFS 广度优先 **/
+        /**
+         * BFS 广度优先
+         **/
         public static boolean hasPathSum2(TreeNode root, int sum) {
             if (root == null) {
                 return false;
@@ -445,7 +514,9 @@ public class 树 {
                 new TreeNode(20, new TreeNode(15), new TreeNode(7)));
         }
 
-        /** 深度优先搜索 DFS **/
+        /**
+         * 深度优先搜索 DFS
+         **/
         public static int minDepth(TreeNode root) {
             if (root == null) {
                 return 0;
@@ -468,7 +539,9 @@ public class 树 {
             return Math.min(m1, m2) + 1;
         }
 
-        /** 广度优先搜索 BFS **/
+        /**
+         * 广度优先搜索 BFS
+         **/
         public static int minDepth2(TreeNode root) {
             return 0;
         }
