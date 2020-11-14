@@ -5,11 +5,12 @@ import com.zhss.c2c.social.govern.report.domain.ReportTask;
 import com.zhss.c2c.social.govern.report.mapper.ReportTaskMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 /**
  * 举报任务Service实现类
  */
-@Repository
+@Service
 public class ReportTaskServiceImpl implements ReportTaskService {
 
     /**
