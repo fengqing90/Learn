@@ -455,37 +455,6 @@ public class MyLeetCode {
     }
 
     /**
-     * [21]合并两个有序链表
-     **/
-    static class 合并两个有序链表 {
-        public class ListNode {
-            int val;
-            ListNode next;
-
-            ListNode(int x) {
-                this.val = x;
-            }
-        }
-
-        public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-            if (l1 == null) {
-                return l2;
-            }
-            if (l2 == null) {
-                return l1;
-            }
-
-            if (l1.val < l2.val) {
-                l1.next = this.mergeTwoLists(l1.next, l2);
-                return l1;
-            } else {
-                l2.next = this.mergeTwoLists(l1, l2.next);
-                return l2;
-            }
-        }
-    }
-
-    /**
      * [20]有效的括号
      **/
     static class 有效的括号 {
@@ -577,54 +546,6 @@ public class MyLeetCode {
     }
 
     /**
-     * [9]回文数
-     **/
-    static class 回文数 {
-        public boolean isPalindrome(int x) {
-            if (x < 0)
-                return false;
-            int cur = 0;
-            int num = x;
-            while (num != 0) {
-                cur = cur * 10 + num % 10;
-                num /= 10;
-            }
-            return cur == x;
-        }
-    }
-
-    /**
-     * [1]两数之和
-     **/
-    static class 两数之和 {
-        // 方式1 时间复杂度：O(n^2)
-        public int[] twoSum(int[] nums, int target) {
-            for (int i = 0; i < nums.length; i++) {
-                for (int j = i + 1; j < nums.length; j++) {
-                    if (target == nums[j] + nums[i]) {
-                        return new int[] { i, j };
-                    }
-                }
-            }
-            throw new IllegalArgumentException("No two sum solution");
-        }
-
-        // 方式2  时间复杂度：O(n)
-        public int[] twoSum2(int[] nums, int target) {
-            Map map = new HashMap();
-            for (int i = 0; i < nums.length; i++) {
-                int data = nums[i];
-                if (map.get(target - data) == null) {
-                    map.put(data, i);
-                } else {
-                    return new int[] { (int) map.get(target - data), i };
-                }
-            }
-            throw new IllegalArgumentException("No two sum solution");
-        }
-    }
-
-    /**
      * [7]整数反转
      **/
     static class 整数反转 {
@@ -673,4 +594,54 @@ public class MyLeetCode {
             return 0;
         }
     }
+
+    /**
+     * [1]两数之和
+     **/
+    static class 两数之和 {
+        // 方式1 时间复杂度：O(n^2)
+        public int[] twoSum(int[] nums, int target) {
+            for (int i = 0; i < nums.length; i++) {
+                for (int j = i + 1; j < nums.length; j++) {
+                    if (target == nums[j] + nums[i]) {
+                        return new int[] { i, j };
+                    }
+                }
+            }
+            throw new IllegalArgumentException("No two sum solution");
+        }
+
+        // 方式2  时间复杂度：O(n)
+        public int[] twoSum2(int[] nums, int target) {
+            Map map = new HashMap();
+            for (int i = 0; i < nums.length; i++) {
+                int data = nums[i];
+                if (map.get(target - data) == null) {
+                    map.put(data, i);
+                } else {
+                    return new int[] { (int) map.get(target - data), i };
+                }
+            }
+            throw new IllegalArgumentException("No two sum solution");
+        }
+    }
+
+    /**
+     * [9]回文数
+     **/
+    static class 回文数 {
+        public boolean isPalindrome(int x) {
+            if (x < 0) {
+                return false;
+            }
+            int cur = 0;
+            int num = x;
+            while (num != 0) {
+                cur = cur * 10 + num % 10;
+                num /= 10;
+            }
+            return cur == x;
+        }
+    }
+
 }
