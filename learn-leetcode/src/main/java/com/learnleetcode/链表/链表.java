@@ -37,15 +37,57 @@ public class 链表 {
 
         // System.out.println(奇偶链表.oddEvenList(奇偶链表.getListNode()));
 
+        // System.out.println(
+        //     两数相加.addTwoNumbers(两数相加.getListNode1(), 两数相加.getListNode2()));
+        // System.out.println(
+        //     两数相加.addTwoNumbers(两数相加.getListNode3(), 两数相加.getListNode4()));
+
         System.out.println(
-            两数相加.addTwoNumbers(两数相加.getListNode1(), 两数相加.getListNode2()));
-        System.out.println(
-            两数相加.addTwoNumbers(两数相加.getListNode3(), 两数相加.getListNode4()));
+            删除链表的倒数第N个节点.removeNthFromEnd(删除链表的倒数第N个节点.getListNode(), 2));
+    }
+
+    /**
+     * 19. 删除链表的倒数第N个节点
+     *
+     * <pre>
+     * 给定一个链表，删除链表的倒数第 n 个节点，并且返回链表的头结点。
+     *
+     * 示例：
+     * 给定一个链表: 1->2->3->4->5, 和 n = 2.
+     * 当删除了倒数第二个节点后，链表变为 1->2->3->5.
+     * </pre>
+     **/
+    static class 删除链表的倒数第N个节点 {
+        public static ListNode getListNode() {
+            return new ListNode(1, new ListNode(2,
+                new ListNode(3, new ListNode(4, new ListNode(5)))));
+        }
+
+        public static ListNode removeNthFromEnd(ListNode head, int n) {
+            ListNode dummy = new ListNode(0, head);
+            ListNode first = head;
+            ListNode second = dummy;
+
+            // 直接找到需要删除的那一个
+            for (int i = 0; i < n; ++i) {
+                first = first.next;
+            }
+            // 遍历到最后一个
+            while (first != null) {
+                first = first.next;
+                second = second.next;
+            }
+            // 删除first
+            second.next = second.next.next;
+            ListNode ans = dummy.next;
+            return ans;
+        }
+
     }
 
     /**
      * 2. 两数相加
-     * 
+     *
      * <pre>
      * 示例：
      * 输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
