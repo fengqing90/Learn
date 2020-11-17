@@ -21,9 +21,92 @@ public class 数组 {
         // System.out.println(升序数组查找数组中绝对值最小的值
         //     .min(new int[] { -7, -6, -5, -4, -3, -2, 1, 2, 3 }));
 
-        System.out.println(Arrays.toString(
-            数组的相对排序.relativeSortArray(数组的相对排序.arr1(), 数组的相对排序.arr2())));
+        // System.out.println(Arrays.toString(
+        //     数组的相对排序.relativeSortArray(数组的相对排序.arr1(), 数组的相对排序.arr2())));
 
+        System.out.println(寻找两个正序数组的中位数
+            .findMedianSortedArrays(new int[] { 1, 2 }, new int[] { 3, 4 }));
+
+    }
+
+    /**
+     * 4. 寻找两个正序数组的中位数
+     *
+     * <pre>
+     * 给定两个大小为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的中位数。
+     * 进阶：你能设计一个时间复杂度为 O(log (m+n)) 的算法解决此问题吗？
+     *
+     * 示例 1：
+     * 输入：nums1 = [1,3], nums2 = [2]
+     * 输出：2.00000
+     * 解释：合并数组 = [1,2,3] ，中位数 2
+     *
+     * 示例 2：
+     * 输入：nums1 = [1,2], nums2 = [3,4]
+     * 输出：2.50000
+     * 解释：合并数组 = [1,2,3,4] ，中位数 (2 + 3) / 2 = 2.5
+     *
+     * 示例 3：
+     * 输入：nums1 = [0,0], nums2 = [0,0]
+     * 输出：0.00000
+     *
+     * 示例 4：
+     * 输入：nums1 = [], nums2 = [1]
+     * 输出：1.00000
+     *
+     *  示例 5：
+     * 输入：nums1 = [2], nums2 = []
+     * 输出：2.00000
+     * </pre>
+     **/
+    static class 寻找两个正序数组的中位数 {
+        public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
+            int m = nums1.length;
+            int n = nums2.length;
+            int[] nums = new int[m + n];
+
+            // 总长度
+            int count = 0;
+            // i = 数据1下标， 就= 数据2下标
+            int i = 0, j = 0;
+            // count 不等于总长度
+            while (count != (m + n)) {
+                // i 等于 数组1长度，说明数据1 已经排完,后续把数组2 追加后面
+                if (i == m) {
+                    while (j != n) {
+                        nums[count++] = nums2[j++];
+                    }
+                    break;
+                }
+
+                // 类似 上面
+                if (j == n) {
+                    while (i != m) {
+                        nums[count++] = nums1[i++];
+                    }
+                    break;
+                }
+
+                // 排序
+                if (nums1[i] < nums2[j]) {
+                    nums[count++] = nums1[i++];
+                } else {
+                    nums[count++] = nums2[j++];
+                }
+            }
+
+            System.out.println(Arrays.toString(nums));
+
+            // 偶数 = 2中数相加 /2.0
+            if (count % 2 == 0) {
+                return (nums[count / 2 - 1] + nums[count / 2]) / 2.0;
+            }
+            // 奇数= 中数
+            else {
+                return nums[count / 2];
+            }
+
+        }
     }
 
     /**
