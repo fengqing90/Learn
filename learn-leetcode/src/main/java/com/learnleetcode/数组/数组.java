@@ -2,6 +2,8 @@ package com.learnleetcode.数组;
 
 import java.util.Arrays;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 /**
  * 数组
  *
@@ -24,8 +26,267 @@ public class 数组 {
         // System.out.println(Arrays.toString(
         //     数组的相对排序.relativeSortArray(数组的相对排序.arr1(), 数组的相对排序.arr2())));
 
-        System.out.println(寻找两个正序数组的中位数
-            .findMedianSortedArrays(new int[] { 1, 2 }, new int[] { 3, 4 }));
+        // System.out.println(寻找两个正序数组的中位数
+        //     .findMedianSortedArrays(new int[] { 1, 2 }, new int[] { 3, 4 }));
+
+        System.out.println(删除排序数组中的重复项
+            .removeDuplicates(new int[] { 0, 0, 1, 1, 1, 2, 2, 3, 3, 4 }));
+    }
+
+    /**
+     * [66]加一
+     **/
+    static class 加一 {
+        public static int[] plusOne(int[] digits) {
+            int len = digits.length;
+            // 从末尾开始加1
+            for (int i = len - 1; i >= 0; i--) {
+
+                digits[i]++;
+
+                // 是否进位
+                digits[i] %= 10;
+
+                // 判断是否进位,未进位直接返回
+                if (digits[i] != 0) {
+                    return digits;
+                }
+            }
+
+            // 执行到此处说明进位
+            digits = new int[len + 1];
+
+            digits[0] = 1;
+            return digits;
+        }
+    }
+
+    /**
+     * [53]最大子序和
+     **/
+    static class 最大子序和 {
+        /**
+         * 方案:分治
+         */
+        public static class Status {
+            public int lSum, rSum, mSum, iSum;
+
+            /**
+             * @param lSum
+             *        表示 [l, r] 内以 l 为左端点的最大子段和
+             * @param rSum
+             *        表示 [l, r] 内以 r 为右端点的最大子段和
+             * @param mSum
+             *        表示 [l, r] 内的最大子段和
+             * @param iSum
+             *        表示 [l, r] 的区间和
+             */
+            public Status(int lSum, int rSum, int mSum, int iSum) {
+                this.lSum = lSum;
+                this.rSum = rSum;
+                this.mSum = mSum;
+                this.iSum = iSum;
+            }
+        }
+
+        /**
+         * 方案:分治
+         */
+        public static int maxSubArray(int[] nums) {
+            return getInfo(nums, 0, nums.length - 1).mSum;
+        }
+
+        /**
+         * 方案:分治
+         */
+        public static Status getInfo(int[] a, int l, int r) {
+            if (l == r) {
+                return new Status(a[l], a[l], a[l], a[l]);
+            }
+            int m = (l + r) >> 1;
+            Status lSub = getInfo(a, l, m);
+            Status rSub = getInfo(a, m + 1, r);
+            return pushUp(lSub, rSub);
+        }
+
+        /**
+         * 方案:分治
+         */
+        public static Status pushUp(Status l, Status r) {
+            int iSum = l.iSum + r.iSum;
+            int lSum = Math.max(l.lSum, l.iSum + r.lSum);
+            int rSum = Math.max(r.rSum, r.iSum + l.rSum);
+            int mSum = Math.max(Math.max(l.mSum, r.mSum), l.rSum + r.lSum);
+            return new Status(lSum, rSum, mSum, iSum);
+        }
+
+        /**
+         * 方案：动态规划，
+         **/
+        public static int maxSubArray3(int[] nums) {
+            int max = nums[0];
+            int sum = 0;
+            for (int num : nums) {
+                if (sum > 0) {
+                    sum += num;
+                } else {
+                    sum = num;
+                }
+                max = Math.max(max, sum);
+            }
+            return max;
+        }
+
+        /**
+         * 方案：滚动变量优化
+         **/
+        public static int maxSubArray2(int[] nums) {
+            // 初始化第一次结果值 和 最大值
+            int sum = nums[0], max = nums[0];
+            for (int i = 1; i < nums.length; i++) {
+                // 第i个 和 第i+(i-1) 取大
+                sum = Math.max(nums[i], sum + nums[i]);
+                // 取大后与现在最大比较
+                max = Math.max(max, sum);
+            }
+            return max;
+        }
+    }
+
+    /**
+     * [35]搜索插入位置
+     **/
+    static class 搜索插入位置 {
+
+        /**
+         * 方案一：二分查找，动态变动 s、e 下标，缩小范围 O(logN)
+         **/
+        public static int searchInsert(int[] nums, int target) {
+            int left = 0, right = nums.length;  // 注意
+            while (left < right) {  // 注意
+                int mid = left + (right - left) / 2; // 注意
+
+                if (nums[mid] < target) {
+                    left = mid + 1; // 注意
+                } else if (nums[mid] > target) {
+                    right = mid; // 注意
+                } else {
+                    return mid; // 注意
+                }
+            }
+            return left;
+        }
+
+        /**
+         * 方案二：O(m) 效率低
+         **/
+        public static int searchInsert数组(int[] nums, int target) {
+            int length = nums.length;
+            int[] array = new int[length + 1];
+
+            for (int i = 0; i < length; i++) {
+                array[i] = nums[i];
+                if (array[i] == target) {
+                    return i;
+                } else if (array[i] > target) {
+                    return i;
+                }
+                if (target > nums[length - 1]) {
+                    return length;
+                }
+            }
+            System.out.println(ArrayUtils.toString(array));
+            return 0;
+        }
+
+    }
+
+    /**
+     * [27]移除元素
+     **/
+    static class 移除元素 {
+
+        /**
+         * 方案一：拷贝覆盖，不相等就覆盖旧数组值，index++
+         **/
+        public int removeElement1(int[] nums, int val) {
+            int ans = 0;
+            for (int num : nums) {
+                // 不相等就覆盖,覆盖到最后那个元素就没了
+                if (num != val) {
+                    nums[ans] = num;
+                    ans++;
+                }
+            }
+            return ans;
+        }
+
+        /**
+         * 方案二：交换移除，相等当前数值与最后的值替换，不相等 i++
+         **/
+        public int removeElement2(int[] nums, int val) {
+            int ans = nums.length;
+            for (int i = 0; i < ans;) {
+                if (nums[i] == val) {
+                    nums[i] = nums[ans - 1];
+                    ans--;
+                } else {
+                    i++;
+                }
+            }
+            return ans;
+        }
+    }
+
+    /**
+     * [26]删除排序数组中的重复项
+     **/
+    static class 删除排序数组中的重复项 {
+        public static int removeDuplicates(int[] nums) {
+            int i = 1;
+            for (int j = 1; j < nums.length; j++) {
+                if (nums[j] != nums[i - 1]) {
+                    nums[i++] = nums[j];
+                }
+            }
+            System.out.println(ArrayUtils.toString(nums));
+            return i;
+        }
+
+        public static int removeDuplicates1(int[] nums) {
+            int length = nums.length;
+            int j = 1;
+            for (int i = 0; i < nums.length - 1; i++) {
+                if (nums[i] == nums[i + 1]) // 如果两个相邻的元素相同,那么进行压缩，长度减少
+                {
+                    length--;
+                } else {
+                    nums[j++] = nums[i + 1]; //若两个相邻元素不同，那么对另外一个元素进行存储
+                }
+
+            }
+            System.out.println(ArrayUtils.toString(nums));
+            return length;
+        }
+
+        // 方式2 ： 双指针
+        public static int removeDuplicates2(int[] nums) {
+            if (nums == null || nums.length == 0) {
+                return 0;
+            }
+            int p = 0;
+            int q = 1;
+            while (q < nums.length) {
+                if (nums[p] != nums[q]) {
+                    if (q - p > 1) {
+                        nums[p + 1] = nums[q];
+                    }
+                    p++;
+                }
+                q++;
+            }
+            return p + 1;
+        }
 
     }
 
