@@ -40,8 +40,24 @@
 		<module>eshop-wms-api</module>
 		<module>eureka-server</module>
 		<module>reliable-message-service</module>
-		<module>reliable-message-service-api</module>eshop-common
+		<module>reliable-message-service-api</module>
 		<module>zuul-gateway</module>
+		<module>data-refill-center-message-api</module>
+		<module>data-refill-center-service-api</module>
 	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.6.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>

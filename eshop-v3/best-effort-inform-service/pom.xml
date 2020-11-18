@@ -179,7 +179,7 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>com.zhss</groupId>
+			<groupId>com.zhss.eshop</groupId>
 			<artifactId>data-refill-center-message-api</artifactId>
 			<version>1.0.0</version>
 		</dependency>
