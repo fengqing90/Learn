@@ -3,7 +3,7 @@ server:
 
 eureka:
   instance:
-    hostname: inst2
+    hostname: localhost
   client:
     serviceUrl:
-      defaultZone: http://inst1:7000/eureka/
+      defaultZone: http://peer1:8761/eureka/,http://peer2:8762/eureka/

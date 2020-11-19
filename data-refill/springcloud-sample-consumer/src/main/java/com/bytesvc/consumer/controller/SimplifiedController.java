@@ -30,7 +30,7 @@ public class SimplifiedController implements ITransferService {
 		this.acctService.decreaseAmount(sourceAcctId, amount);
 		this.increaseAmount(targetAcctId, amount);
 
-		// throw new IllegalStateException("rollback!");
+//		throw new IllegalStateException("rollback!");
 	}
 
 	private void increaseAmount(String acctId, double amount) {
