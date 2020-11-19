@@ -36,6 +36,10 @@
 		<module>reliable-message-service</module>
 		<module>reliable-message-service-api</module>
 		<module>zuul-gateway</module>
+
+		<module>sample-eureka-server</module>
+		<module>springcloud-sample-consumer</module>
+		<module>springcloud-sample-provider</module>
 	</modules>
 
 	<build>
