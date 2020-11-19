@@ -1,7 +1,5 @@
 package com.zhss.data.refill.center.api;
 
-import java.util.Date;
-
 import org.bytesoft.compensable.Compensable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,8 +32,6 @@ public class LotteryDrawService implements LotteryDrawApi {
 	@Transactional
 	public void increment(@PathVariable("userAccountId") Long userAccountId) {
 		lotteryDrawMapper.tryIncrement(userAccountId);  
-		System.out.println(new Date() + ": try增加抽奖次数接口");  
-//		throw new IllegalStateException("error");
 	}
 	
 }
