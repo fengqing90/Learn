@@ -4,12 +4,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import org.bytesoft.bytetcc.supports.spring.aware.CompensableContextAware;
 import org.bytesoft.compensable.Compensable;
 import org.bytesoft.compensable.CompensableCancel;
 import org.bytesoft.compensable.CompensableConfirm;
+import org.bytesoft.compensable.CompensableContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zhss.data.refill.center.api.AccountAmountService;
 import com.zhss.data.refill.center.api.CouponActivityService;
 import com.zhss.data.refill.center.api.CouponService;
@@ -27,6 +32,7 @@ import com.zhss.data.refill.center.api.DataPackageService;
 import com.zhss.data.refill.center.api.LotteryDrawService;
 import com.zhss.data.refill.center.api.PromotionActivityService;
 import com.zhss.data.refill.center.api.RefillOrderService;
+import com.zhss.data.refill.center.api.ReliableMessageService;
 import com.zhss.data.refill.center.domain.Coupon;
 import com.zhss.data.refill.center.domain.CouponActivity;
 import com.zhss.data.refill.center.domain.DataPackage;
@@ -46,7 +52,10 @@ import com.zhss.data.refill.center.service.RefillDataCenterService;
 @RestController
 @RequestMapping("/dataRefillCenter")
 @Compensable(interfaceClass = RefillDataCenterService.class, simplified = true)
-public class DataRefillCenterController implements RefillDataCenterService {
+public class DataRefillCenterController 
+		implements RefillDataCenterService, CompensableContextAware {
+	
+	private CompensableContext compensableContext; 
 
 	/**
 	 * 流量套餐service组件
@@ -73,6 +82,11 @@ public class DataRefillCenterController implements RefillDataCenterService {
 	 */
 	@Autowired
 	private RefillOrderService refillOrderService;
+	/**
+	 * 可靠消息服务
+	 */
+	@Autowired
+	private ReliableMessageService reliableMessageService;
 //	/**
 //	 * 第三方运营商BOSS系统访问service组件
 //	 */
@@ -162,38 +176,29 @@ public class DataRefillCenterController implements RefillDataCenterService {
 		refillResponse.setCode("SUCCESS");
 		refillResponse.setMessage("流量充值成功");
 		
-		try {
-//			dataRefillCenterService.finishRefillData(refillRequest);
-			
-			// 完成支付转账
-			accountAmountService.transfer(refillRequest.getUserAccountId(), 
-					refillRequest.getBusinessAccountId(), refillRequest.getPayAmount());  
-			// 创建充值订单
-			refillOrderService.add(createRefillOrder(refillRequest));  
-			// 给用户增加一次抽奖机会
-			lotteryDrawService.increment(refillRequest.getUserAccountId()); 
-			// 给用户增加充值面值5%的积分
-			creditService.increment(refillRequest.getUserAccountId(),
-					(double)Math.round((refillRequest.getPayAmount() * 0.05) * 100) / 100); 
-			// 如果使用了流量券的话，标记使用的流量券状态为已使用
-			if(refillRequest.getCoupon() != null && refillRequest.getCoupon().getId() != null) {
-				couponService.markCouponUsed(refillRequest.getCoupon().getId());  
-			}
-			// 如果要赠送流量券的话，就会插入一张流量券
-			CouponActivity couponActivity = refillRequest.getDataPackage().getCouponActivity();
-			if(couponActivity != null && couponActivity.getId() != null) {
-				couponService.insert(createCoupon(refillRequest, couponActivity));  
-			}
-//			throw new IllegalStateException("rollback!");
-			
-//			thirdPartyBossService.refillData(refillRequest.getPhoneNumber(), 
-//					refillRequest.getData()); 
-//			messageService.send(refillRequest.getPhoneNumber(), "流量已经充值成功"); 
-		} catch (Exception e) {
-			e.printStackTrace();
-			refillResponse.setCode("FAILURE");
-			refillResponse.setMessage("流量充值失败");  
+		// 完成支付转账
+		accountAmountService.transfer(refillRequest.getUserAccountId(), 
+				refillRequest.getBusinessAccountId(), refillRequest.getPayAmount());  
+		// 创建充值订单
+		refillOrderService.add(createRefillOrder(refillRequest));  
+		// 给用户增加一次抽奖机会
+		lotteryDrawService.increment(refillRequest.getUserAccountId()); 
+		// 给用户增加充值面值5%的积分
+		creditService.increment(refillRequest.getUserAccountId(),
+				(double)Math.round((refillRequest.getPayAmount() * 0.05) * 100) / 100); 
+		// 如果使用了流量券的话，标记使用的流量券状态为已使用
+		if(refillRequest.getCoupon() != null && refillRequest.getCoupon().getId() != null) {
+			couponService.markCouponUsed(refillRequest.getCoupon().getId());  
 		}
+		// 如果要赠送流量券的话，就会插入一张流量券
+		CouponActivity couponActivity = refillRequest.getDataPackage().getCouponActivity();
+		if(couponActivity != null && couponActivity.getId() != null) {
+			couponService.insert(createCoupon(refillRequest, couponActivity));  
+		}
+		
+//		throw new IllegalStateException("rollback!");
+		
+		this.compensableContext.setVariable("dataRefillNo", UUID.randomUUID().toString());  
 		
 		return refillResponse;
 	}
@@ -202,9 +207,38 @@ public class DataRefillCenterController implements RefillDataCenterService {
 	@Transactional
 	public RefillResponse confirmFinishRefillData(@RequestBody RefillRequest refillRequest) {
 		System.out.println(new Date() + ": confirm流量充值接口");  
+		
 		RefillResponse refillResponse = new RefillResponse();
 		refillResponse.setCode("SUCCESS");
 		refillResponse.setMessage("流量充值成功");
+		
+//		thirdPartyBossService.refillData(refillRequest.getPhoneNumber(), 
+//		refillRequest.getData()); 
+//		messageService.send(refillRequest.getPhoneNumber(), "流量已经充值成功"); 
+		
+		// 我们要在这里去调用第三方运营商的BOSS系统，所以在这里就可以使用可靠消息最终一致性的方案
+		// 通过跟可靠消息服务来进行交互，以达到最终一定会成功通知到运营商BOSS系统完成流量充值的事情
+		String dataRefillNo = (String) this.compensableContext.getVariable("dataRefillNo"); 
+		
+		Map<String, Object> messageMap = new HashMap<String, Object>();
+		messageMap.put("dataRefillNo", dataRefillNo);
+		messageMap.put("phoneNumber", refillRequest.getPhoneNumber()); 
+		messageMap.put("data", refillRequest.getData()); 
+		
+		String message = JSONObject.toJSONString(messageMap);
+		
+		Long messageId = reliableMessageService.prepareMessage(message);
+		
+		try {
+			// 模拟一下：这里流量充值服务其实也可以操作自己的本地数据实现一些业务逻辑
+			// 假设这里是成功的 
+			// 假设一下，可以插入数据库一条数据，里面包含了那个关键性的dataRefillNo，就是一次流量充值的串号
+			reliableMessageService.confirmMessage(messageId);
+		} catch (Exception e) {
+			reliableMessageService.removeMessage(messageId);
+			e.printStackTrace(); 
+		}
+		
 		return refillResponse;
 	}
 	
@@ -283,6 +317,11 @@ public class DataRefillCenterController implements RefillDataCenterService {
 	public RefillOrder queryRefillOrder(
 			@PathVariable("id") Long id) {
 		return refillOrderService.queryById(id);
+	}
+
+	@Override
+	public void setCompensableContext(CompensableContext aware) {
+		this.compensableContext = aware;
 	}
 
 }
