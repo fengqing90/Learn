@@ -40,9 +40,8 @@ import com.zhss.data.refill.center.domain.PromotionActivity;
 import com.zhss.data.refill.center.domain.RefillOrder;
 import com.zhss.data.refill.center.domain.RefillRequest;
 import com.zhss.data.refill.center.domain.RefillResponse;
-//import com.zhss.data.refill.center.service.MessageService;
+import com.zhss.data.refill.center.mapper.DataRefillHistoryMapper;
 import com.zhss.data.refill.center.service.RefillDataCenterService;
-//import com.zhss.data.refill.center.service.ThirdPartyBossService;
 
 /**
  * 流量充值controller组件
@@ -87,21 +86,13 @@ public class DataRefillCenterController
 	 */
 	@Autowired
 	private ReliableMessageService reliableMessageService;
-//	/**
-//	 * 第三方运营商BOSS系统访问service组件
-//	 */
-//	@Autowired
-//	private ThirdPartyBossService thirdPartyBossService;
-//	/**
-//	 * 消息服务service组件
-//	 */
-//	@Autowired
-//	private MessageService messageService;
 	/**
 	 * 账号金额service组件
 	 */
 	@Autowired
 	private AccountAmountService accountAmountService;
+	@Autowired
+	private DataRefillHistoryMapper dataRefillHistoryMapper;
 	/**
 	 * 抽奖机会service组件
 	 */
@@ -228,14 +219,25 @@ public class DataRefillCenterController
 		String message = JSONObject.toJSONString(messageMap);
 		
 		Long messageId = reliableMessageService.prepareMessage(message);
+		System.out.println("步骤1：流量充值服务发送待确认消息，message=" + message + ", messageId=" + messageId); 
 		
 		try {
 			// 模拟一下：这里流量充值服务其实也可以操作自己的本地数据实现一些业务逻辑
 			// 假设这里是成功的 
 			// 假设一下，可以插入数据库一条数据，里面包含了那个关键性的dataRefillNo，就是一次流量充值的串号
-			reliableMessageService.confirmMessage(messageId);
+			dataRefillHistoryMapper.create(dataRefillNo);  
+			System.out.println("步骤3，流量充值服务操作本地数据库，dataRefillNo=" + dataRefillNo);  
+			
+			try {
+				reliableMessageService.confirmMessage(messageId);
+				System.out.println("步骤4，流量充值服务通知可靠消息服务确认消息，messageId=" + messageId);   
+			} catch (Exception e) {
+				System.out.println("流量充值服务通知可靠消息服务确认消息的时候报错了");  
+				e.printStackTrace();
+			}
 		} catch (Exception e) {
 			reliableMessageService.removeMessage(messageId);
+			System.out.println("步骤4，流量充值服务通知可靠消息服务删除消息，messageId=" + messageId);   
 			e.printStackTrace(); 
 		}
 		

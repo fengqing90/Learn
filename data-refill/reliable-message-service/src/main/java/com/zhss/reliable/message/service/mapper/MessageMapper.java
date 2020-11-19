@@ -70,4 +70,7 @@ public interface MessageMapper {
 		+ "WHERE id=#{id}")  
 	public void finish(Message message); 
 	
+	@Update("UPDATE message SET content=#{content} WHERE id=#{id}")  
+	public void updateContent(Message message);
+	
 }

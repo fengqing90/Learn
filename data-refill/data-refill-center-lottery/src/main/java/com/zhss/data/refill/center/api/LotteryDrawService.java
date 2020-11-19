@@ -35,7 +35,7 @@ public class LotteryDrawService implements LotteryDrawApi {
 	public void increment(@PathVariable("userAccountId") Long userAccountId) {
 		lotteryDrawMapper.tryIncrement(userAccountId);  
 		System.out.println(new Date() + ": try增加抽奖次数接口");  
-		throw new IllegalStateException("error");
+//		throw new IllegalStateException("error");
 	}
 	
 }

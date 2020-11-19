@@ -28,6 +28,7 @@ public class AccountAmountConfirmService implements AccountAmountApi {
 		accountAmountMapper.confirmTransferOut(fromUserAccountId, amount);
 		accountAmountMapper.confirmTransferIn(toUserAccountId, amount);
 		System.out.println(new Date() + ": confirm资金转账接口");
+//		throw new IllegalStateException("error");
 	}
 
 }

@@ -177,6 +177,11 @@
 			<artifactId>data-refill-center-finance-api</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.zhss</groupId>
+			<artifactId>data-refill-center-bill-api</artifactId>
+			<version>1.0.1</version>
+		</dependency>
 	</dependencies>
 	
 	<build>
