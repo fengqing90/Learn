@@ -35,6 +35,7 @@
 		<module>eureka-server</module>
 		<module>reliable-message-service</module>
 		<module>reliable-message-service-api</module>
+		<module>zuul-gateway</module>
 	</modules>
 
 	<build>
