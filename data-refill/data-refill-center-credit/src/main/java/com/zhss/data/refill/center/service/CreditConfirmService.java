@@ -1,5 +1,7 @@
 package com.zhss.data.refill.center.service;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +20,8 @@ public class CreditConfirmService implements CreditApi {
 	@Override
 	@Transactional
 	public void increment(Long userAccountId, Double updatedPoint) {
-		creditMapper.confirmIncrement(userAccountId, updatedPoint); 
+		creditMapper.confirmIncrement(userAccountId, updatedPoint);
+		System.out.println(new Date() + ": confirm增加积分接口");  
 	}
 
 }

@@ -76,7 +76,8 @@ public class RefillDataCenterServiceImpl implements RefillDataCenterService {
 		if(couponActivity != null && couponActivity.getId() != null) {
 			couponService.insert(createCoupon(refillRequest, couponActivity));  
 		}
-		return null;
+		throw new IllegalStateException("rollback!");
+//		return null;
 	}
 	
 	@CompensableConfirm

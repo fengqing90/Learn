@@ -1,5 +1,7 @@
 package com.zhss.data.refill.center.service;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ public class CreditCancelService implements CreditApi {
 	@Transactional
 	public void increment(Long userAccountId, Double updatedPoint) {
 		creditMapper.cancelIncrement(userAccountId, updatedPoint); 
+		System.out.println(new Date() + ": cancel增加积分接口");  
 	}
 
 }
