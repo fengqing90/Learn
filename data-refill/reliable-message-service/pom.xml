@@ -146,20 +146,9 @@
 		    <artifactId>jackson-databind</artifactId>
 		</dependency>
 		
-		<!-- rabbitmq -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-amqp</artifactId>
-		</dependency>
-		
 		<dependency>
 			<groupId>com.zhss</groupId>  
 			<artifactId>reliable-message-service-api</artifactId>
-			<version>1.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.zhss</groupId>  
-			<artifactId>data-refill-center-service-api</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 	</dependencies>
