@@ -42,8 +42,56 @@ public class 链表 {
         // System.out.println(
         //     两数相加.addTwoNumbers(两数相加.getListNode3(), 两数相加.getListNode4()));
 
+        // System.out.println(
+        //     删除链表的倒数第N个节点.removeNthFromEnd(删除链表的倒数第N个节点.getListNode(), 2));
+
+        // System.out
+        //     .println(删除排序链表中的重复元素.deleteDuplicates(删除排序链表中的重复元素.getListNode()));
         System.out.println(
-            删除链表的倒数第N个节点.removeNthFromEnd(删除链表的倒数第N个节点.getListNode(), 2));
+            删除排序链表中的重复元素.deleteDuplicates(删除排序链表中的重复元素.getListNode2()));
+    }
+
+    /**
+     * 83. 删除排序链表中的重复元素
+     * 
+     * <pre>
+     * 给定一个排序链表，删除所有重复的元素，使得每个元素只出现一次。
+     *
+     * 示例 1:
+     * 输入: 1->1->2
+     * 输出: 1->2
+     * 
+     * 示例 2:
+     * 输入: 1->1->2->3->3
+     * 输出: 1->2->3
+     * </pre>
+     **/
+    static class 删除排序链表中的重复元素 {
+
+        public static ListNode getListNode2() {
+            return new ListNode(1, new ListNode(1, new ListNode(1)));
+        }
+
+        public static ListNode getListNode() {
+            return new ListNode(1, new ListNode(1,
+                new ListNode(2, new ListNode(3, new ListNode(3)))));
+        }
+
+        public static ListNode deleteDuplicates(ListNode head) {
+
+            // 操作node
+            ListNode node = head;
+
+            while (node != null && node.next != null) {
+                // 如果重复直接指定下下个
+                if (node.val == node.next.val) {
+                    node.next = node.next.next;
+                }
+                // 更新下标
+                node = node.next;
+            }
+            return head;
+        }
     }
 
     /**
