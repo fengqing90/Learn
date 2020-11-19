@@ -1,6 +1,5 @@
 package com.zhss.data.refill.center.api;
 
-import java.util.Date;
 import java.util.List;
 
 import org.bytesoft.bytetcc.supports.spring.aware.CompensableContextAware;
@@ -43,8 +42,7 @@ public class RefillOrderService implements RefillOrderApi, CompensableContextAwa
 	public void add(@RequestBody RefillOrder refillOrder) {
 		refillOrder.setStatus(0); 
 		refillOrderMapper.tryCreateRefillOrder(refillOrder); 
-		this.compensableContext.setVariable("refillOrderId", refillOrder.getId()); 
-		System.out.println(new Date() + ": try创建订单接口");
+		this.compensableContext.setVariable("refillOrderId", refillOrder.getId());      
 	}
 	
 	/**

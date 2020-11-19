@@ -58,10 +58,14 @@ public interface RefillOrderMapper {
 	@Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
 	void tryCreateRefillOrder(RefillOrder refillOrder);
 	
-	@Update("UPDATE refill_order SET status=1 WHERE id=#{id}")  
+	@Update("UPDATE refill_order SET "
+				+ "status=1 "
+			+ "WHERE id=#{id}")  
 	void confirmCreateRefillOrder(@Param("id") Long id);
 	
-	@Update("DELETE FROM refill_order WHERE id=#{id}")  
+	@Update("UPDATE refill_order SET "
+				+ "status=2 "
+			+ "WHERE id=#{id}")  
 	void cancelCreateRefillOrder(@Param("id") Long id);
 	
 	/**
