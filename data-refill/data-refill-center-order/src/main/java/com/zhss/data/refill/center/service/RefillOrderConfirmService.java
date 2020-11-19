@@ -1,5 +1,6 @@
 package com.zhss.data.refill.center.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.bytesoft.bytetcc.supports.spring.aware.CompensableContextAware;
@@ -7,12 +8,14 @@ import org.bytesoft.compensable.CompensableContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.zhss.data.refill.center.api.RefillOrderApi;
 import com.zhss.data.refill.center.domain.RefillOrder;
 import com.zhss.data.refill.center.mapper.RefillOrderMapper;
 
 @Service("refillOrderConfirmService")  
+@RequestMapping("/refillOrder/confirm")  
 public class RefillOrderConfirmService implements RefillOrderApi, CompensableContextAware {
 
 	@Autowired
@@ -25,6 +28,7 @@ public class RefillOrderConfirmService implements RefillOrderApi, CompensableCon
 	public void add(RefillOrder refillOrder) {
 		Long refillOrderId = (Long) this.compensableContext.getVariable("refillOrderId");  
 		refillOrderMapper.confirmCreateRefillOrder(refillOrderId); 
+		System.out.println(new Date() + ": confirm创建订单接口");
 	}
 
 	@Override

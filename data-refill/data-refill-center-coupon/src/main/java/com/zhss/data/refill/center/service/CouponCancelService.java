@@ -4,12 +4,14 @@ import org.bytesoft.bytetcc.supports.spring.aware.CompensableContextAware;
 import org.bytesoft.compensable.CompensableContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.zhss.data.refill.center.api.CouponApi;
 import com.zhss.data.refill.center.domain.Coupon;
 import com.zhss.data.refill.center.mapper.CouponMapper;
 
 @Service("couponCancelService") 
+@RequestMapping("/coupon/cancel")
 public class CouponCancelService implements CouponApi, CompensableContextAware {
 	
 	private CouponMapper couponMapper;

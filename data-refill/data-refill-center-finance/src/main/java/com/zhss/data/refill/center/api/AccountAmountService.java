@@ -1,5 +1,7 @@
 package com.zhss.data.refill.center.api;
 
+import java.util.Date;
+
 import org.bytesoft.compensable.Compensable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +42,7 @@ public class AccountAmountService implements AccountAmountApi {
 			@RequestParam("amount") Double amount) {
 		accountAmountMapper.tryTransferOut(fromUserAccountId, amount); 
 		accountAmountMapper.tryTransferIn(toUserAccountId, amount);  
+		System.out.println(new Date() + ": try资金转账接口");
 	}
 	
 }

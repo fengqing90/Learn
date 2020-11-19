@@ -32,6 +32,7 @@ public class LotteryDrawService implements LotteryDrawApi {
 	@Transactional
 	public void increment(@PathVariable("userAccountId") Long userAccountId) {
 		lotteryDrawMapper.tryIncrement(userAccountId);  
+		throw new IllegalStateException("error");
 	}
 	
 }

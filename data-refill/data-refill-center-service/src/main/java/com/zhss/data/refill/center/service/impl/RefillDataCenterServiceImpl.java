@@ -4,11 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
 
-import org.bytesoft.bytetcc.supports.spring.aware.CompensableContextAware;
 import org.bytesoft.compensable.Compensable;
 import org.bytesoft.compensable.CompensableCancel;
 import org.bytesoft.compensable.CompensableConfirm;
-import org.bytesoft.compensable.CompensableContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +26,7 @@ import com.zhss.data.refill.center.service.RefillDataCenterService;
 
 @Service
 @Compensable(interfaceClass = RefillDataCenterService.class, simplified = true)
-public class RefillDataCenterServiceImpl 
-		implements RefillDataCenterService, CompensableContextAware {
+public class RefillDataCenterServiceImpl implements RefillDataCenterService {
 
 	/**
 	 * 流量券service组件
@@ -57,15 +54,9 @@ public class RefillDataCenterServiceImpl
 	@Autowired
 	private CreditService creditService;
 	
-	private CompensableContext compensableContext;
-	
 	@Override
 	@Transactional
 	public RefillResponse finishRefillData(RefillRequest refillRequest) {
-		RefillResponse refillResponse = new RefillResponse();
-		refillResponse.setCode("SUCCESS");
-		refillResponse.setMessage("流量充值成功");
-		
 		// 完成支付转账
 		accountAmountService.transfer(refillRequest.getUserAccountId(), 
 				refillRequest.getBusinessAccountId(), refillRequest.getPayAmount());  
@@ -85,10 +76,7 @@ public class RefillDataCenterServiceImpl
 		if(couponActivity != null && couponActivity.getId() != null) {
 			couponService.insert(createCoupon(refillRequest, couponActivity));  
 		}
-		
-		this.compensableContext.setVariable("dataRefillNo", UUID.randomUUID().toString());  
-		
-		return refillResponse;
+		return null;
 	}
 	
 	@CompensableConfirm
@@ -153,10 +141,5 @@ public class RefillDataCenterServiceImpl
 		
 		return coupon;
  	}
-
-	@Override
-	public void setCompensableContext(CompensableContext aware) {
-		this.compensableContext = aware;
-	}
 
 }
