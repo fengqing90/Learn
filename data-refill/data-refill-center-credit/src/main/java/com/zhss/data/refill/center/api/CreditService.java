@@ -1,7 +1,5 @@
 package com.zhss.data.refill.center.api;
 
-import java.util.Date;
-
 import org.bytesoft.compensable.Compensable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +34,6 @@ public class CreditService implements CreditApi {
 	public void increment(@PathVariable("userAccountId")Long userAccountId, 
 			@RequestParam("updatedPoint") Double updatedPoint) {
 		creditMapper.tryIncrement(userAccountId, updatedPoint); 
-		System.out.println(new Date() + ": try增加积分接口");  
 	}
 	
 }

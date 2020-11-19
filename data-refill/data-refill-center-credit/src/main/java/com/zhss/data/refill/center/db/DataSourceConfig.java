@@ -66,7 +66,7 @@ public class DataSourceConfig {
      */
     @Bean(name = "dataSource")
     @Primary  
-    public DataSource dataSource(){  
+    public DataSource activityDataSource(){  
         DruidDataSource datasource = new DruidDataSource();  
         datasource.setUrl(this.dbUrl);  
         datasource.setUsername(username);  
