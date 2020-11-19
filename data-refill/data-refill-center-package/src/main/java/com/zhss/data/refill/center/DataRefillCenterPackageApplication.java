@@ -9,11 +9,6 @@ import org.springframework.context.annotation.Import;
 
 import com.zhss.data.refill.center.db.DataSourceConfig;
 
-/**
- * 活动服务
- * @author zhonghuashishan
- *
- */
 @SpringBootApplication
 @ServletComponentScan
 @EnableEurekaClient

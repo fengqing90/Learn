@@ -7,11 +7,6 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.annotation.ImportResource;
 
-/**
- * 活动服务
- * @author zhonghuashishan
- *
- */
 @SpringBootApplication
 @ServletComponentScan
 @EnableEurekaClient

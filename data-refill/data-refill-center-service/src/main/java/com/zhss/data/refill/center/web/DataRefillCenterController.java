@@ -4,16 +4,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
-import org.bytesoft.bytetcc.supports.spring.aware.CompensableContextAware;
 import org.bytesoft.compensable.Compensable;
 import org.bytesoft.compensable.CompensableCancel;
 import org.bytesoft.compensable.CompensableConfirm;
-import org.bytesoft.compensable.CompensableContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSONObject;
 import com.zhss.data.refill.center.api.AccountAmountService;
 import com.zhss.data.refill.center.api.CouponActivityService;
 import com.zhss.data.refill.center.api.CouponService;
@@ -32,7 +27,6 @@ import com.zhss.data.refill.center.api.DataPackageService;
 import com.zhss.data.refill.center.api.LotteryDrawService;
 import com.zhss.data.refill.center.api.PromotionActivityService;
 import com.zhss.data.refill.center.api.RefillOrderService;
-import com.zhss.data.refill.center.api.ReliableMessageService;
 import com.zhss.data.refill.center.domain.Coupon;
 import com.zhss.data.refill.center.domain.CouponActivity;
 import com.zhss.data.refill.center.domain.DataPackage;
@@ -40,74 +34,30 @@ import com.zhss.data.refill.center.domain.PromotionActivity;
 import com.zhss.data.refill.center.domain.RefillOrder;
 import com.zhss.data.refill.center.domain.RefillRequest;
 import com.zhss.data.refill.center.domain.RefillResponse;
-import com.zhss.data.refill.center.mapper.DataRefillHistoryMapper;
 import com.zhss.data.refill.center.service.RefillDataCenterService;
 
-/**
- * 流量充值controller组件
- * @author zhonghuashishan
- *
- */
 @RestController
 @RequestMapping("/dataRefillCenter")
 @Compensable(interfaceClass = RefillDataCenterService.class, simplified = true)
-public class DataRefillCenterController 
-		implements RefillDataCenterService, CompensableContextAware {
+public class DataRefillCenterController implements RefillDataCenterService {
 	
-	private CompensableContext compensableContext; 
-
-	/**
-	 * 流量套餐service组件
-	 */
 	@Autowired
 	private DataPackageService dataPackageService;
-	/**
-	 * 优惠活动service组件
-	 */
 	@Autowired
 	private PromotionActivityService promotionActivityService;
-	/**
-	 * 流量券活动service组件
-	 */
 	@Autowired
 	private CouponActivityService couponActivityService;
-	/**
-	 * 流量券service组件
-	 */
 	@Autowired
 	private CouponService couponService;
-	/**
-	 * 充值订单service组件
-	 */
 	@Autowired
 	private RefillOrderService refillOrderService;
-	/**
-	 * 可靠消息服务
-	 */
-	@Autowired
-	private ReliableMessageService reliableMessageService;
-	/**
-	 * 账号金额service组件
-	 */
 	@Autowired
 	private AccountAmountService accountAmountService;
 	@Autowired
-	private DataRefillHistoryMapper dataRefillHistoryMapper;
-	/**
-	 * 抽奖机会service组件
-	 */
-	@Autowired
 	private LotteryDrawService lotteryDrawService;
-	/**
-	 * 积分service组件
-	 */
 	@Autowired
 	private CreditService creditService;
 	
-	/**
-	 * 查询所有的流量套餐
-	 * @return
-	 */
 	@GetMapping("/dataPackages")  
 	public List<DataPackage> queryAllDataPackage() {
 		List<DataPackage> dataPackages = new ArrayList<DataPackage>();
@@ -133,11 +83,6 @@ public class DataRefillCenterController
 		return dataPackages;
 	}
 	
-	/**
-	 * 查询用户账号的面额最高的流量券
-	 * @param userAccountId 用户账号id
-	 * @return 流量券
-	 */
 	@GetMapping("/coupon/{userAccountId}")  
 	public Coupon queryCoupon(
 			@PathVariable("userAccountId") Long userAccountId) {
@@ -153,11 +98,6 @@ public class DataRefillCenterController
 		return new Coupon();  
 	}
 	
-	/**
-	 * 为流量充值来进行支付
-	 * @param refillRequest 充值请求
-	 * @return 充值响应
-	 */
 	@PutMapping("/finishRefillData")
 	@Transactional
 	public RefillResponse finishRefillData(@RequestBody RefillRequest refillRequest) {
@@ -189,8 +129,6 @@ public class DataRefillCenterController
 		
 //		throw new IllegalStateException("rollback!");
 		
-		this.compensableContext.setVariable("dataRefillNo", UUID.randomUUID().toString());  
-		
 		return refillResponse;
 	}
 	
@@ -198,49 +136,9 @@ public class DataRefillCenterController
 	@Transactional
 	public RefillResponse confirmFinishRefillData(@RequestBody RefillRequest refillRequest) {
 		System.out.println(new Date() + ": confirm流量充值接口");  
-		
 		RefillResponse refillResponse = new RefillResponse();
 		refillResponse.setCode("SUCCESS");
 		refillResponse.setMessage("流量充值成功");
-		
-//		thirdPartyBossService.refillData(refillRequest.getPhoneNumber(), 
-//		refillRequest.getData()); 
-//		messageService.send(refillRequest.getPhoneNumber(), "流量已经充值成功"); 
-		
-		// 我们要在这里去调用第三方运营商的BOSS系统，所以在这里就可以使用可靠消息最终一致性的方案
-		// 通过跟可靠消息服务来进行交互，以达到最终一定会成功通知到运营商BOSS系统完成流量充值的事情
-		String dataRefillNo = (String) this.compensableContext.getVariable("dataRefillNo"); 
-		
-		Map<String, Object> messageMap = new HashMap<String, Object>();
-		messageMap.put("dataRefillNo", dataRefillNo);
-		messageMap.put("phoneNumber", refillRequest.getPhoneNumber()); 
-		messageMap.put("data", refillRequest.getData()); 
-		
-		String message = JSONObject.toJSONString(messageMap);
-		
-		Long messageId = reliableMessageService.prepareMessage(message);
-		System.out.println("步骤1：流量充值服务发送待确认消息，message=" + message + ", messageId=" + messageId); 
-		
-		try {
-			// 模拟一下：这里流量充值服务其实也可以操作自己的本地数据实现一些业务逻辑
-			// 假设这里是成功的 
-			// 假设一下，可以插入数据库一条数据，里面包含了那个关键性的dataRefillNo，就是一次流量充值的串号
-			dataRefillHistoryMapper.create(dataRefillNo);  
-			System.out.println("步骤3，流量充值服务操作本地数据库，dataRefillNo=" + dataRefillNo);  
-			
-			try {
-				reliableMessageService.confirmMessage(messageId);
-				System.out.println("步骤4，流量充值服务通知可靠消息服务确认消息，messageId=" + messageId);   
-			} catch (Exception e) {
-				System.out.println("流量充值服务通知可靠消息服务确认消息的时候报错了");  
-				e.printStackTrace();
-			}
-		} catch (Exception e) {
-			reliableMessageService.removeMessage(messageId);
-			System.out.println("步骤4，流量充值服务通知可靠消息服务删除消息，messageId=" + messageId);   
-			e.printStackTrace(); 
-		}
-		
 		return refillResponse;
 	}
 	
@@ -319,11 +217,6 @@ public class DataRefillCenterController
 	public RefillOrder queryRefillOrder(
 			@PathVariable("id") Long id) {
 		return refillOrderService.queryById(id);
-	}
-
-	@Override
-	public void setCompensableContext(CompensableContext aware) {
-		this.compensableContext = aware;
 	}
 
 }
