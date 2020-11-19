@@ -2,6 +2,9 @@ package com.zhss.eshop.schedule.api;
 
 import java.util.List;
 
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.recipes.locks.InterProcessLock;
+import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.bytesoft.compensable.Compensable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +16,7 @@ import com.zhss.eshop.order.domain.OrderInfoDTO;
 import com.zhss.eshop.order.domain.OrderItemDTO;
 import com.zhss.eshop.schedule.constant.StockUpdateEvent;
 import com.zhss.eshop.schedule.constant.TccType;
+import com.zhss.eshop.schedule.curator.CuratorClient;
 import com.zhss.eshop.schedule.dao.ScheduleOrderPickingItemDAO;
 import com.zhss.eshop.schedule.dao.ScheduleOrderSendOutDetailDAO;
 import com.zhss.eshop.schedule.domain.SaleDeliveryScheduleResult;
@@ -70,16 +74,25 @@ public class ScheduleTccService implements ScheduleTccApi {
 		uniqueRecordMapper.insert("ScheduleTccService_informSubmitOrderEvent_" + order.getId()); 
 		
 		for(OrderItemDTO orderItem : order.getOrderItems()) {
+			CuratorFramework curatorClient = CuratorClient.getInstance();
+			InterProcessLock lock = new InterProcessMutex(curatorClient, "/locks/schedule_stock_lock_" + orderItem.getGoodsSkuId());
+			lock.acquire();
+			
+			// 这里会进行调度的计算
 			SaleDeliveryScheduleResult scheduleResult = 
 					saleDeliveryScheduler.schedule(orderItem);
 			
+			// 根据调度的计算结果反过来去锁定对应的货位库存
 			SubmitOrderScheduleStockUpdater stockUpdater = (SubmitOrderScheduleStockUpdater) 
 					stockUpdaterFactory.create(StockUpdateEvent.SUBMIT_ORDER, scheduleResult);
 			stockUpdater.setTccType(TccType.TRY);  
 			stockUpdater.update();
 			
+			// 通知wms中心锁定库存
 			wmsTccService.informSubmitOrderEvent(
 					BeanConvertUtils.convertSaleDeliveryScheduleResult(scheduleResult)); 
+			
+			lock.release();
 		}
 		
 		return true;
