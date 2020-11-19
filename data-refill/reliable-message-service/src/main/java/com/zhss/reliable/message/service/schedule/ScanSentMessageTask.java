@@ -41,7 +41,6 @@ public class ScanSentMessageTask {
 		
 		if(currentTime - confirmedTime > 10 * 60 * 1000) {
 			messageProducer.send(message.getContent());  
-			System.out.println("发现一条已发送超过10分钟的消息，messageId=" + message.getId() + "，再次投递消息到MQ");   
 		}
 	}
 	

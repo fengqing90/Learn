@@ -26,7 +26,7 @@ public class ScanPreparedMessageTask {
 	
 	@Scheduled(fixedRate = 10 * 60 * 1000)
 	public void execute() {
-		List<Message> messages = messageMapper.findPrepared();
+		List<Message> messages = messageMapper.findByStatus(MessageStatus.PREPARED);  
 		
 		for(Message message : messages) {
 			try {

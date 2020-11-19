@@ -52,7 +52,7 @@ public interface MessageMapper {
 	})
 	public Message findById(@Param("id") Long id);
 	
-	@Select("SELECT * FROM message WHERE status=1")   
+	@Select("SELECT * FROM message WHERE status=#{status}")     
 	@Results({
 		@Result(id = true, column = "id", property = "id"),
 		@Result(column = "content", property = "content"),
@@ -62,7 +62,7 @@ public interface MessageMapper {
 		@Result(column = "confirmed_time", property = "confirmedTime"),
 		@Result(column = "finished_time", property = "finishedTime") 
 	})
-	public List<Message> findPrepared();
+	public List<Message> findByStatus(@Param("status") Integer status); 
 	
 	@Update("UPDATE message SET "
 			+ "status=#{status},"
