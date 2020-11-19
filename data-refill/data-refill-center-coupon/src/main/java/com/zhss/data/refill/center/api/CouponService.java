@@ -1,7 +1,5 @@
 package com.zhss.data.refill.center.api;
 
-import java.util.Date;
-
 import org.bytesoft.bytetcc.supports.spring.aware.CompensableContextAware;
 import org.bytesoft.compensable.Compensable;
 import org.bytesoft.compensable.CompensableContext;
@@ -51,7 +49,6 @@ public class CouponService implements CouponApi, CompensableContextAware {
 	@Transactional
 	public void markCouponUsed(@PathVariable("id") Long id) {
 		couponMapper.updateStatus(id, -1);
-		System.out.println(new Date() + ": try使用流量券接口");  
 	}
 	
 	/**
@@ -63,7 +60,7 @@ public class CouponService implements CouponApi, CompensableContextAware {
 		coupon.setStatus(0);  
 		couponMapper.insert(coupon); 
 		context.setVariable("couponId", coupon.getId());  
-		System.out.println(new Date() + ": try插入流量券接口");  
+		
 	}
 
 	@Override

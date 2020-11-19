@@ -1,25 +1,18 @@
 package com.zhss.data.refill.center.service;
 
-import java.util.Date;
-
 import org.bytesoft.bytetcc.supports.spring.aware.CompensableContextAware;
 import org.bytesoft.compensable.CompensableContext;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.zhss.data.refill.center.api.CouponApi;
 import com.zhss.data.refill.center.domain.Coupon;
 import com.zhss.data.refill.center.mapper.CouponMapper;
 
 @Service("couponConfirmService") 
-@RequestMapping("/coupon/confirm")  
 public class CouponConfirmService implements CouponApi, CompensableContextAware {
 	
-	@Autowired
 	private CouponMapper couponMapper;
-	
 	private CompensableContext context;
 
 	@Override
@@ -32,7 +25,6 @@ public class CouponConfirmService implements CouponApi, CompensableContextAware 
 	@Transactional
 	public void markCouponUsed(Long id) {
 		couponMapper.updateStatus(id, 2);  
-		System.out.println(new Date() + ": confirm使用流量券接口");  
 	}
 
 	@Override
@@ -40,7 +32,6 @@ public class CouponConfirmService implements CouponApi, CompensableContextAware 
 	public void insert(Coupon coupon) {
 		Long couponId = (Long) context.getVariable("couponId"); 
 		couponMapper.updateStatus(couponId, 1); 
-		System.out.println(new Date() + ": confirm插入流量券接口");  
 	}
 	
 	@Override

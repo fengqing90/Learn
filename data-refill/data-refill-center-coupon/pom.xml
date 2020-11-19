@@ -171,7 +171,6 @@
 			<artifactId>commons-dbcp2</artifactId>
 		</dependency>
 		
-		<!-- api -->
 		<dependency>
 			<groupId>com.zhss</groupId>
 			<artifactId>data-refill-center-coupon-api</artifactId>

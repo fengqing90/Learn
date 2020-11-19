@@ -64,10 +64,10 @@ public class DataSourceConfig {
      * 创建druid数据库连接池bean
      * @return
      */
-    @Bean(name = "dataSource")  
-    @Primary
-    public DataSource dataSource(){  
-    	DruidDataSource datasource = new DruidDataSource();  
+    @Bean(name = "dataSource")
+    @Primary  
+    public DataSource activityDataSource(){  
+        DruidDataSource datasource = new DruidDataSource();  
         datasource.setUrl(this.dbUrl);  
         datasource.setUsername(username);  
         datasource.setPassword(password);  
@@ -94,7 +94,7 @@ public class DataSourceConfig {
         datasource.setConnectionProperties(connectionProperties);  
         
         LocalXADataSource localXaDataSource = new LocalXADataSource();
-        localXaDataSource.setDataSource(datasource);
+        localXaDataSource.setDataSource(datasource); 
         
         return localXaDataSource;
     }

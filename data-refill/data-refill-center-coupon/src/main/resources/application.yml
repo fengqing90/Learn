@@ -5,7 +5,7 @@ spring:
   application:
     name: data-refill-center-coupon
   datasource:
-    type: org.apache.commons.dbcp2.BasicDataSource
+    type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://127.0.0.1:3306/data-refill-center-coupon?useUnicode=true&characterEncoding=utf-8
     username: root
     password: root
