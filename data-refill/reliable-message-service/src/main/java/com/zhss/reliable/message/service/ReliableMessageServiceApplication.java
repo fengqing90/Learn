@@ -6,6 +6,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.zhss.reliable.message.service.db.DataSourceConfig;
 
@@ -13,6 +14,7 @@ import com.zhss.reliable.message.service.db.DataSourceConfig;
 @ServletComponentScan
 @EnableEurekaClient
 @EnableFeignClients
+@EnableScheduling
 @Import(DataSourceConfig.class)
 public class ReliableMessageServiceApplication {
 	

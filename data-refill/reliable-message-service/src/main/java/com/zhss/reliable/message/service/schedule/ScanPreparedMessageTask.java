@@ -26,7 +26,7 @@ public class ScanPreparedMessageTask {
 	
 	@Scheduled(fixedRate = 10 * 60 * 1000)
 	public void execute() {
-		List<Message> messages = messageMapper.findByStatus(MessageStatus.PREPARED);  
+		List<Message> messages = messageMapper.findPrepared();
 		
 		for(Message message : messages) {
 			try {
@@ -43,11 +43,8 @@ public class ScanPreparedMessageTask {
 		long currentTime = new Date().getTime();
 		
 		if(currentTime - createdTime > 10 * 60 * 1000) {
-			System.out.println("发现一条待确认超过10分钟的消息，messageId=" + message.getId());  
-			
 			Boolean operationStatus = dataRefillCenterService.queryOperationStatus(
 					message.getContent()); 
-			System.out.println("回查流量充值服务，消息对应的操作状态为：" + operationStatus + ", messageId=" + message.getId());   
 			
 			if(operationStatus) {
 				message.setStatus(MessageStatus.CONFIRMED); 
@@ -55,15 +52,11 @@ public class ScanPreparedMessageTask {
 				
 				messageMapper.confirm(message); 
 				messageProducer.send(message.getContent());  
-				
-				System.out.println("操作已经执行过，再次确认消息以及投递消息，messageId=" + message.getId());  
 			} else {
 				message.setStatus(MessageStatus.REMOVED); 
 				message.setRemovedTime(new Date());  
 				
 				messageMapper.remove(message); 
-				
-				System.out.println("操作没有执行过，删除消息，messageId=" + message.getId());  
 			}
 		}
 	}

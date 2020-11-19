@@ -1,5 +1,7 @@
 package com.zhss.reliable.message.service.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -49,6 +51,18 @@ public interface MessageMapper {
 		@Result(column = "finished_time", property = "finishedTime") 
 	})
 	public Message findById(@Param("id") Long id);
+	
+	@Select("SELECT * FROM message WHERE status=1")   
+	@Results({
+		@Result(id = true, column = "id", property = "id"),
+		@Result(column = "content", property = "content"),
+		@Result(column = "status", property = "status"),
+		@Result(column = "created_time", property = "createdTime"),
+		@Result(column = "removed_time", property = "removedTime"),
+		@Result(column = "confirmed_time", property = "confirmedTime"),
+		@Result(column = "finished_time", property = "finishedTime") 
+	})
+	public List<Message> findPrepared();
 	
 	@Update("UPDATE message SET "
 			+ "status=#{status},"
