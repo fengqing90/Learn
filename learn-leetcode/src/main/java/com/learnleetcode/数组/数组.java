@@ -34,6 +34,59 @@ public class 数组 {
     }
 
     /**
+     * 88. 合并两个有序数组
+     * 
+     * <pre>
+     * 给你两个有序整数数组 nums1 和 nums2，请你将 nums2 合并到 nums1 中，使 nums1 成为一个有序数组。
+     *
+     * 说明：
+     * 初始化 nums1 和 nums2 的元素数量分别为 m 和 n 。
+     * 你可以假设 nums1 有足够的空间（空间大小大于或等于 m + n）来保存 nums2 中的元素。
+     *  
+     *
+     * 示例：
+     * 输入：
+     * nums1 = [1,2,3,0,0,0], m = 3
+     * nums2 = [2,5,6],       n = 3
+     * 输出：[1,2,2,3,5,6]
+     *  
+     *
+     * 提示：
+     * -10^9 <= nums1[i], nums2[i] <= 10^9
+     * nums1.length == m + n
+     * nums2.length == n
+     * </pre>
+     **/
+    static class 合并两个有序数组 {
+        // 前提：nums1 足够大，2个有序数组
+        public static int[] merge(int[] nums1, int m, int[] nums2, int n) {
+            // two get pointers for nums1 and nums2
+            int p1 = m - 1;
+            int p2 = n - 1;
+            // set pointer for nums1
+            // 结果数组总长度
+            int p = m + n - 1;
+
+            // while there are still elements to compare
+            // 下表 递减
+            while ((p1 >= 0) && (p2 >= 0))
+            // compare two elements from nums1 and nums2
+            // and add the largest one in nums1
+            {
+                // 倒序 比较值大小，给nums1赋值=  n1 < n2 : 用n2, 反之用n1
+                nums1[p--] = (nums1[p1] < nums2[p2]) ? nums2[p2--]
+                    : nums1[p1--];
+            }
+
+            // 将nums2中未加入到nums1中的数放到头部
+            System.arraycopy(nums2, 0, nums1, 0, p2 + 1);
+
+            return nums1;
+        }
+
+    }
+
+    /**
      * [66]加一
      **/
     static class 加一 {
