@@ -76,9 +76,12 @@ public class 树 {
         // System.out.println(二叉搜索树中的搜索.searchBST(二叉搜索树中的搜索.getTreeNode(), 5));
         // System.out.println(二叉搜索树中的搜索.searchBST(二叉搜索树中的搜索.getTreeNode2(), 63));
 
-        System.out.println(二叉搜索树节点最小距离.minDiffInBST(二叉搜索树节点最小距离.getTreeNode()));
+        // System.out.println(二叉搜索树节点最小距离.minDiffInBST(二叉搜索树节点最小距离.getTreeNode()));
+        // System.out
+        //     .println(二叉搜索树节点最小距离.minDiffInBST(二叉搜索树节点最小距离.getTreeNode2()));
+
         System.out
-            .println(二叉搜索树节点最小距离.minDiffInBST(二叉搜索树节点最小距离.getTreeNode2()));
+            .println(相同的树.isSameTree(相同的树.getTreeNode1(), 相同的树.getTreeNode2()));
     }
 
     /**
@@ -666,22 +669,30 @@ public class 树 {
      * </pre>
      */
     static class 相同的树 {
+        public static TreeNode getTreeNode1() {
+            return new TreeNode(1, new TreeNode(2), null);
+        }
 
-        public boolean isSameTree(TreeNode p, TreeNode q) {
+        public static TreeNode getTreeNode2() {
+            return new TreeNode(1, null, new TreeNode(2));
+
+        }
+
+        public static boolean isSameTree(TreeNode p, TreeNode q) {
             if (p == null && q == null) {
                 return true;
             } else if (p == null || q == null) {
                 return false;
-            } else if (q.val == p.val) {
-                return true;
-            } else {
-                // 两个数的左节点是否相等
-                // 两个数的右节点是否相等
-                return this.isSameTree(p.left, q.left)
-                    && this.isSameTree(p.right, q.right);
             }
-        }
 
+            // 两个数的左节点是否相等
+            // 两个数的右节点是否相等
+            boolean l = isSameTree(p.left, q.left);
+            boolean r = isSameTree(p.right, q.right);
+
+            return q.val == p.val && l && r;
+
+        }
     }
 
     /**
