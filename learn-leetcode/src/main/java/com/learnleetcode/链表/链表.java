@@ -86,9 +86,9 @@ public class 链表 {
                 // 如果重复直接指定下下个
                 if (node.val == node.next.val) {
                     node.next = node.next.next;
+                } else {
+                    node = node.next;
                 }
-                // 更新下标
-                node = node.next;
             }
             return head;
         }
