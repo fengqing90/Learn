@@ -1,5 +1,8 @@
 package com.learnleetcode.链表;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * TODO
  *
@@ -47,20 +50,85 @@ public class 链表 {
 
         // System.out
         //     .println(删除排序链表中的重复元素.deleteDuplicates(删除排序链表中的重复元素.getListNode()));
-        System.out.println(
-            删除排序链表中的重复元素.deleteDuplicates(删除排序链表中的重复元素.getListNode2()));
+        // System.out.println(
+        //     删除排序链表中的重复元素.deleteDuplicates(删除排序链表中的重复元素.getListNode2()));
+
+        System.out.println(环形链表.hasCycle(环形链表.getListNode()));
+        System.out.println(环形链表.hasCycle(环形链表.getListNode2()));
+
+    }
+
+    /**
+     * 141. 环形链表 <br>
+     * https://leetcode-cn.com/problems/linked-list-cycle/
+     **/
+    static class 环形链表 {
+
+        public static ListNode getListNode() {
+            ListNode node_4 = new ListNode(-4);
+            ListNode node_2 = new ListNode(2, new ListNode(0, node_4));
+            node_4.next = node_2;
+            return new ListNode(3, node_2);
+        }
+
+        public static ListNode getListNode2() {
+            ListNode node_4 = new ListNode(4);
+            ListNode node_0 = new ListNode(0,
+                new ListNode(1, new ListNode(2, new ListNode(3, node_4))));
+            node_4.next = node_0;
+            return new ListNode(-3, new ListNode(-2, new ListNode(-1, node_0)));
+        }
+
+        public static boolean hasCycle(ListNode head) {
+
+            if (head == null || head.next == null) {
+                return false;
+            }
+
+            ListNode fast = head.next;
+            ListNode slow = head;
+
+            while (slow != null) {
+
+                if (fast == null || fast.next == null) {
+                    return false;
+                }
+
+                // System.out.println(slow.val);
+                // System.out.println(fast.val);
+                if (slow.equals(fast)) {
+                    return true;
+                }
+                fast = fast.next.next;
+                slow = slow.next;
+            }
+
+            return false;
+        }
+
+        public boolean hasCycle2(ListNode head) {
+            Set<ListNode> seen = new HashSet<ListNode>();
+            while (head != null) {
+                if (!seen.add(head)) {
+                    return true;
+                }
+                head = head.next;
+            }
+            return false;
+
+        }
     }
 
     /**
      * 83. 删除排序链表中的重复元素
-     * 
+     *
      * <pre>
      * 给定一个排序链表，删除所有重复的元素，使得每个元素只出现一次。
      *
      * 示例 1:
      * 输入: 1->1->2
      * 输出: 1->2
-     * 
+     *
      * 示例 2:
      * 输入: 1->1->2->3->3
      * 输出: 1->2->3
