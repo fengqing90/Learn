@@ -12,8 +12,16 @@
 	<properties>
 		<sonar.sourceEncoding>utf-8</sonar.sourceEncoding>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
-		<spring.boot.starter.version>2.3.4.RELEASE</spring.boot.starter.version>
+		<!--<spring.boot.starter.version>2.3.4.RELEASE</spring.boot.starter.version>-->
 	</properties>
+
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.3.4.RELEASE</version>
+		<relativePath/>
+	</parent>
 
 	<modules>
 		<module>BB</module>
