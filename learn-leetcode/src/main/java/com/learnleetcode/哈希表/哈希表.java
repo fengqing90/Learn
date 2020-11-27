@@ -18,7 +18,71 @@ public class 哈希表 {
         // System.out.println(无重复字符的最长子串.lengthOfLongestSubstring("abba"));
 
         // System.out.println(只出现一次的数字.singleNumber(new int[] { 2, 2, 1 }));
-        System.out.println(只出现一次的数字.singleNumber(new int[] { 4, 1, 2, 1, 2 }));
+        // 只出现一次的数字.run();
+        四数相加II.run();
+    }
+
+    /**
+     * 454. 四数相加 II
+     * 
+     * <pre>
+     * 给定四个包含整数的数组列表 A , B , C , D ,计算有多少个元组 (i, j, k, l) ，使得 A[i] + B[j] + C[k] + D[l] = 0。
+     * 为了使问题简单化，所有的 A, B, C, D 具有相同的长度 N，且 0 ≤ N ≤ 500 。所有整数的范围在 -228 到 228 - 1 之间，最终结果不会超过 231 - 1 。
+     *
+     * 例如:
+     * 输入:
+     * A = [ 1, 2]
+     * B = [-2,-1]
+     * C = [-1, 2]
+     * D = [ 0, 2]
+     *
+     * 输出:
+     * 2
+     *
+     * 解释:
+     * 两个元组如下:
+     * 1. (0, 0, 0, 1) -> A[0] + B[0] + C[0] + D[1] = 1 + (-2) + (-1) + 2 = 0
+     * 2. (1, 1, 0, 0) -> A[1] + B[1] + C[0] + D[0] = 2 + (-1) + (-1) + 0 = 0
+     * </pre>
+     */
+    static class 四数相加II {
+
+        static void run() {
+            System.out.println(fourSumCount(new int[] { 1, 2 },
+                new int[] { -2, -1 }, new int[] { -1, 2 }, new int[] { 0, 2 }));
+        }
+
+        /**
+         * <pre>
+         * 1段：(A+B) + 2段：(B+C) = 0
+         * 1段结果存到map中。
+         * 2段结果必然是1段的相反数，判断2段结果是否在1段中。
+         * </pre>
+         */
+        public static int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
+            Map<Integer, Integer> map = new HashMap<>();
+
+            int res = 0;
+            for (int element : A) {
+                for (int value : B) {
+                    int sumAB = element + value;
+                    if (map.containsKey(sumAB)) {
+                        map.put(sumAB, map.get(sumAB) + 1);
+                    } else
+                        map.put(sumAB, 1);
+                }
+            }
+
+            for (int item : C) {
+                for (int value : D) {
+                    int sumCD = -(item + value);
+                    if (map.containsKey(sumCD)) {
+                        res += map.get(sumCD);
+                    }
+                }
+            }
+            return res;
+        }
     }
 
     /**
@@ -45,6 +109,9 @@ public class 哈希表 {
      * </pre>
      **/
     static class 只出现一次的数字 {
+        static void run() {
+            System.out.println(singleNumber(new int[] { 4, 1, 2, 1, 2 }));
+        }
 
         public static int singleNumber(int[] nums) {
             int single = 0;
