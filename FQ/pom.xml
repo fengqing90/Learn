@@ -13,16 +13,24 @@
 		<!-- <git.commitTime>${git.commit.time}</git.commitTime> -->
 		<!-- <git.commiter>${git.commit.user.name}</git.commiter> -->
 		<build.timestamp>${maven.build.timestamp}</build.timestamp>
-		<spring.version>4.3.17.RELEASE</spring.version>
-		<spring.security.version>4.0.3.RELEASE</spring.security.version>
+		<!--<spring.version>4.3.17.RELEASE</spring.version>-->
+		<!--<spring.security.version>4.0.3.RELEASE</spring.security.version>-->
 		<org.aspectj>1.8.6</org.aspectj>
 	</properties>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.3.4.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>${spring.version}</version>
+			<!-- <version>${spring.version}</version> -->
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
 		<dependency>
@@ -76,37 +84,37 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
+			<!-- <version>${spring.version}</version> -->
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
-			<version>${spring.version}</version>
+			<!-- <version>${spring.version}</version> -->
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
+			<!-- <version>${spring.version}</version> -->
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
-			<version>${spring.version}</version>
+			<!-- <version>${spring.version}</version> -->
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
-			<version>${spring.version}</version>
+			<!-- <version>${spring.version}</version> -->
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>${spring.version}</version>
+			<!-- <version>${spring.version}</version> -->
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
+			<!-- <version>${spring.version}</version> -->
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -180,12 +188,12 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-messaging</artifactId>
-			<version>${spring.version}</version>
+			<!-- <version>${spring.version}</version> -->
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-websocket</artifactId>
-			<version>${spring.version}</version>
+			<!-- <version>${spring.version}</version> -->
 		</dependency>
 		<dependency>
 			<groupId>org.projectreactor</groupId>
@@ -195,7 +203,7 @@
 		<dependency>
 			<groupId>org.springframework.batch</groupId>
 			<artifactId>spring-batch-core</artifactId>
-			<version>3.0.4.RELEASE</version>
+			<!--<version>3.0.4.RELEASE</version>-->
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
@@ -210,7 +218,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>4.3.17.RELEASE</version>
+			<!--<version>4.3.17.RELEASE</version>-->
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

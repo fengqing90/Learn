@@ -9,6 +9,12 @@
 	<version>2020</version>
 	<packaging>pom</packaging>
 
+	<properties>
+		<sonar.sourceEncoding>utf-8</sonar.sourceEncoding>
+		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
+		<spring.boot.starter.version>2.3.4.RELEASE</spring.boot.starter.version>
+	</properties>
+
 	<modules>
 		<module>BB</module>
 		<module>FQ</module>
