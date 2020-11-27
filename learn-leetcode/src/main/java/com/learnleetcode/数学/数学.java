@@ -8,13 +8,54 @@ package com.learnleetcode.数学;
  */
 public class 数学 {
     public static void main(String[] args) {
-        System.out.println('0' - '1');
+        x的平方根.run();
+        Excel表列名称.run();
+    }
+
+    /**
+     * 168. Excel表列名称
+     * 
+     * <pre>
+     * 给定一个正整数，返回它在 Excel 表中相对应的列名称。
+     *
+     * 例如：
+    *     1 -> A
+    *     2 -> B
+    *     3 -> C
+    *     ...
+    *     26 -> Z
+    *     27 -> AA
+    *     28 -> AB 
+    *     ...
+     * </pre>
+     */
+    static class Excel表列名称 {
+
+        static void run() {
+            System.out.println(new Excel表列名称().convertToTitle(486));
+            System.out.println(new Excel表列名称().convertToTitle(701));
+        }
+
+        public String convertToTitle(int n) {
+            StringBuilder stringBuilder = new StringBuilder();
+            while (n != 0) {
+                n--;
+                stringBuilder.append((char) ('A' + n % 26));
+                n /= 26;
+            }
+            return stringBuilder.reverse().toString();
+
+        }
     }
 
     /** [69]x 的平方根 **/
     static class x的平方根 {
 
-        public static int mySqrt(int x) {
+        static void run() {
+            System.out.println(new x的平方根().mySqrt(10));
+        }
+
+        int mySqrt(int x) {
             // 左标记、右标记
             int l = 0, r = x, ans = -1;
 
