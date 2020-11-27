@@ -53,9 +53,60 @@ public class 链表 {
         // System.out.println(
         //     删除排序链表中的重复元素.deleteDuplicates(删除排序链表中的重复元素.getListNode2()));
 
-        System.out.println(环形链表.hasCycle(环形链表.getListNode()));
-        System.out.println(环形链表.hasCycle(环形链表.getListNode2()));
+        // 环形链表.run();
 
+        相交链表.run();
+
+    }
+
+    /**
+     * 160. 相交链表 </br>
+     * https://leetcode-cn.com/problems/intersection-of-two-linked-lists/
+     **/
+    static class 相交链表 {
+
+        static void run() {
+            相交链表 相交链表 = new 相交链表();
+            ListNode node8 = new ListNode(8, new ListNode(4, new ListNode(5)));
+
+            // [4,1,8,4,5]
+            ListNode listNodeA = new ListNode(4, new ListNode(1, node8));
+
+            // [5,6,1,8,4,5]
+            ListNode listNodeB = new ListNode(5,
+                new ListNode(6, new ListNode(1, node8)));
+
+            System.out.println(相交链表.getIntersectionNode(listNodeA, listNodeB));
+        }
+
+        /**
+         * 方法三：双指针法
+         * 
+         * <pre>
+         * 创建两个指针 pApA 和 pBpB，分别初始化为链表 A 和 B 的头结点。然后让它们向后逐结点遍历。 
+         * 当 pApA 到达链表的尾部时，将它重定位到链表 B 的头结点 (你没看错，就是链表 B); 类似的，当 pBpB
+         * 到达链表的尾部时，将它重定位到链表 A 的头结点。
+         * 若在某一时刻 pApA 和 pBpB 相遇，则 pApA/pBpB 为相交结点。
+         * 想弄清楚为什么这样可行, 可以考虑以下两个链表: A={1,3,5,7,9,11} 和 B={2,4,9,11}，相交于结点 9。 由于
+         * B.length (=4) < A.length (=6)，pBpB 比 pApA 少经过 22 个结点，会先到达尾部。将 pBpB
+         * 重定向到 A 的头结点，pApA 重定向到 B 的头结点后，pBpB 要比 pApA 多走 2 个结点。因此，它们会同时到达交点。
+         * 如果两个链表存在相交，它们末尾的结点必然相同。因此当 pApA/pBpB 到达链表结尾时，记录下链表 A/B
+         * 对应的元素。若最后元素不相同，则两个链表不相交。
+         * 时间复杂度 : O(m+n)O(m+n)。
+         * 空间复杂度 : O(1)O(1)。
+         * 
+         * A:[4,1,8,4,5][5,6,1,8,4,5]
+         * B:[5,6,1,8,4,5][4,1,8,4,5]
+         * </pre>
+         */
+        public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+            ListNode a = headA, b = headB;
+            while (a != b) {
+                a = (a == null) ? headB : a.next;
+                b = (b == null) ? headA : b.next;
+            }
+            return a;
+        }
     }
 
     /**
@@ -64,14 +115,21 @@ public class 链表 {
      **/
     static class 环形链表 {
 
-        public static ListNode getListNode() {
+        static void run() {
+            环形链表 环形链表 = new 环形链表();
+
+            System.out.println(环形链表.hasCycle(环形链表.getListNode()));
+            System.out.println(环形链表.hasCycle(环形链表.getListNode2()));
+        }
+
+        ListNode getListNode() {
             ListNode node_4 = new ListNode(-4);
             ListNode node_2 = new ListNode(2, new ListNode(0, node_4));
             node_4.next = node_2;
             return new ListNode(3, node_2);
         }
 
-        public static ListNode getListNode2() {
+        ListNode getListNode2() {
             ListNode node_4 = new ListNode(4);
             ListNode node_0 = new ListNode(0,
                 new ListNode(1, new ListNode(2, new ListNode(3, node_4))));
@@ -79,7 +137,7 @@ public class 链表 {
             return new ListNode(-3, new ListNode(-2, new ListNode(-1, node_0)));
         }
 
-        public static boolean hasCycle(ListNode head) {
+        boolean hasCycle(ListNode head) {
 
             if (head == null || head.next == null) {
                 return false;
