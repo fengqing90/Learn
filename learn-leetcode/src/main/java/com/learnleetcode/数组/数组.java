@@ -1,6 +1,8 @@
 package com.learnleetcode.数组;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -29,8 +31,84 @@ public class 数组 {
         // System.out.println(寻找两个正序数组的中位数
         //     .findMedianSortedArrays(new int[] { 1, 2 }, new int[] { 3, 4 }));
 
-        System.out.println(删除排序数组中的重复项
-            .removeDuplicates(new int[] { 0, 0, 1, 1, 1, 2, 2, 3, 3, 4 }));
+        // System.out.println(删除排序数组中的重复项
+        //     .removeDuplicates(new int[] { 0, 0, 1, 1, 1, 2, 2, 3, 3, 4 }));
+
+        两数之和II_输入有序数组.run();
+    }
+
+    /**
+     * 167. 两数之和 II - 输入有序数组
+     * 
+     * <pre>
+     * 给定一个已按照升序排列 的有序数组，找到两个数使得它们相加之和等于目标数。
+     *
+     * 函数应该返回这两个下标值 index1 和 index2，其中 index1 必须小于 index2。
+     *
+     * 说明:
+     * 返回的下标值（index1 和 index2）不是从零开始的。
+     * 你可以假设每个输入只对应唯一的答案，而且你不可以重复使用相同的元素。
+     * 示例:
+     *
+     * 输入: numbers = [2, 7, 11, 15], target = 9
+     * 输出: [1,2]
+     * 解释: 2 与 7 之和等于目标数 9 。因此 index1 = 1, index2 = 2 。
+     * </pre>
+     */
+    static class 两数之和II_输入有序数组 {
+        static void run() {
+            两数之和II_输入有序数组 两数之和II_输入有序数组 = new 两数之和II_输入有序数组();
+
+            System.out.println(ArrayUtils
+                .toString(两数之和II_输入有序数组.twoSum(new int[] { 2, 7, 11, 15 }, 9)));
+
+            System.out.println(ArrayUtils.toString(
+                两数之和II_输入有序数组.twoSum2(new int[] { 2, 7, 11, 15 }, 9)));
+        }
+
+        /**
+         * 二分
+         */
+        int[] twoSum3(int[] numbers, int target) {
+            return null;
+        }
+
+        /**
+         * 双指针,有序数组
+         */
+        int[] twoSum2(int[] numbers, int target) {
+            int low = 0, hight = numbers.length - 1;
+
+            while (low < hight) {
+                int sum = numbers[low] + numbers[hight];
+                if (sum == target) {
+                    return new int[] { low + 1, hight + 1 };
+                } else if (sum > target) {
+                    hight--;
+                } else {
+                    low++;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * hash
+         */
+        int[] twoSum(int[] numbers, int target) {
+
+            Map<Integer, Integer> map = new HashMap<>();
+
+            for (int i = 1; i <= numbers.length; i++) {
+                if (map.containsKey(target - numbers[i - 1])) {
+                    return new int[] { map.get(target - numbers[i - 1]), i };
+                } else {
+                    map.put(numbers[i - 1], i);
+                }
+            }
+
+            return new int[] {};
+        }
     }
 
     /**
