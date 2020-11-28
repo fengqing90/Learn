@@ -38,12 +38,16 @@ public class 数学 extends LeetCode {
 
         static void run() {
             阶乘后的零 阶乘后的零 = new 阶乘后的零();
-            System.out.println(阶乘后的零.trailingZeroes(1));
+            System.out.println(阶乘后的零.trailingZeroes(5));
         }
 
         int trailingZeroes(int n) {
-
-            return 0;
+            int zeroCount = 0;
+            while (n > 0) {
+                n /= 5;
+                zeroCount += n;
+            }
+            return zeroCount;
         }
     }
 
