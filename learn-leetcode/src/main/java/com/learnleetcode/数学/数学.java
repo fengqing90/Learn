@@ -10,6 +10,40 @@ public class 数学 {
     public static void main(String[] args) {
         x的平方根.run();
         Excel表列名称.run();
+        Excel表列序号.run();
+    }
+
+    /**
+     * 171. Excel表列序号
+     * 
+     * <pre>
+     * 给定一个Excel表格中的列名称，返回其相应的列序号。
+     *
+     * 例如，
+     *     A -> 1
+     *     B -> 2
+     *     C -> 3
+     *     ...
+     *     Z -> 26
+     *     AA -> 27
+     *     AB -> 28 
+     *     ...
+     * </pre>
+     */
+    static class Excel表列序号 {
+        static void run() {
+            System.out.println(new Excel表列序号().titleToNumber("ZYA"));
+        }
+
+        public int titleToNumber(String s) {
+
+            int n = 0;
+            for (int i = 0; i < s.length(); i++) {
+                int t = (s.charAt(i) - 'A' + 1);
+                n = n * 26 + t;
+            }
+            return n;
+        }
     }
 
     /**
@@ -32,8 +66,8 @@ public class 数学 {
     static class Excel表列名称 {
 
         static void run() {
-            System.out.println(new Excel表列名称().convertToTitle(486));
-            System.out.println(new Excel表列名称().convertToTitle(701));
+            // System.out.println(new Excel表列名称().convertToTitle(486));
+            System.out.println(new Excel表列名称().convertToTitle(704));
         }
 
         public String convertToTitle(int n) {
@@ -52,7 +86,7 @@ public class 数学 {
     static class x的平方根 {
 
         static void run() {
-            System.out.println(new x的平方根().mySqrt(10));
+            // System.out.println(new x的平方根().mySqrt(10));
         }
 
         int mySqrt(int x) {
