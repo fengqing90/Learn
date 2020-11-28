@@ -34,7 +34,58 @@ public class 数组 {
         // System.out.println(删除排序数组中的重复项
         //     .removeDuplicates(new int[] { 0, 0, 1, 1, 1, 2, 2, 3, 3, 4 }));
 
-        两数之和II_输入有序数组.run();
+        // 两数之和II_输入有序数组.run();
+
+        多数元素.run();
+    }
+
+    /**
+     * 169. 多数元素
+     * 
+     * <pre>
+     * 给定一个大小为 n 的数组，找到其中的多数元素。多数元素是指在数组中出现次数大于 ⌊ n/2 ⌋ 的元素。
+     * 你可以假设数组是非空的，并且给定的数组总是存在多数元素。
+     *
+     * 示例 1:
+     * 输入: [3,2,3]
+     * 输出: 3
+     * 
+     * 示例 2:
+     * 输入: [2,2,1,1,1,2,2]
+     * 输出: 2
+     * </pre>
+     */
+    static class 多数元素 {
+        static void run() {
+
+            System.out.println(new 多数元素()
+                .majorityElement(new int[] { 2, 2, 1, 1, 1, 2, 2, 1, 1 }));
+        }
+
+        /**
+         * 题目要求超过一半,排序后那个数肯定超过一半,取中间即可
+         */
+        int majorityElement2(int[] nums) {
+            Arrays.sort(nums);
+            return nums[nums.length / 2];
+        }
+
+        /**
+         * 投票
+         */
+        int majorityElement(int[] nums) {
+            int count = 0;
+            int candidate = 0;
+
+            for (int num : nums) {
+
+                if (count == 0) {
+                    candidate = num;
+                }
+                count += (num == candidate) ? 1 : -1;
+            }
+            return candidate;
+        }
     }
 
     /**
