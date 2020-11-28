@@ -2,13 +2,15 @@ package com.learnleetcode.字符串;
 
 import java.util.Stack;
 
+import com.learnleetcode.LeetCode;
+
 /**
  * TODO
  *
  * @author fengqing
  * @date 2020/11/17 10:04
  */
-public class 字符串 {
+public class 字符串 extends LeetCode {
 
     public static void main(String[] args) {
 
@@ -24,7 +26,7 @@ public class 字符串 {
      * https://leetcode-cn.com/problems/increasing-decreasing-string/solution/javadai-ma-2msji-bai-liao-100de-yong-hu-by-sdwwld/
      * </pre>
      **/
-    static class 上升下降字符串 {
+    static class 上升下降字符串 extends 字符串 {
         public String sortString(String s) {
             //相当于26个桶
             int[] bucket = new int[26];

@@ -3,13 +3,15 @@ package com.learnleetcode.哈希表;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.learnleetcode.LeetCode;
+
 /**
  * TODO
  *
  * @author fengqing
  * @date 2020/11/16 18:45
  */
-public class 哈希表 {
+public class 哈希表 extends LeetCode {
 
     public static void main(String[] args) {
         // System.out.println(无重复字符的最长子串.lengthOfLongestSubstring("abcabcbb"));
@@ -45,7 +47,7 @@ public class 哈希表 {
      * 2. (1, 1, 0, 0) -> A[1] + B[1] + C[0] + D[0] = 2 + (-1) + (-1) + 0 = 0
      * </pre>
      */
-    static class 四数相加II {
+    static class 四数相加II extends 哈希表 {
 
         static void run() {
             System.out.println(fourSumCount(new int[] { 1, 2 },

@@ -6,13 +6,15 @@ import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import com.learnleetcode.LeetCode;
+
 /**
  * 数组
  *
  * @author fengqing
  * @date 2020/10/19 10:02
  */
-public class 数组 {
+public class 数组 extends LeetCode {
 
     public static void main(String[] args) {
 
@@ -55,7 +57,7 @@ public class 数组 {
      * 输出: 2
      * </pre>
      */
-    static class 多数元素 {
+    static class 多数元素 extends 数组 {
         static void run() {
 
             System.out.println(new 多数元素()
@@ -106,7 +108,7 @@ public class 数组 {
      * 解释: 2 与 7 之和等于目标数 9 。因此 index1 = 1, index2 = 2 。
      * </pre>
      */
-    static class 两数之和II_输入有序数组 {
+    static class 两数之和II_输入有序数组 extends 数组 {
         static void run() {
             两数之和II_输入有序数组 两数之和II_输入有序数组 = new 两数之和II_输入有序数组();
 
@@ -186,7 +188,7 @@ public class 数组 {
      * nums2.length == n
      * </pre>
      **/
-    static class 合并两个有序数组 {
+    static class 合并两个有序数组 extends 数组 {
         // 前提：nums1 足够大，2个有序数组
         public static int[] merge(int[] nums1, int m, int[] nums2, int n) {
             // two get pointers for nums1 and nums2

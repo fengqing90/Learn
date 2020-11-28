@@ -3,13 +3,15 @@ package com.learnleetcode.链表;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.learnleetcode.LeetCode;
+
 /**
  * TODO
  *
  * @author fengqing
  * @date 2020/11/13 15:10
  */
-public class 链表 {
+public class 链表 extends LeetCode {
 
     public static class ListNode {
         int val;
@@ -63,7 +65,7 @@ public class 链表 {
      * 160. 相交链表 </br>
      * https://leetcode-cn.com/problems/intersection-of-two-linked-lists/
      **/
-    static class 相交链表 {
+    static class 相交链表 extends 链表 {
 
         static void run() {
             相交链表 相交链表 = new 相交链表();

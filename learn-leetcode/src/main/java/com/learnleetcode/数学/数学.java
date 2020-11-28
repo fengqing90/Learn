@@ -1,16 +1,50 @@
 package com.learnleetcode.数学;
 
+import com.learnleetcode.LeetCode;
+
 /**
  * TODO
  *
  * @author fengqing
  * @date 2020/11/17 10:10
  */
-public class 数学 {
+public class 数学 extends LeetCode {
+
     public static void main(String[] args) {
         x的平方根.run();
         Excel表列名称.run();
         Excel表列序号.run();
+        阶乘后的零.run();
+    }
+
+    /**
+     * 172. 阶乘后的零
+     * 
+     * <pre>
+     * 给定一个整数 n，返回 n! 结果尾数中零的数量。
+     *
+     * 示例 1:
+     * 输入: 3
+     * 输出: 0
+     * 解释: 3! = 6, 尾数中没有零。
+     * 
+     * 示例 2:
+     * 输入: 5
+     * 输出: 1
+     * 解释: 5! = 120, 尾数中有 1 个零.
+     * </pre>
+     */
+    static class 阶乘后的零 extends 数学 {
+
+        static void run() {
+            阶乘后的零 阶乘后的零 = new 阶乘后的零();
+            System.out.println(阶乘后的零.trailingZeroes(1));
+        }
+
+        int trailingZeroes(int n) {
+
+            return 0;
+        }
     }
 
     /**
@@ -30,9 +64,9 @@ public class 数学 {
      *     ...
      * </pre>
      */
-    static class Excel表列序号 {
+    static class Excel表列序号 extends 数学 {
         static void run() {
-            System.out.println(new Excel表列序号().titleToNumber("ZYA"));
+            // System.out.println(new Excel表列序号().titleToNumber("ZYA"));
         }
 
         public int titleToNumber(String s) {
@@ -67,7 +101,7 @@ public class 数学 {
 
         static void run() {
             // System.out.println(new Excel表列名称().convertToTitle(486));
-            System.out.println(new Excel表列名称().convertToTitle(704));
+            // System.out.println(new Excel表列名称().convertToTitle(704));
         }
 
         public String convertToTitle(int n) {

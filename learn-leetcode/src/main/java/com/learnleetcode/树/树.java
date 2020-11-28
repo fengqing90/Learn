@@ -6,13 +6,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import com.learnleetcode.LeetCode;
+
 /**
  * 树
  *
  * @author fengqing
  * @date 2020/10/16 11:02
  */
-public class 树 {
+public class 树 extends LeetCode {
     public static class TreeNode {
         int val;
         TreeNode left;
@@ -130,7 +132,7 @@ public class 树 {
     /**
      * 700. 二叉搜索树中的搜索
      **/
-    static class 二叉搜索树中的搜索 {
+    static class 二叉搜索树中的搜索 extends 树 {
         public static TreeNode getTreeNode() {
             return new TreeNode(4,
                 new TreeNode(2, new TreeNode(1), new TreeNode(3)),
