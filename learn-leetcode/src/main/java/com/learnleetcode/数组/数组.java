@@ -16,7 +16,7 @@ import com.learnleetcode.LeetCode;
  * @author fengqing
  * @date 2020/10/19 10:02
  */
-public class 数组 extends LeetCode {
+class 数组 extends LeetCode {
 
     public static void main(String[] args) {
 
@@ -29,19 +29,13 @@ public class 数组 extends LeetCode {
         // System.out.println(升序数组查找数组中绝对值最小的值
         //     .min(new int[] { -7, -6, -5, -4, -3, -2, 1, 2, 3 }));
 
-        // System.out.println(Arrays.toString(
-        //     数组的相对排序.relativeSortArray(数组的相对排序.arr1(), 数组的相对排序.arr2())));
-
-        // System.out.println(寻找两个正序数组的中位数
-        //     .findMedianSortedArrays(new int[] { 1, 2 }, new int[] { 3, 4 }));
-
-        // System.out.println(删除排序数组中的重复项
-        //     .removeDuplicates(new int[] { 0, 0, 1, 1, 1, 2, 2, 3, 3, 4 }));
-
-        // 两数之和II_输入有序数组.run();
-
+        数组的相对排序.run();
+        寻找两个正序数组的中位数.run();
+        删除排序数组中的重复项.run();
+        两数之和II_输入有序数组.run();
         多数元素.run();
         杨辉三角.run();
+
     }
 
     /**
@@ -63,7 +57,7 @@ public class 数组 extends LeetCode {
      * ]
      * </pre>
      */
-    static class 杨辉三角 {
+    static class 杨辉三角 extends 数组 {
 
         static void run() {
             System.out.println(new 杨辉三角().generate(5));
@@ -474,19 +468,23 @@ public class 数组 extends LeetCode {
     /**
      * [26]删除排序数组中的重复项
      **/
-    static class 删除排序数组中的重复项 {
-        public static int removeDuplicates(int[] nums) {
+    static class 删除排序数组中的重复项 extends 数组 {
+        static void run() {
+            System.out.println(new 删除排序数组中的重复项()
+                .removeDuplicates(new int[] { 0, 0, 1, 1, 1, 2, 2, 3, 3, 4 }));
+        }
+
+        int removeDuplicates(int[] nums) {
             int i = 1;
             for (int j = 1; j < nums.length; j++) {
                 if (nums[j] != nums[i - 1]) {
                     nums[i++] = nums[j];
                 }
             }
-            System.out.println(ArrayUtils.toString(nums));
             return i;
         }
 
-        public static int removeDuplicates1(int[] nums) {
+        int removeDuplicates1(int[] nums) {
             int length = nums.length;
             int j = 1;
             for (int i = 0; i < nums.length - 1; i++) {
@@ -503,7 +501,7 @@ public class 数组 extends LeetCode {
         }
 
         // 方式2 ： 双指针
-        public static int removeDuplicates2(int[] nums) {
+        int removeDuplicates2(int[] nums) {
             if (nums == null || nums.length == 0) {
                 return 0;
             }
@@ -553,8 +551,13 @@ public class 数组 extends LeetCode {
      * 输出：2.00000
      * </pre>
      **/
-    static class 寻找两个正序数组的中位数 {
-        public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
+    static class 寻找两个正序数组的中位数 extends 数组 {
+        static void run() {
+            System.out.println(new 寻找两个正序数组的中位数().findMedianSortedArrays(
+                new int[] { 1, 2 }, new int[] { 3, 4 }));
+        }
+
+        double findMedianSortedArrays(int[] nums1, int[] nums2) {
             int m = nums1.length;
             int n = nums2.length;
             int[] nums = new int[m + n];
@@ -619,16 +622,24 @@ public class 数组 extends LeetCode {
      * 输出：[2,2,2,1,4,3,3,9,6,7,19]
      * </pre>
      **/
-    static class 数组的相对排序 {
-        static int[] arr1() {
+    static class 数组的相对排序 extends 数组 {
+
+        public static void run() {
+            数组的相对排序 数组的相对排序 = new 数组的相对排序();
+
+            System.out.println(Arrays.toString(
+                数组的相对排序.relativeSortArray(数组的相对排序.arr1(), 数组的相对排序.arr2())));
+        }
+
+        int[] arr1() {
             return new int[] { 2, 3, 1, 3, 2, 4, 6, 7, 9, 2, 19 };
         }
 
-        static int[] arr2() {
+        int[] arr2() {
             return new int[] { 2, 1, 4, 3, 9, 6 };
         }
 
-        static int[] relativeSortArray(int[] arr1, int[] arr2) {
+        int[] relativeSortArray(int[] arr1, int[] arr2) {
 
             int[] array = new int[arr1.length];
             int index = 0;

@@ -8,7 +8,7 @@ import com.learnleetcode.LeetCode;
  * @author fengqing
  * @date 2020/11/17 10:10
  */
-public class 数学 extends LeetCode {
+class 数学 extends LeetCode {
 
     public static void main(String[] args) {
         x的平方根.run();

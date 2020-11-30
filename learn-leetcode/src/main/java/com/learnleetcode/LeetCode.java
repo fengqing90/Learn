@@ -10,6 +10,8 @@ public abstract class LeetCode {
 
     public LeetCode() {
         // System.out.println("【" + this.getClass().getName() + "】:");
-        System.out.println("【" + this.getClass().getSimpleName() + "】:");
+        System.out.println();
+        System.out.println(
+            "=====================>【" + this.getClass().getSimpleName() + "】:");
     }
 }
