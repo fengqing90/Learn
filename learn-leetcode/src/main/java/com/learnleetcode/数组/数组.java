@@ -1,7 +1,9 @@
 package com.learnleetcode.数组;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -39,6 +41,53 @@ public class 数组 extends LeetCode {
         // 两数之和II_输入有序数组.run();
 
         多数元素.run();
+        杨辉三角.run();
+    }
+
+    /**
+     * 118. 杨辉三角
+     * 
+     * <pre>
+     * 给定一个非负整数 numRows，生成杨辉三角的前 numRows 行。
+     * 在杨辉三角中，每个数是它左上方和右上方的数的和。
+     *
+     * 示例:
+     * 输入: 5
+     * 输出:
+     * [
+     *      [1],
+     *     [1,1],
+     *    [1,2,1],
+     *   [1,3,3,1],
+     *  [1,4,6,4,1]
+     * ]
+     * </pre>
+     */
+    static class 杨辉三角 {
+
+        static void run() {
+            System.out.println(new 杨辉三角().generate(5));
+        }
+
+        public List<List<Integer>> generate(int numRows) {
+            List<List<Integer>> result = new ArrayList<>();
+
+            for (int i = 0; i < numRows; i++) {
+                List<Integer> sub = new ArrayList<>();
+                for (int j = 0; j <= i; j++) {
+
+                    // 如果是第一个或最后一个 
+                    if (j == 0 || j == i) {
+                        sub.add(1);
+                    } else {
+                        sub.add(result.get(i - 1).get(j - 1)
+                            + result.get(i - 1).get(j));
+                    }
+                }
+                result.add(sub);
+            }
+            return result;
+        }
     }
 
     /**
