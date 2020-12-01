@@ -35,7 +35,68 @@ class 数组 extends LeetCode {
         两数之和II_输入有序数组.run();
         多数元素.run();
         杨辉三角.run();
+        杨辉三角II.run();
 
+    }
+
+    /***
+     * 119. 杨辉三角 II
+     * 给定一个非负索引 k，其中 k ≤ 33，返回杨辉三角的第 k 行。
+     */
+    static class 杨辉三角II extends 数组 {
+
+        static void run() {
+            System.out.println(new 杨辉三角II().getRow(5));
+        }
+
+        /**
+         * 同一个List 变化：
+         * 
+         * <pre>
+         *  [1          ],
+         *  [1,1        ],
+         *  [1,2,1      ],
+         *  [1,3,3,1    ],
+         *  [1,4,6,4,1  ]
+         * </pre>
+         */
+        List<Integer> getRow(int rowIndex) {
+
+            List<Integer> res = new ArrayList<>(rowIndex + 1);
+
+            for (int i = 0; i <= rowIndex; i++) {
+                res.add(1);
+
+                for (int j = i - 1; j > 0; j--) {
+                    res.set(j, res.get(j) + res.get(j - 1));
+                }
+            }
+
+            return res;
+        }
+
+        /**
+         * 复用118
+         */
+        public List<Integer> getRow2(int rowIndex) {
+            List<List<Integer>> result = new ArrayList<>();
+
+            for (int i = 0; i < rowIndex + 1; i++) {
+                List<Integer> sub = new ArrayList<>();
+                for (int j = 0; j <= i; j++) {
+
+                    // 如果是第一个或最后一个 
+                    if (j == 0 || j == i) {
+                        sub.add(1);
+                    } else {
+                        sub.add(result.get(i - 1).get(j - 1)
+                            + result.get(i - 1).get(j));
+                    }
+                }
+                result.add(sub);
+            }
+            return result.get(rowIndex);
+        }
     }
 
     /**
