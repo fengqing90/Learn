@@ -32,9 +32,12 @@ public class 树 extends LeetCode {
 
         @Override
         public String toString() {
+            if (this.left == null && this.right == null)
+                return this.val + "";
 
             return this.val + " (" + (this.left == null ? "" : this.left)
                 + " | " + (this.right == null ? "" : this.right) + ")";
+
             // return "TreeNode{" + "val=" + this.val + ", left=" + this.left
             //     + ", right=" + this.right + '}';
         }
@@ -84,6 +87,7 @@ public class 树 extends LeetCode {
 
         相同的树.run();
         二叉树的层次遍历II.run();
+        将有序数组转换为二叉搜索树.run();
     }
 
     /**
@@ -589,18 +593,47 @@ public class 树 extends LeetCode {
 
     /**
      * 108. 将有序数组转换为二叉搜索树
+     * 
+     * <pre>
+     * 将一个按照升序排列的有序数组，转换为一棵高度平衡二叉搜索树。
+     *
+     * 本题中，一个高度平衡二叉树是指一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1。
+     *
+     * 示例:
+     *
+     * 给定有序数组: [-10,-3,0,5,9],
+     *
+     * 一个可能的答案是：[0,-3,9,-10,null,5]，它可以表示下面这个高度平衡二叉搜索树：
+     *
+     *       0
+     *      / \
+     *    -3   9
+     *    /   /
+     *  -10  5
+     * </pre>
      */
-    static class 将有序数组转换为二叉搜索树 {
-        public TreeNode sortedArrayToBST(int[] nums) {
+    final static class 将有序数组转换为二叉搜索树 extends 树 {
+
+        static void run() {
+            System.out.println(new 将有序数组转换为二叉搜索树()
+                .sortedArrayToBST(new int[] { -10, -3, 0, 5, 9 }));
+            // 0 (-10 ( | -3) | 5 ( | 9))
+            // 0 (-3 (-10 | ) | 9 (5 | ))
+        }
+
+        TreeNode sortedArrayToBST(int[] nums) {
             return this.dfs(nums, 0, nums.length - 1);
         }
 
-        private TreeNode dfs(int[] nums, int left, int right) {
+        TreeNode dfs(int[] nums, int left, int right) {
             if (left > right) {
                 return null;
             }
             // 以升序数组的中间元素作为根节点 root。
-            int mid = left + (right - left) / 2;
+            // int mid = left + (right - left) / 2;               // 0 (-10 ( | -3) | 5 ( | 9))
+            // int mid = left + ((right - left) >> 1);            // 0 (-10 ( | -3) | 5 ( | 9))
+            int mid = (left + right + 1) / 2;                     // 0 (-3 (-10 | ) | 9 (5 | ))
+
             // 创建tree
             TreeNode root = new TreeNode(nums[mid]);
 
