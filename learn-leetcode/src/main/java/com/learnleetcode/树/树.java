@@ -82,22 +82,22 @@ public class 树 extends LeetCode {
         // System.out
         //     .println(二叉搜索树节点最小距离.minDiffInBST(二叉搜索树节点最小距离.getTreeNode2()));
 
-        System.out
-            .println(相同的树.isSameTree(相同的树.getTreeNode1(), 相同的树.getTreeNode2()));
+        相同的树.run();
+        二叉树的层次遍历II.run();
     }
 
     /**
      * 783. 二叉搜索树节点最小距离
      **/
-    static class 二叉搜索树节点最小距离 {
+    final static class 二叉搜索树节点最小距离 extends 树 {
 
-        public static TreeNode getTreeNode() {
+        TreeNode getTreeNode() {
             return new TreeNode(4,
                 new TreeNode(2, new TreeNode(1), new TreeNode(3)),
                 new TreeNode(6));
         }
 
-        public static TreeNode getTreeNode2() {
+        TreeNode getTreeNode2() {
             return new TreeNode(10,
                 new TreeNode(3, new TreeNode(1), new TreeNode(5)),
                 new TreeNode(8));
@@ -105,7 +105,7 @@ public class 树 extends LeetCode {
 
         static List<Integer> vals;
 
-        public static int minDiffInBST(TreeNode root) {
+        int minDiffInBST(TreeNode root) {
             vals = new ArrayList();
             dfs(root);
             Collections.sort(vals);
@@ -556,7 +556,7 @@ public class 树 extends LeetCode {
     /**
      * 110. 平衡二叉树
      */
-    static class 平衡二叉树 {
+    final static class 平衡二叉树 {
 
         public static TreeNode getTreeNode() {
             return new TreeNode(3, new TreeNode(9),
@@ -670,17 +670,24 @@ public class 树 extends LeetCode {
      * 输出: false
      * </pre>
      */
-    static class 相同的树 {
-        public static TreeNode getTreeNode1() {
+    final static class 相同的树 extends 树 {
+
+        static void run() {
+            相同的树 相同的树 = new 相同的树();
+            System.out.println(
+                相同的树.isSameTree(相同的树.getTreeNode1(), 相同的树.getTreeNode2()));
+        }
+
+        TreeNode getTreeNode1() {
             return new TreeNode(1, new TreeNode(2), null);
         }
 
-        public static TreeNode getTreeNode2() {
+        TreeNode getTreeNode2() {
             return new TreeNode(1, null, new TreeNode(2));
 
         }
 
-        public static boolean isSameTree(TreeNode p, TreeNode q) {
+        boolean isSameTree(TreeNode p, TreeNode q) {
             if (p == null && q == null) {
                 return true;
             } else if (p == null || q == null) {
@@ -699,10 +706,38 @@ public class 树 extends LeetCode {
 
     /**
      * 107. 二叉树的层次遍历 II
+     * 
+     * <pre>
+     * 给定一个二叉树，返回其节点值自底向上的层次遍历。 （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）
+     *
+     * 例如：
+     * 给定二叉树 [3,9,20,null,null,15,7],
+     *
+     *     3
+     *    / \
+     *   9  20
+     *     /  \
+     *    15   7
+     * 返回其自底向上的层次遍历为：
+     *
+     * [
+     *   [15,7],
+     *   [9,20],
+     *   [3]
+     * ]
+     * </pre>
      */
-    static class 二叉树的层次遍历II {
+    private final static class 二叉树的层次遍历II extends 树 {
 
-        private static TreeNode getTreeNode() {
+        static void run() {
+            二叉树的层次遍历II 二叉树的层次遍历II = new 二叉树的层次遍历II();
+            System.out.println("DFS: "
+                + 二叉树的层次遍历II.levelOrderBottom(二叉树的层次遍历II.getTreeNode()));
+            System.out.println("BFS: "
+                + 二叉树的层次遍历II.levelOrderBottom2(二叉树的层次遍历II.getTreeNode()));
+        }
+
+        TreeNode getTreeNode() {
             TreeNode root = new TreeNode(3);
             TreeNode l2 = new TreeNode(9);
             TreeNode r2 = new TreeNode(20);
@@ -715,7 +750,41 @@ public class 树 extends LeetCode {
             return root;
         }
 
-        public static List<List<Integer>> levelOrderBottom(TreeNode root) {
+        /**
+         * DFS
+         */
+        List<List<Integer>> levelOrderBottom(TreeNode root) {
+            List<List<Integer>> list = new ArrayList<>();
+            if (root == null) {
+                return list;
+            }
+
+            this.dfs(root, list, 1);
+            Collections.reverse(list);
+            return list;
+        }
+
+        void dfs(TreeNode node, List<List<Integer>> list, int index) {
+
+            if (node == null) {
+                return;
+            }
+
+            // 深度 大于 list大小说明 该层的list还未创建
+            if (index > list.size()) {
+                list.add(new ArrayList<>());
+            }
+
+            list.get(index - 1).add(node.val);
+
+            dfs(node.left, list, index + 1);
+            dfs(node.right, list, index + 1);
+        }
+
+        /**
+         * BFS
+         */
+        List<List<Integer>> levelOrderBottom2(TreeNode root) {
             List<List<Integer>> levelOrder = new LinkedList<>();
             if (root == null) {
                 return levelOrder;
