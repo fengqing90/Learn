@@ -19,16 +19,7 @@ import com.learnleetcode.LeetCode;
 class 数组 extends LeetCode {
 
     public static void main(String[] args) {
-
-        // System.out.println(升序数组查找数组中绝对值最小的值
-        //     .min(new int[] { -5, -3, -1, 2, 3, 4, 6, 7, 8, 9 }));
-        // System.out.println(升序数组查找数组中绝对值最小的值
-        //     .min(new int[] { -5, -4, -3, 2, 3, 4, 6, 7, 8, 9 }));
-        // System.out.println(升序数组查找数组中绝对值最小的值
-        //     .min(new int[] { -7, -6, -5, -4, -3, -2, -1, 1, 2, 3 }));
-        // System.out.println(升序数组查找数组中绝对值最小的值
-        //     .min(new int[] { -7, -6, -5, -4, -3, -2, 1, 2, 3 }));
-
+        升序数组查找数组中绝对值最小的值.run();
         数组的相对排序.run();
         寻找两个正序数组的中位数.run();
         删除排序数组中的重复项.run();
@@ -43,7 +34,7 @@ class 数组 extends LeetCode {
      * 119. 杨辉三角 II
      * 给定一个非负索引 k，其中 k ≤ 33，返回杨辉三角的第 k 行。
      */
-    static class 杨辉三角II extends 数组 {
+    final static class 杨辉三角II extends 数组 {
 
         static void run() {
             System.out.println(new 杨辉三角II().getRow(5));
@@ -118,7 +109,7 @@ class 数组 extends LeetCode {
      * ]
      * </pre>
      */
-    static class 杨辉三角 extends 数组 {
+    final static class 杨辉三角 extends 数组 {
 
         static void run() {
             System.out.println(new 杨辉三角().generate(5));
@@ -161,7 +152,7 @@ class 数组 extends LeetCode {
      * 输出: 2
      * </pre>
      */
-    static class 多数元素 extends 数组 {
+    final static class 多数元素 extends 数组 {
         static void run() {
 
             System.out.println(new 多数元素()
@@ -212,7 +203,7 @@ class 数组 extends LeetCode {
      * 解释: 2 与 7 之和等于目标数 9 。因此 index1 = 1, index2 = 2 。
      * </pre>
      */
-    static class 两数之和II_输入有序数组 extends 数组 {
+    final static class 两数之和II_输入有序数组 extends 数组 {
         static void run() {
             两数之和II_输入有序数组 两数之和II_输入有序数组 = new 两数之和II_输入有序数组();
 
@@ -292,7 +283,7 @@ class 数组 extends LeetCode {
      * nums2.length == n
      * </pre>
      **/
-    static class 合并两个有序数组 extends 数组 {
+    final static class 合并两个有序数组 extends 数组 {
         // 前提：nums1 足够大，2个有序数组
         public static int[] merge(int[] nums1, int m, int[] nums2, int n) {
             // two get pointers for nums1 and nums2
@@ -324,7 +315,7 @@ class 数组 extends LeetCode {
     /**
      * [66]加一
      **/
-    static class 加一 {
+    final static class 加一 {
         public static int[] plusOne(int[] digits) {
             int len = digits.length;
             // 从末尾开始加1
@@ -352,7 +343,7 @@ class 数组 extends LeetCode {
     /**
      * [53]最大子序和
      **/
-    static class 最大子序和 {
+    final static class 最大子序和 {
         /**
          * 方案:分治
          */
@@ -444,7 +435,7 @@ class 数组 extends LeetCode {
     /**
      * [35]搜索插入位置
      **/
-    static class 搜索插入位置 {
+    final static class 搜索插入位置 {
 
         /**
          * 方案一：二分查找，动态变动 s、e 下标，缩小范围 O(logN)
@@ -492,7 +483,7 @@ class 数组 extends LeetCode {
     /**
      * [27]移除元素
      **/
-    static class 移除元素 {
+    final static class 移除元素 {
 
         /**
          * 方案一：拷贝覆盖，不相等就覆盖旧数组值，index++
@@ -529,7 +520,7 @@ class 数组 extends LeetCode {
     /**
      * [26]删除排序数组中的重复项
      **/
-    static class 删除排序数组中的重复项 extends 数组 {
+    final static class 删除排序数组中的重复项 extends 数组 {
         static void run() {
             System.out.println(new 删除排序数组中的重复项()
                 .removeDuplicates(new int[] { 0, 0, 1, 1, 1, 2, 2, 3, 3, 4 }));
@@ -612,7 +603,7 @@ class 数组 extends LeetCode {
      * 输出：2.00000
      * </pre>
      **/
-    static class 寻找两个正序数组的中位数 extends 数组 {
+    final static class 寻找两个正序数组的中位数 extends 数组 {
         static void run() {
             System.out.println(new 寻找两个正序数组的中位数().findMedianSortedArrays(
                 new int[] { 1, 2 }, new int[] { 3, 4 }));
@@ -683,7 +674,7 @@ class 数组 extends LeetCode {
      * 输出：[2,2,2,1,4,3,3,9,6,7,19]
      * </pre>
      **/
-    static class 数组的相对排序 extends 数组 {
+    final static class 数组的相对排序 extends 数组 {
 
         public static void run() {
             数组的相对排序 数组的相对排序 = new 数组的相对排序();
@@ -739,16 +730,29 @@ class 数组 extends LeetCode {
         }
     }
 
-    static class 升序数组查找数组中绝对值最小的值 {
-        public static int min(int[] arr) {
+    final static class 升序数组查找数组中绝对值最小的值 extends 数组 {
+
+        static void run() {
+            升序数组查找数组中绝对值最小的值 升序数组查找数组中绝对值最小的值 = new 升序数组查找数组中绝对值最小的值();
+            System.out.println(升序数组查找数组中绝对值最小的值
+                .min(new int[] { -5, -3, -1, 2, 3, 4, 6, 7, 8, 9 }));
+            System.out.println(升序数组查找数组中绝对值最小的值
+                .min(new int[] { -5, -4, -3, 2, 3, 4, 6, 7, 8, 9 }));
+            System.out.println(升序数组查找数组中绝对值最小的值
+                .min(new int[] { -7, -6, -5, -4, -3, -2, -1, 1, 2, 3 }));
+            System.out.println(升序数组查找数组中绝对值最小的值
+                .min(new int[] { -7, -6, -5, -4, -3, -2, 1, 2, 3 }));
+        }
+
+        int min(int[] arr) {
             int left = 0, mid = 0, right = arr.length;
             while (left < right) {
 
-                System.out.println("left:" + left);
-                System.out.println("right:" + right);
+                // System.out.println("left:" + left);
+                // System.out.println("right:" + right);
                 mid = left + (right - left) / 2;
-                System.out.println("mid:" + mid);
-                System.out.println("******************");
+                // System.out.println("mid:" + mid);
+                // System.out.println("******************");
 
                 if (arr[mid + 1] < 0) {
                     left = mid + 1;
