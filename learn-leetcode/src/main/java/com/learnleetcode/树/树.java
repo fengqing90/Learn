@@ -35,8 +35,8 @@ public class 树 extends LeetCode {
             if (this.left == null && this.right == null)
                 return this.val + "";
 
-            return this.val + " (" + (this.left == null ? "" : this.left)
-                + " | " + (this.right == null ? "" : this.right) + ")";
+            return this.val + "( " + (this.left == null ? "" : this.left)
+                + " | " + (this.right == null ? "" : this.right) + " )";
 
             // return "TreeNode{" + "val=" + this.val + ", left=" + this.left
             //     + ", right=" + this.right + '}';
@@ -49,8 +49,6 @@ public class 树 extends LeetCode {
         // System.out.println(二叉树的锯齿形层次遍历.zigzagLevelOrder(null));
         // System.out
         //     .println(二叉树的锯齿形层次遍历.zigzagLevelOrder(二叉树的锯齿形层次遍历.getTreeNode2()));
-
-        // System.out.println(平衡二叉树.isBalanced(平衡二叉树.getTreeNode()));
 
         // System.out.println(二叉树的最小深度.minDepth(二叉树的最小深度.getTreeNode()));
 
@@ -85,6 +83,7 @@ public class 树 extends LeetCode {
         // System.out
         //     .println(二叉搜索树节点最小距离.minDiffInBST(二叉搜索树节点最小距离.getTreeNode2()));
 
+        平衡二叉树.run();
         相同的树.run();
         二叉树的层次遍历II.run();
         将有序数组转换为二叉搜索树.run();
@@ -559,21 +558,32 @@ public class 树 extends LeetCode {
 
     /**
      * 110. 平衡二叉树
+     * 
+     * <pre>
+     * 给定一个二叉树，判断它是否是高度平衡的二叉树。
+     * 本题中，一棵高度平衡二叉树定义为：
+     * 一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1 。
+     * </pre>
      */
-    final static class 平衡二叉树 {
+    final static class 平衡二叉树 extends 树 {
 
-        public static TreeNode getTreeNode() {
+        static void run() {
+            平衡二叉树 平衡二叉树 = new 树.平衡二叉树();
+            System.out.println(平衡二叉树.isBalanced(平衡二叉树.getTreeNode()));
+        }
+
+        TreeNode getTreeNode() {
             return new TreeNode(3, new TreeNode(9),
                 new TreeNode(20, new TreeNode(15), new TreeNode(7)));
             // return new TreeNode(3, new TreeNode(9), new TreeNode(20,
             //     new TreeNode(15), new TreeNode(7, new TreeNode(3), null)));
         }
 
-        public static boolean isBalanced(TreeNode root) {
+        boolean isBalanced(TreeNode root) {
             return balanced(root) != -1;
         }
 
-        private static int balanced(TreeNode node) {
+        int balanced(TreeNode node) {
             if (node == null) {
                 return 0;
             }
