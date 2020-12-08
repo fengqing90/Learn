@@ -1,5 +1,7 @@
 package com.learnleetcode.字符串;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import com.learnleetcode.LeetCode;
@@ -14,8 +16,83 @@ public class 字符串 extends LeetCode {
 
     public static void main(String[] args) {
 
-        System.out.println(最长公共前缀
-            .longestCommonPrefix(new String[] { "flower", "flow", "flight" }));
+        最长公共前缀.run();
+        将数组拆分成斐波那契序列.run();
+    }
+
+    /**
+     * 842. 将数组拆分成斐波那契序列
+     * 
+     * <pre>
+     * 给定一个数字字符串 S，比如 S = "123456579"，我们可以将它分成斐波那契式的序列 [123, 456, 579]。
+     * https://leetcode-cn.com/problems/split-array-into-fibonacci-sequence/
+     * </pre>
+     */
+    final static class 将数组拆分成斐波那契序列 extends 字符串 {
+
+        static void run() {
+            System.out
+                .println(new 将数组拆分成斐波那契序列().splitIntoFibonacci("123456579"));
+        }
+
+        int len;
+
+        List<Integer> splitIntoFibonacci(String s) {
+            len = s.length();
+            List<Integer> res = new ArrayList<>();
+            return dfs(0, s, res) ? res : new ArrayList<>();
+        }
+
+        private boolean dfs(int index, String s, List<Integer> res) {
+            // 字符串长度
+            int size = res.size();
+
+            // 遍历到最后一位，判读结果集中是否大于2个，大于2个及  A+B=C 是斐波那契序列
+            if (index == len) {
+                if (size > 2) {
+
+                    return true;
+                } else
+                    return false;
+            }
+
+            System.out.println("#########结果值不相等重新开始计算");
+            // 循环判断字符串中的结果值
+            int num = 0;
+            for (int i = index; i < len; i++) {
+
+                // 计算:结果值
+                num = 10 * num + s.charAt(i) - '0';
+
+                //判断:结果值 是否溢出，2正数相加溢出 = 负数， 2负数溢出 = 正数
+                if (num < 0) {
+                    return false;
+                }
+
+                System.out.println(size - 2 >= 0 ? res.get(size - 2) : "");
+                System.out.println(size - 1 >= 0 ? res.get(size - 1) : "");
+                System.out.println("num:" + num);
+                System.out.println("***********************");
+
+                // 结果集中小于2个,直接加入
+                // A+B = num 加入
+                if (size < 2 || num == res.get(size - 1) + res.get(size - 2)) {
+                    res.add(num);
+                    // 递归 下一个字符, 如果相等返回
+                    if (dfs(i + 1, s, res)) {
+                        return true;
+                    }
+                    // 不相等 移除
+                    res.remove(size);
+                }
+                //判断是否以0开头，阻止循环到下一位
+                if (s.charAt(i) - '0' == 0 && i == index) {
+                    return false;
+                }
+            }
+            return false;
+        }
+
     }
 
     /**
@@ -26,7 +103,7 @@ public class 字符串 extends LeetCode {
      * https://leetcode-cn.com/problems/increasing-decreasing-string/solution/javadai-ma-2msji-bai-liao-100de-yong-hu-by-sdwwld/
      * </pre>
      **/
-    static class 上升下降字符串 extends 字符串 {
+    final static class 上升下降字符串 extends 字符串 {
         public String sortString(String s) {
             //相当于26个桶
             int[] bucket = new int[26];
@@ -63,8 +140,13 @@ public class 字符串 extends LeetCode {
     /**
      * [14]最长公共前缀
      **/
-    static class 最长公共前缀 {
-        public static String longestCommonPrefix(String[] strs) {
+    final static class 最长公共前缀 extends 字符串 {
+        static void run() {
+            System.out.println(new 最长公共前缀().longestCommonPrefix(
+                new String[] { "flower", "flow", "flight" }));
+        }
+
+        String longestCommonPrefix(String[] strs) {
             if (strs.length == 0) {
                 return "";
             }
