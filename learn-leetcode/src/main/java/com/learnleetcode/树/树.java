@@ -2,6 +2,7 @@ package com.learnleetcode.树;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -50,8 +51,6 @@ public class 树 extends LeetCode {
         // System.out
         //     .println(二叉树的锯齿形层次遍历.zigzagLevelOrder(二叉树的锯齿形层次遍历.getTreeNode2()));
 
-        // System.out.println(二叉树的最小深度.minDepth(二叉树的最小深度.getTreeNode()));
-
         // System.out.println(路径总和.hasPathSum(路径总和.getTreeNode(), 22));
         // System.out.println(路径总和.hasPathSum2(路径总和.getTreeNode(), 26));
 
@@ -82,7 +81,7 @@ public class 树 extends LeetCode {
         // System.out.println(二叉搜索树节点最小距离.minDiffInBST(二叉搜索树节点最小距离.getTreeNode()));
         // System.out
         //     .println(二叉搜索树节点最小距离.minDiffInBST(二叉搜索树节点最小距离.getTreeNode2()));
-
+        二叉树的最小深度.run();
         平衡二叉树.run();
         相同的树.run();
         二叉树的层次遍历II.run();
@@ -515,9 +514,23 @@ public class 树 extends LeetCode {
 
     /**
      * 111. 二叉树的最小深度
+     * 
+     * <pre>
+     * 给定一个二叉树，找出其最小深度。
+     *
+     * 最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
+     *
+     * 说明：叶子节点是指没有子节点的节点。
+     * </pre>
      */
-    static class 二叉树的最小深度 {
-        public static TreeNode getTreeNode() {
+    final static class 二叉树的最小深度 {
+
+        static void run() {
+            二叉树的最小深度 二叉树的最小深度 = new 二叉树的最小深度();
+            System.out.println(二叉树的最小深度.minDepth(二叉树的最小深度.getTreeNode()));
+        }
+
+        TreeNode getTreeNode() {
             return new TreeNode(3, new TreeNode(9),
                 new TreeNode(20, new TreeNode(15), new TreeNode(7)));
         }
@@ -525,7 +538,7 @@ public class 树 extends LeetCode {
         /**
          * 深度优先搜索 DFS
          **/
-        public static int minDepth(TreeNode root) {
+        int minDepth(TreeNode root) {
             if (root == null) {
                 return 0;
             }
@@ -550,8 +563,30 @@ public class 树 extends LeetCode {
         /**
          * 广度优先搜索 BFS
          **/
-        public static int minDepth2(TreeNode root) {
-            return 0;
+        int minDepth2(TreeNode root) {
+            if (root == null) {
+                return 0;
+            }
+            Deque<TreeNode> deque = new LinkedList<>();
+            deque.offer(root);
+            int level = 1;
+            while (!deque.isEmpty()) {
+                int size = deque.size();
+                for (int i = 0; i < size; i++) {
+                    TreeNode cur = deque.poll();
+                    if (cur.right == null && cur.left == null) {
+                        return level;
+                    }
+                    if (cur.left != null) {
+                        deque.offer(cur.left);
+                    }
+                    if (cur.right != null) {
+                        deque.offer(cur.right);
+                    }
+                }
+                level++;
+            }
+            return level;
         }
 
     }
