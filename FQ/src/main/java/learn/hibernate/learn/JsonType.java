@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.usertype.UserType;
 
@@ -107,16 +107,16 @@ public class JsonType implements UserType, Serializable {
      * @throws HibernateException
      * @throws SQLException
      */
-    @Override
-    public Object nullSafeGet(ResultSet resultSet, String[] names,
-            SessionImplementor arg2, Object arg3)
-            throws HibernateException, SQLException {
-        String json = resultSet.getString(names[0]);
-        if (json == null || json.trim().length() == 0) {
-            return new JsonList();
-        }
-        return JSONArray.toList(JSONArray.fromObject(json), JsonList.class);
-    }
+    // @Override
+    // public Object nullSafeGet(ResultSet resultSet, String[] names,
+    //         SessionImplementor arg2, Object arg3)
+    //         throws HibernateException, SQLException {
+    //     String json = resultSet.getString(names[0]);
+    //     if (json == null || json.trim().length() == 0) {
+    //         return new JsonList();
+    //     }
+    //     return JSONArray.toList(JSONArray.fromObject(json), JsonList.class);
+    // }
 
     /**
      * 本方法将在Hibernate进行数据保存时被调用 我们可以通过PreparedStateme将自定义数据写入到对应的数据库表字段
@@ -127,15 +127,38 @@ public class JsonType implements UserType, Serializable {
      * @throws HibernateException
      * @throws SQLException
      */
+    // @Override
+    // public void nullSafeSet(PreparedStatement preparedStatement, Object value,
+    //         int i, SessionImplementor arg3)
+    //         throws HibernateException, SQLException {
+    //     if (value == null) {
+    //         preparedStatement.setNull(i, StandardBasicTypes.STRING.sqlType());
+    //     } else {
+    //         preparedStatement.setString(i,
+    //             JSONArray.fromObject(value).toString());
+    //     }
+    // }
+
     @Override
-    public void nullSafeSet(PreparedStatement preparedStatement, Object value,
-            int i, SessionImplementor arg3)
+    public Object nullSafeGet(ResultSet rs, String[] names,
+            SharedSessionContractImplementor session, Object owner)
+            throws HibernateException, SQLException {
+        String json = rs.getString(names[0]);
+        if (json == null || json.trim().length() == 0) {
+            return new JsonList();
+        }
+        return JSONArray.toList(JSONArray.fromObject(json), JsonList.class);
+    }
+
+    @Override
+    public void nullSafeSet(PreparedStatement st, Object value, int index,
+            SharedSessionContractImplementor session)
             throws HibernateException, SQLException {
         if (value == null) {
-            preparedStatement.setNull(i, StandardBasicTypes.STRING.sqlType());
+            st.setNull(index, StandardBasicTypes.STRING.sqlType());
         } else {
-            preparedStatement.setString(i,
-                JSONArray.fromObject(value).toString());
+            st.setString(index, JSONArray.fromObject(value).toString());
         }
     }
+
 }
