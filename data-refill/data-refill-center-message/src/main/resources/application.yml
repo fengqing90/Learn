@@ -1,0 +1,20 @@
+server:
+  port: 9012
+
+spring:
+  application:
+    name: data-refill-center-message
+    
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    serviceUrl:
+      defaultZone: http://peer1:8761/eureka,http://peer2:8762/eureka
+
+ribbon:
+  ConnectTimeout: 3000
+  ReadTimeout: 3000
+  OkToRetryOnAllOperations: true
+  MaxAutoRetries: 1
+  MaxAutoRetriesNextServer: 1

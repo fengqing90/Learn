@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>cn.fengqing</groupId>
+	<artifactId>data-refill</artifactId>
+	<version>2020</version>
+	<packaging>pom</packaging>
+	<modules>
+		<module>best-effort-inform-service</module>
+		<module>data-refill-center</module>
+		<module>data-refill-center-activity</module>
+		<module>data-refill-center-activity-api</module>
+		<module>data-refill-center-bill</module>
+		<module>data-refill-center-bill-api</module>
+		<module>data-refill-center-boss</module>
+		<module>data-refill-center-coupon</module>
+		<module>data-refill-center-coupon-api</module>
+		<module>data-refill-center-credit</module>
+		<module>data-refill-center-credit-api</module>
+		<module>data-refill-center-finance</module>
+		<module>data-refill-center-finance-api</module>
+		<module>data-refill-center-lottery</module>
+		<module>data-refill-center-lottery-api</module>
+		<module>data-refill-center-message</module>
+		<module>data-refill-center-message-api</module>
+		<module>data-refill-center-order</module>
+		<module>data-refill-center-order-api</module>
+		<module>data-refill-center-package</module>
+		<module>data-refill-center-package-api</module>
+		<module>data-refill-center-service</module>
+		<module>data-refill-center-service-api</module>
+		<module>eureka-server</module>
+		<module>reliable-message-service</module>
+		<module>reliable-message-service-api</module>
+		<module>zuul-gateway</module>
+
+		<module>sample-eureka-server</module>
+		<module>springcloud-sample-consumer</module>
+		<module>springcloud-sample-provider</module>
+	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.6.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
