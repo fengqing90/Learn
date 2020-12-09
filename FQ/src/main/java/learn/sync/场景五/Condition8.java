@@ -1,7 +1,7 @@
 package learn.sync.场景五;
 
 /**
- * TODO
+ * 场景五：两个线程访问同一个对象中的同步方法，同步方法又调用一个非同步方法
  *
  * @author fengqing
  * @date 2020/12/8 15:06
@@ -22,7 +22,7 @@ public class Condition8 implements Runnable {
     }
 
     // synchronized 方法
-    private static synchronized void method1() {
+    private synchronized void method1() {
         System.out.println("线程名：" + Thread.currentThread().getName()
             + "，synchronized 方法，运行开始");
         try {
@@ -36,7 +36,7 @@ public class Condition8 implements Runnable {
     }
 
     // 普通方法
-    private static void method2() {
+    private void method2() {
         System.out
             .println("线程名：" + Thread.currentThread().getName() + "，普通方法，运行开始");
         try {
