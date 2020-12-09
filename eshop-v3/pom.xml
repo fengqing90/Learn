@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>cn.fengqing</groupId>
+	<artifactId>eshop-v3</artifactId>
+	<version>2020</version>
+	<packaging>pom</packaging>
+	<modules>
+		<module>best-effort-inform-service</module>
+		<module>eshop-auth</module>
+		<module>eshop-cart</module>
+		<module>eshop-comment</module>
+		<module>eshop-commodity</module>
+		<module>eshop-commodity-api</module>
+		<module>eshop-common</module>
+		<module>eshop-customer</module>
+		<module>eshop-customer-api</module>
+		<module>eshop-finance</module>
+		<module>eshop-finance-api</module>
+		<module>eshop-inventory</module>
+		<module>eshop-inventory-api</module>
+		<module>eshop-logistics</module>
+		<module>eshop-logistics-api</module>
+		<module>eshop-membership</module>
+		<module>eshop-membership-api</module>
+		<module>eshop-order</module>
+		<module>eshop-order-api</module>
+		<module>eshop-pay</module>
+		<module>eshop-pay-api</module>
+		<module>eshop-promotion</module>
+		<module>eshop-promotion-api</module>
+		<module>eshop-purchase</module>
+		<module>eshop-purchase-api</module>
+		<module>eshop-schedule</module>
+		<module>eshop-schedule-api</module>
+		<module>eshop-wms</module>
+		<module>eshop-wms-api</module>
+		<module>eureka-server</module>
+		<module>reliable-message-service</module>
+		<module>reliable-message-service-api</module>
+		<module>zuul-gateway</module>
+		<module>data-refill-center-message-api</module>
+		<module>data-refill-center-service-api</module>
+	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.6.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
