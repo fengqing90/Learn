@@ -1,7 +1,10 @@
 package com.learnleetcode.字符串;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import com.learnleetcode.LeetCode;
@@ -18,6 +21,55 @@ public class 字符串 extends LeetCode {
 
         最长公共前缀.run();
         将数组拆分成斐波那契序列.run();
+        字母异位词分组.run();
+    }
+
+    /**
+     * 49. 字母异位词分组
+     * 
+     * <pre>
+     * 给定一个字符串数组，将字母异位词组合在一起。字母异位词指字母相同，但排列不同的字符串。
+     *
+     * 示例:
+     *
+     * 输入: ["eat", "tea", "tan", "ate", "nat", "bat"]
+     * 输出:
+     * [
+     *   ["ate","eat","tea"],
+     *   ["nat","tan"],
+     *   ["bat"]
+     * ]
+     * </pre>
+     */
+    final static class 字母异位词分组 extends 字符串 {
+
+        static void run() {
+            System.out.println(new 字母异位词分组().groupAnagrams(
+                new String[] { "eat", "tea", "tan", "ate", "nat", "bat" }));
+        }
+
+        /**
+         * 将字母排序，排序后的肯定是相等，将相等的加入到集合中
+         */
+        List<List<String>> groupAnagrams(String[] strs) {
+
+            Map<String, List<String>> map = new HashMap<>();
+
+            for (String str : strs) {
+
+                char[] chars = str.toCharArray();
+
+                Arrays.sort(chars);
+
+                List<String> list = map.getOrDefault(Arrays.toString(chars),
+                    new ArrayList<>());
+
+                list.add(str);
+                map.put(Arrays.toString(chars), list);
+
+            }
+            return new ArrayList<>(map.values());
+        }
     }
 
     /**
@@ -56,7 +108,7 @@ public class 字符串 extends LeetCode {
                     return false;
             }
 
-            System.out.println("#########结果值不相等重新开始计算");
+            // System.out.println("#########结果值不相等重新开始计算");
             // 循环判断字符串中的结果值
             int num = 0;
             for (int i = index; i < len; i++) {
@@ -69,10 +121,10 @@ public class 字符串 extends LeetCode {
                     return false;
                 }
 
-                System.out.println(size - 2 >= 0 ? res.get(size - 2) : "");
-                System.out.println(size - 1 >= 0 ? res.get(size - 1) : "");
-                System.out.println("num:" + num);
-                System.out.println("***********************");
+                // System.out.println(size - 2 >= 0 ? res.get(size - 2) : "");
+                // System.out.println(size - 1 >= 0 ? res.get(size - 1) : "");
+                // System.out.println("num:" + num);
+                // System.out.println("***********************");
 
                 // 结果集中小于2个,直接加入
                 // A+B = num 加入
