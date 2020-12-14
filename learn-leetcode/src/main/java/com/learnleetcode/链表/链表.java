@@ -17,9 +17,6 @@ public class 链表 extends LeetCode {
         int val;
         ListNode next;
 
-        ListNode() {
-        }
-
         ListNode(int val) {
             this.val = val;
         }
@@ -31,7 +28,7 @@ public class 链表 extends LeetCode {
 
         @Override
         public String toString() {
-            return this.val + "->" + this.next;
+            return this.val + (this.next == null ? "" : "->" + this.next);
         }
     }
 
@@ -58,6 +55,7 @@ public class 链表 extends LeetCode {
         // 环形链表.run();
 
         相交链表.run();
+        合并两个有序链表.run();
 
     }
 
@@ -329,9 +327,23 @@ public class 链表 extends LeetCode {
     /**
      * [21]合并两个有序链表
      **/
-    static class 合并两个有序链表 {
+    final static class 合并两个有序链表 extends 链表 {
 
-        public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode getL1() {
+            return new ListNode(1, new ListNode(2, new ListNode(4)));
+        }
+
+        ListNode getL2() {
+            return new ListNode(1, new ListNode(3, new ListNode(4)));
+        }
+
+        static void run() {
+            合并两个有序链表 合并两个有序链表 = new 合并两个有序链表();
+            System.out.println(
+                合并两个有序链表.mergeTwoLists(合并两个有序链表.getL1(), 合并两个有序链表.getL2()));
+        }
+
+        ListNode mergeTwoLists(ListNode l1, ListNode l2) {
             if (l1 == null) {
                 return l2;
             }
