@@ -3,6 +3,8 @@ package com.learnleetcode.贪心算法;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+import com.learnleetcode.LeetCode;
+
 /**
  * <pre>
  * 贪心算法（又称贪婪算法）是指，在对问题求解时，总是做出在当前看来是最好的选择。
@@ -14,12 +16,56 @@ import java.util.LinkedList;
  * @author fengqing
  * @date 2020/11/16 17:40
  */
-public class 贪心算法 {
+public class 贪心算法 extends LeetCode {
     public static void main(String[] args) {
-        System.out
-            .println(Arrays.deepToString(根据身高重建队列.reconstructQueue(new int[][] {
-                { 7, 0 }, { 4, 4 }, { 7, 1 }, { 5, 0 }, { 6, 1 }, { 5, 2 } })));
-        System.out.println("******************************************");
+        根据身高重建队列.run();
+
+        单调递增的数字.run();
+    }
+
+    /**
+     * 738. 单调递增的数字
+     * 
+     * <pre>
+     * 题目描述:
+     * 找到不大于 n 的最大的数，该数满足从高位到低位的数字非严格递增。
+     * 
+     * n   = 1234321
+     * res = 1233999
+     * 
+     * n    = 2333332
+     * res  = 2299999
+     * 
+     * https://leetcode-cn.com/problems/monotone-increasing-digits/solution/jian-dan-tan-xin-shou-ba-shou-jiao-xue-k-a0mp/
+     * </pre>
+     */
+    final static class 单调递增的数字 extends 贪心算法 {
+        static void run() {
+            单调递增的数字 单调递增的数字 = new 单调递增的数字();
+            System.out.println(单调递增的数字.monotoneIncreasingDigits(123456_31)); // 12345599
+            System.out.println(单调递增的数字.monotoneIncreasingDigits(123456_11)); // 12345599
+            System.out.println(单调递增的数字.monotoneIncreasingDigits(12345_111)); // 12344999
+            System.out.println(单调递增的数字.monotoneIncreasingDigits(1234_1111)); // 12339999
+        }
+
+        int monotoneIncreasingDigits(int N) {
+            char[] strN = Integer.toString(N).toCharArray();
+            int i = 1;
+            while (i < strN.length && strN[i - 1] <= strN[i]) {
+                i += 1;
+            }
+            if (i < strN.length) {
+                while (i > 0 && strN[i - 1] > strN[i]) {
+                    strN[i - 1] -= 1;
+                    i -= 1;
+                }
+                for (i += 1; i < strN.length; ++i) {
+                    strN[i] = '9';
+                }
+            }
+            return Integer.parseInt(new String(strN));
+
+        }
     }
 
     /**
@@ -38,8 +84,15 @@ public class 贪心算法 {
      * [[5,0], [7,0], [5,2], [6,1], [4,4], [7,1]]
      * </pre>
      **/
-    static class 根据身高重建队列 {
-        static int[][] reconstructQueue(int[][] people) {
+    final static class 根据身高重建队列 extends 贪心算法 {
+
+        static void run() {
+            System.out.println(Arrays.deepToString(
+                new 根据身高重建队列().reconstructQueue(new int[][] { { 7, 0 },
+                    { 4, 4 }, { 7, 1 }, { 5, 0 }, { 6, 1 }, { 5, 2 } })));
+        }
+
+        int[][] reconstructQueue(int[][] people) {
             Arrays.sort(people,
                 (o1, o2) -> o1[0] == o2[0] ? o1[1] - o2[1] : o2[0] - o1[0]);
             System.out.println(Arrays.deepToString(people));
