@@ -56,17 +56,17 @@ public class 位运算 extends LeetCode {
         /**
          * n 不变
          */
-        // int hammingWeight(int n) {
-        //     int r = 0;
-        //     int c = 1;
-        //     for (int i = 0; i < 32; i++) {
-        //         if ((n & c) != 0) {
-        //             r++;
-        //         }
-        //         c <<= 1;
-        //     }
-        //
-        //     return r;
-        // }
+        int hammingWeight2(int n) {
+            int r = 0;
+            int c = 1;
+            for (int i = 0; i < 32; i++) {
+                if ((n & c) != 0) {
+                    r++;
+                }
+                c <<= 1;
+            }
+
+            return r;
+        }
     }
 }
