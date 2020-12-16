@@ -1,14 +1,13 @@
 package com.zhss.c2c.social.govern.report.service;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.zhss.c2c.social.govern.report.dao.ReportTaskDAO;
 import com.zhss.c2c.social.govern.report.dao.ReportTaskVoteDAO;
 import com.zhss.c2c.social.govern.report.domain.ReportTask;
 import com.zhss.c2c.social.govern.report.domain.ReportTaskVote;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 举报任务投票Service组件
@@ -29,14 +28,11 @@ public class ReportTaskVoteServiceImpl implements ReportTaskVoteService {
 
     /**
      * 初始化评审员对举报任务的投票
-     * 
-     * @param reviewerIds
-     *        评审员id
-     * @param reportTaskId
-     *        举报任务id
+     * @param reviewerIds 评审员id
+     * @param reportTaskId 举报任务id
      */
     public void initVotes(List<Long> reviewerIds, Long reportTaskId) {
-        for (Long reviewerId : reviewerIds) {
+        for(Long reviewerId : reviewerIds) {
             ReportTaskVote reportTaskVote = new ReportTaskVote();
             reportTaskVote.setReviewerId(reviewerId);
             reportTaskVote.setReportTaskId(reportTaskId);
@@ -48,13 +44,9 @@ public class ReportTaskVoteServiceImpl implements ReportTaskVoteService {
 
     /**
      * 对举报任务执行投票
-     * 
-     * @param reviewerId
-     *        评审员id
-     * @param reportTaskId
-     *        举报任务id
-     * @param voteResult
-     *        投票结果
+     * @param reviewerId 评审员id
+     * @param reportTaskId 举报任务id
+     * @param voteResult 投票结果
      */
     public void vote(Long reviewerId, Long reportTaskId, Integer voteResult) {
         ReportTaskVote reportTaskVote = new ReportTaskVote();
@@ -66,37 +58,33 @@ public class ReportTaskVoteServiceImpl implements ReportTaskVoteService {
 
     /**
      * 对举报任务进行归票
-     * 
-     * @param reportTaskId
-     *        举报任务id
+     * @param reportTaskId 举报任务id
      */
     public Boolean calculateVotes(Long reportTaskId) {
         List<ReportTaskVote> reportTaskVotes = reportTaskVoteDAO
-            .queryByReportTaskId(reportTaskId);
+                .queryByReportTaskId(reportTaskId);
 
         Integer quorum = reportTaskVotes.size() / 2 + 1;
 
         Integer approvedVotes = 0;
         Integer unapprovedVotes = 0;
 
-        for (ReportTaskVote reportTaskVote : reportTaskVotes) {
-            if (reportTaskVote.getVoteResult()
-                .equals(ReportTaskVote.APPROVED)) {
+        for(ReportTaskVote reportTaskVote : reportTaskVotes) {
+            if(reportTaskVote.getVoteResult().equals(ReportTaskVote.APPROVED)) {
                 approvedVotes++;
-            } else if (reportTaskVote.getVoteResult()
-                .equals(ReportTaskVote.UNAPPROVED)) {
+            } else if(reportTaskVote.getVoteResult().equals(ReportTaskVote.UNAPPROVED)) {
                 unapprovedVotes++;
             }
         }
 
-        if (approvedVotes >= quorum) {
+        if(approvedVotes >= quorum) {
             ReportTask reportTask = new ReportTask();
             reportTask.setId(reportTaskId);
             reportTask.setVoteResult(ReportTask.VOTE_RESULT_APPROVED);
             reportTaskDAO.update(reportTask);
 
             return true;
-        } else if (unapprovedVotes >= quorum) {
+        } else if(unapprovedVotes >= quorum) {
             ReportTask reportTask = new ReportTask();
             reportTask.setId(reportTaskId);
             reportTask.setVoteResult(ReportTask.VOTE_RESULT_UNAPPROVED);
@@ -110,9 +98,7 @@ public class ReportTaskVoteServiceImpl implements ReportTaskVoteService {
 
     /**
      * 查询举报任务下的所有投票
-     * 
-     * @param reportTaskId
-     *        举报任务id
+     * @param reportTaskId 举报任务id
      * @return 投票
      */
     public List<ReportTaskVote> queryByReportTaskId(Long reportTaskId) {
