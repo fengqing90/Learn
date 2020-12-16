@@ -22,6 +22,102 @@ public class 哈希表 extends LeetCode {
         // System.out.println(只出现一次的数字.singleNumber(new int[] { 2, 2, 1 }));
         // 只出现一次的数字.run();
         四数相加II.run();
+        单词规律.run();
+    }
+
+    /**
+     * 290. 单词规律
+     * 
+     * <pre>
+     *  给定一种规律 pattern 和一个字符串 str ，判断 str 是否遵循相同的规律。
+     *
+     * 这里的 遵循 指完全匹配，例如， pattern 里的每个字母和字符串 str 中的每个非空单词之间存在着双向连接的对应规律。
+     *
+     * 示例1:
+     *
+     * 输入: pattern = "abba", str = "dog cat cat dog"
+     * 输出: true
+     * 示例 2:
+     *
+     * 输入:pattern = "abba", str = "dog cat cat fish"
+     * 输出: false
+     * 示例 3:
+     *
+     * 输入: pattern = "aaaa", str = "dog cat cat dog"
+     * 输出: false
+     * 示例 4:
+     *
+     * 输入: pattern = "abba", str = "dog dog dog dog"
+     * 输出: false
+     * 说明:
+     * 你可以假设 pattern 只包含小写字母， str 包含了由单个空格分隔的小写字母。    
+     * </pre>
+     */
+    final static class 单词规律 extends 哈希表 {
+
+        static void run() {
+
+            单词规律 单词规律 = new 单词规律();
+
+            System.out.println("abba = dog cat cat dog : "
+                + 单词规律.wordPattern("abba", "dog cat cat dog"));
+
+            System.out.println("abba = dog cat cat fish : "
+                + 单词规律.wordPattern("abba", "dog cat cat fish"));
+
+            System.out.println("aaaa = dog cat cat dog : "
+                + 单词规律.wordPattern("aaaa", "dog cat cat dog"));
+
+            System.out.println("aaaa = dog dog dog dog : "
+                + 单词规律.wordPattern("aaaa", "dog dog dog dog"));
+
+            System.out.println("abba = dog dog dog dog : "
+                + 单词规律.wordPattern("abba", "dog dog dog dog"));
+        }
+
+        public boolean wordPattern(String pattern, String s) {
+
+            if (pattern == null || s == null) {
+                return false;
+            }
+
+            // 长度不相等，不是
+            String[] strings = s.split(" ");
+            if (strings.length != pattern.length()) {
+                return false;
+            }
+
+            Map<Character, String> p_map = new HashMap<>();
+            Map<String, Character> s_map = new HashMap<>();
+
+            for (int i = 0; i < pattern.length(); i++) {
+
+                // s_map中，如果p存在肯定相等
+                String s_v = p_map.get(pattern.charAt(i));
+                if (s_v != null && !s_v.equals(strings[i])) {
+                    return false;
+                }
+                if (s_v == null) {
+                    p_map.put(pattern.charAt(i), strings[i]);
+                }
+
+                // p_map中，如果s存在肯定相等
+                Character p_v = s_map.get(strings[i]);
+                if (p_v != null && !p_v.equals(pattern.charAt(i))) {
+                    return false;
+                }
+                if (p_v == null) {
+                    s_map.put(strings[i], pattern.charAt(i));
+                }
+
+                // 长度肯定相等
+                if (p_map.size() != s_map.size()) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 
     /**
