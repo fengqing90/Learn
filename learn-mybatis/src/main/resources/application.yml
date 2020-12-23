@@ -1,0 +1,12 @@
+logging:
+  level.root: info
+
+
+spring:
+  datasource:
+    url: jdbc:mysql://10.255.33.35:3321/fengqing
+    username: root
+    password: sdfjo29@2
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
