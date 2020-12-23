@@ -7,12 +7,12 @@
     
                 XXX XXX = new XXX();
     
-                System.out.println(XXX.MMM(N));
+                System.out.println(XXX.MMM(null));
             }
     
             int MMM(int n) {
     
-                return null;
+                return 0;
             }
         }
     }

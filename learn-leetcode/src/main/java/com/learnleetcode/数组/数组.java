@@ -30,6 +30,21 @@ class 数组 extends LeetCode {
 
     }
 
+    final static class 买卖股票的最佳时机 extends 数组 {
+        static void run() {
+
+            买卖股票的最佳时机 买卖股票的最佳时机 = new 买卖股票的最佳时机();
+
+            System.out.println(买卖股票的最佳时机.maxProfit(null));
+        }
+
+        int maxProfit(int[] prices) {
+
+            return 0;
+        }
+
+    }
+
     /***
      * 119. 杨辉三角 II
      * 给定一个非负索引 k，其中 k ≤ 33，返回杨辉三角的第 k 行。
