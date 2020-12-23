@@ -1,4 +1,4 @@
-package cn.fengqing.learnmybatis.官方.model;
+package cn.fengqing.learnmybatis.model;
 
 import lombok.Data;
 

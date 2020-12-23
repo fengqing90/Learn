@@ -5,7 +5,7 @@ import javax.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import cn.fengqing.learnmybatis.官方.model.City;
+import cn.fengqing.learnmybatis.model.City;
 import cn.fengqing.learnmybatis.官方.service.CityService;
 import cn.fengqing.learnmybatis.官方.vo.CityVO;
 

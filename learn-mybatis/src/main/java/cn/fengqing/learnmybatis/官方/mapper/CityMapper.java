@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import cn.fengqing.learnmybatis.官方.model.City;
+import cn.fengqing.learnmybatis.model.City;
 import cn.fengqing.learnmybatis.官方.vo.CityVO;
 
 /**

@@ -5,8 +5,8 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import cn.fengqing.learnmybatis.model.City;
 import cn.fengqing.learnmybatis.官方.mapper.CityMapper;
-import cn.fengqing.learnmybatis.官方.model.City;
 import cn.fengqing.learnmybatis.官方.vo.CityVO;
 
 /**
