@@ -26,6 +26,7 @@
 		<module>learn-rabbitMQ2</module>
 		<module>learn-springBatch</module>
 		<module>learn-leetcode</module>
+		<module>learn-mybatis</module>
 	</modules>
 
 
