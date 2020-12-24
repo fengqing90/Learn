@@ -43,3 +43,5 @@ build/
 ### 不需要git的项目
 seata
 seata-samples
+LeetCode
+JavaGuide
