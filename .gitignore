@@ -39,3 +39,7 @@ build/
 /learn-rabbitMQ/src/main/resources/rebel.xml
 /learn-jpa/mvnw
 /learn-jpa/mvnw.cmd
+
+### 不需要git的项目
+seata
+seata-samples
