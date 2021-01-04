@@ -61,11 +61,11 @@
 
 		<!-- mybatis-plus -->
 		<!-- mybatis-plus 是自己开发，并非官方的！ -->
-		<!--<dependency>
+		<dependency>
 			<groupId>com.baomidou</groupId>
 			<artifactId>mybatis-plus-boot-starter</artifactId>
 			<version>3.0.5</version>
-		</dependency>-->
+		</dependency>
 
 
 	</dependencies>
