@@ -1,11 +1,5 @@
 package cn.fengqing.learnmybatis.plus.mapper;
 
-import org.springframework.stereotype.Repository;
-
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-
-import cn.fengqing.learnmybatis.model.User;
-
 /**
  * // @Mapper 貌似可以代替：
  * // @Repository
@@ -18,7 +12,7 @@ import cn.fengqing.learnmybatis.model.User;
 // 代表持久层
 
 // @Mapper
-@Repository
-public interface UserMapper extends BaseMapper<User> {
-    // 所有的CRUD操作都已经编写完成了
-}
+// @Repository
+// public interface UserMapper extends BaseMapper<User> {
+//     // 所有的CRUD操作都已经编写完成了
+// }
