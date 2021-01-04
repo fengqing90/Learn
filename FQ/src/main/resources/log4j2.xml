@@ -9,7 +9,7 @@
 		<Console name="Console" target="SYSTEM_OUT">
 			<!--<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>-->
 			<!--<PatternLayout pattern="%d{HH:mm:ss.SSS} %5p %-40.40logger{39} 【%-50m】 \(%F:%L\) [%t] %n"/>-->
-			<PatternLayout pattern="%d{HH:mm:ss.SSS} %p \(%F:%L\) %m [%t]  %n"/>
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} %p \(%F:%L\)#%M [%t] %msg %n"/>
 		</Console>
 	</Appenders>
 	<Loggers>
