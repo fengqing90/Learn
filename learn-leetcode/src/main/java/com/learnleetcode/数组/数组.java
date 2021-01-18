@@ -27,7 +27,51 @@ class 数组 extends LeetCode {
         多数元素.run();
         杨辉三角.run();
         杨辉三角II.run();
+        旋转数组.run();
 
+    }
+
+    /**
+     * 189. 旋转数组
+     * 
+     * <pre>
+     * 给定一个数组，将数组中的元素向右移动 k 个位置，其中 k 是非负数。
+     *
+     * 示例 1:
+     *
+     * 输入: [1,2,3,4,5,6,7] 和 k = 3
+     * 输出: [5,6,7,1,2,3,4]
+     * 解释:
+     * 向右旋转 1 步: [7,1,2,3,4,5,6]
+     * 向右旋转 2 步: [6,7,1,2,3,4,5]
+     * 向右旋转 3 步: [5,6,7,1,2,3,4]
+     * </pre>
+     */
+    final static class 旋转数组 extends 数组 {
+        static void run() {
+
+            int[] arry = new int[] { 1, 2, 3, 4, 5, 6, 7 };
+            int k = 1;
+
+            旋转数组 旋转数组 = new 旋转数组();
+            System.out.println(ArrayUtils.toString(arry));
+
+            旋转数组.rotate(arry, k);
+            System.out.println(k + ":" + ArrayUtils.toString(arry));
+        }
+
+        public void rotate(int nums[], int k) {
+            int length = nums.length;
+            int temp[] = new int[length];
+            //把原数组值放到一个临时数组中，
+            for (int i = 0; i < length; i++) {
+                temp[i] = nums[i];
+            }
+            //然后在把临时数组的值重新放到原数组，并且往右移动k位
+            for (int i = 0; i < length; i++) {
+                nums[(i + k) % length] = temp[i];
+            }
+        }
     }
 
     final static class 买卖股票的最佳时机 extends 数组 {
