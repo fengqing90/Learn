@@ -56,7 +56,58 @@ public class 链表 extends LeetCode {
 
         相交链表.run();
         合并两个有序链表.run();
+        移除链表元素.run();
 
+    }
+
+    /**
+     * 203. 移除链表元素
+     */
+    final static class 移除链表元素 extends 链表 {
+
+        static void run() {
+
+            移除链表元素 移除链表元素 = new 移除链表元素();
+
+            ListNode node = new ListNode(1,
+                new ListNode(2, new ListNode(6, new ListNode(3,
+                    new ListNode(4, new ListNode(5, new ListNode(6)))))));
+
+            System.out.println(移除链表元素.removeElements(node, 6));
+        }
+
+        public ListNode removeElements(ListNode head, int val) {
+
+            ListNode tmp = new ListNode(-1);
+            tmp.next = head;
+            ListNode pre = tmp;
+
+            // pre.next = 当期node
+            while (pre.next != null) {
+                if (pre.next.val == val) {
+                    pre.next = pre.next.next;
+                } else {
+                    pre = pre.next;
+                }
+            }
+
+            return tmp.next;
+        }
+
+        // 递归方式
+        public ListNode removeElements2(ListNode head, int val) {
+
+            if (head == null)
+                return null;
+
+            head.next = removeElements2(head.next, val);
+
+            if (head.val == val)
+                return head.next;
+            else
+                return head;
+
+        }
     }
 
     /**
