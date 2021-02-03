@@ -28,7 +28,69 @@ class 数组 extends LeetCode {
         杨辉三角.run();
         杨辉三角II.run();
         旋转数组.run();
+        数组形式的整数加法.run();
 
+    }
+
+    /***
+     * 989. 数组形式的整数加法
+     * 
+     * <pre>
+     *  对于非负整数 X 而言，X 的数组形式是每位数字按从左到右的顺序形成的数组。例如，如果 X = 1231，那么其数组形式为 [1,2,3,1]。
+     *  给定非负整数 X 的数组形式 A，返回整数 X+K 的数组形式。
+     * 示例 1：
+     * 输入：A = [1,2,0,0], K = 34
+     * 输出：[1,2,3,4]
+     * 解释：1200 + 34 = 1234
+     * 
+     * 示例 2：
+     * 输入：A = [2,7,4], K = 181
+     * 输出：[4,5,5]
+     * 解释：274 + 181 = 455
+     * </pre>
+     */
+    final static class 数组形式的整数加法 extends 数组 {
+
+        static void run() {
+            int[] arry = new int[] { 1, 2, 3, 4, 5, 6, 7 };
+            int k = 1;
+
+            数组形式的整数加法 数组形式的整数加法 = new 数组形式的整数加法();
+
+            System.out.println(数组形式的整数加法.addToArrayForm(arry, k));
+        }
+
+        // while ( A 没完 || B 没完))
+        // A 的当前位
+        // B 的当前位
+        //
+        // 和 = A 的当前位 + B 的当前位 + 进位carry
+        //
+        //         当前位 = 和 % 10;
+        // 进位 = 和 / 10;
+        //
+        // 判断还有进位吗
+
+        public List<Integer> addToArrayForm(int[] A, int K) {
+            int n = A.length;
+            List<Integer> res = new ArrayList<>();
+            int i = n - 1, sum = 0, carry = 0;
+            while (i >= 0 || K != 0) {  // 循环条件：两个数有一个没完
+                int x = i >= 0 ? A[i] : 0;
+                int y = K != 0 ? K % 10 : 0;
+
+                sum = x + y + carry;
+                carry = sum / 10;
+
+                K = K / 10;
+                i--;
+                res.add(0, sum % 10);
+            }
+            if (carry != 0)
+                res.add(0, carry);
+            return res;
+
+        }
     }
 
     /**
