@@ -1,14 +1,11 @@
 package learn.Disruptor;
 
 /**
- * TODO
- *
+ * 高并发内存队列Disruptor
+ * 
+ * @description disruptor代码样例。每10ms向disruptor中插入一个元素，消费者读取数据，并打印到终端
  * @author fengqing
  * @date 2021/1/28 20:28
- */
-
-/**
- * @description disruptor代码样例。每10ms向disruptor中插入一个元素，消费者读取数据，并打印到终端
  */
 
 import java.util.concurrent.Executors;
@@ -59,7 +56,7 @@ public class DisruptorMain {
             @Override
             public void onEvent(Element element, long sequence,
                     boolean endOfBatch) {
-                System.out.println("Element: " + element.get());
+                System.out.println(sequence + " ：Element: " + element.get());
             }
         };
 
