@@ -1,5 +1,7 @@
 package com.learnleetcode.数学;
 
+import java.util.Arrays;
+
 import com.learnleetcode.LeetCode;
 
 /**
@@ -16,6 +18,80 @@ class 数学 extends LeetCode {
         Excel表列序号.run();
         阶乘后的零.run();
         快乐数.run();
+        计数质数.run();
+    }
+
+    /**
+     * 204. 计数质数
+     */
+    final static class 计数质数 extends 数学 {
+
+        static void run() {
+
+            计数质数 计数质数 = new 计数质数();
+
+            System.out.println(计数质数.countPrimes(100)); // 2, 3, 5, 7
+        }
+
+        public int countPrimes(int n) {
+            int[] isPrim = new int[n];
+            Arrays.fill(isPrim, 1);
+
+            System.out.println(Arrays.toString(isPrim));
+
+            // 从 2 开始枚举到 sqrt(n)。
+            for (int i = 2; i * i < n; i++) {
+                // 如果当前是素数
+                if (isPrim[i] == 1) {
+                    // 就把从 i*i 开始，i 的所有倍数都设置为 false。
+                    for (int j = i * i; j < n; j += i) {
+                        isPrim[j] = 0;
+                    }
+                }
+            }
+            // 计数
+            int cnt = 0;
+            for (int i = 2; i < n; i++) {
+                if (isPrim[i] == 1) {
+                    cnt++;
+                }
+            }
+            System.out.println(Arrays.toString(isPrim));
+            return cnt;
+
+        }
+
+        public int countPrimes2(int n) {
+            // int[] isPrim = new int[n];
+            // Arrays.fill(isPrim, 1);
+
+            boolean[] isPrim = new boolean[n];
+            Arrays.fill(isPrim, true);
+
+            System.out.println(Arrays.toString(isPrim));
+
+            // 从 2 开始枚举到 sqrt(n)。
+            for (int i = 2; i * i < n; i++) {
+                // 如果当前是素数
+                if (isPrim[i]) {
+                    // 就把从 i*i 开始，i 的所有倍数都设置为 false。
+                    for (int j = i * i; j < n; j += i) {
+                        isPrim[j] = false;
+                    }
+                }
+            }
+
+            // 计数
+            int cnt = 0;
+            for (int i = 2; i < n; i++) {
+                if (isPrim[i]) {
+                    cnt++;
+                }
+            }
+            System.out.println(Arrays.toString(isPrim));
+            return cnt;
+
+        }
     }
 
     /**
