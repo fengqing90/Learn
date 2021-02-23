@@ -32,10 +32,10 @@ public class GenerateCode {
         gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor("fengqing");//作者名称
         gc.setOpen(false);
-        gc.setFileOverride(false); // 是否覆盖
+        gc.setFileOverride(true); // 是否覆盖
         gc.setIdType(IdType.ID_WORKER);
         gc.setDateType(DateType.ONLY_DATE);
-        gc.setSwagger2(true);//实体属性 Swagger2 注解
+        gc.setSwagger2(false);//实体属性 Swagger2 注解
 
         // 自定义文件命名，注意 %s 会自动填充表实体属性！
         gc.setServiceName("%sService");
@@ -50,11 +50,11 @@ public class GenerateCode {
         //2、设置数据源
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setUrl(
-            "jdbc:mysql://10.255.33.35:3321/fengqing?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8");
+            "jdbc:mysql://10.255.33.109:3306/avatar?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         // dsc.setDriverName("com.mysql.jdbc.Driver"); //mysql5.6以下的驱动
-        dsc.setUsername("root");
-        dsc.setPassword("sdfjo29@2");
+        dsc.setUsername("test");
+        dsc.setPassword("test123");
         dsc.setDbType(DbType.MYSQL);
         mpg.setDataSource(dsc);
         //3、包的配置
@@ -69,15 +69,16 @@ public class GenerateCode {
 
         //4、策略配置
         StrategyConfig strategy = new StrategyConfig();
-        strategy.setInclude("city", "city"); // 设置要映射的表名
+        String table = "mt_code";
+
+        strategy.setInclude(table, table); // 设置要映射的表名
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         strategy.setEntityLombokModel(true); // 自动lombok；
         strategy.setLogicDeleteFieldName("deleted");
         // 自动填充配置
-        TableFill gmtCreate = new TableFill("gmt_create", FieldFill.INSERT);
-        TableFill gmtModified = new TableFill("gmt_modified",
-            FieldFill.INSERT_UPDATE);
+        TableFill gmtCreate = new TableFill(table, FieldFill.INSERT);
+        TableFill gmtModified = new TableFill(table, FieldFill.INSERT_UPDATE);
         ArrayList<TableFill> tableFills = new ArrayList<>();
         tableFills.add(gmtCreate);
         tableFills.add(gmtModified);
@@ -85,7 +86,7 @@ public class GenerateCode {
         // 乐观锁
         strategy.setVersionFieldName("version");
         //根据你的表名来建对应的类名，如果你的表名没有下划线，比如test，那么你就可以取消这一步
-        strategy.setTablePrefix("t_");
+        strategy.setTablePrefix("mt_");
         strategy.setRestControllerStyle(true); //rest请求
         //自动转下划线，比如localhost:8080/hello_id_2
         strategy.setControllerMappingHyphenStyle(true);
