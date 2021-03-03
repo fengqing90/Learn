@@ -1,6 +1,6 @@
 package learn.对象大小;
 
-import java.lang.instrument.Instrumentation;
+import org.openjdk.jol.info.ClassLayout;
 
 /**
  * @ClassName ObjectShallowSize
@@ -10,14 +10,8 @@ import java.lang.instrument.Instrumentation;
  */
 public class ObjectShallowSize {
 
-    private static Instrumentation inst;
-
-    public static void premain(String agentArgs, Instrumentation instP) {
-        inst = instP;
+    public static void main(String[] args) {
+        Object obj = new Object();
+        System.out.println(ClassLayout.parseInstance(obj).toPrintable());
     }
-
-    public static long sizeOf(Object obj) {
-        return inst.getObjectSize(obj);
-    }
-
 }
