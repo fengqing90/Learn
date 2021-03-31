@@ -7,13 +7,13 @@ import java.util.Map;
  * @author fengqing
  * @date 2020/10/28 20:13
  */
-public class LRU4LinkedHashMap<K, V> {
+public class Lru4LinkedHashMap<K, V> {
 
     private static final float hashLoadFactory = 0.75f;
     private LinkedHashMap<K, V> map;
     private int cacheSize;
 
-    public LRU4LinkedHashMap(int cacheSize) {
+    public Lru4LinkedHashMap(int cacheSize) {
         this.cacheSize = cacheSize;
         int capacity = (int) Math.ceil(cacheSize / hashLoadFactory) + 1;
         map = new LinkedHashMap<K, V>(capacity, hashLoadFactory, true) {
@@ -21,7 +21,7 @@ public class LRU4LinkedHashMap<K, V> {
 
             @Override
             protected boolean removeEldestEntry(Map.Entry eldest) {
-                return size() > LRU4LinkedHashMap.this.cacheSize;
+                return size() > Lru4LinkedHashMap.this.cacheSize;
             }
         };
     }
