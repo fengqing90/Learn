@@ -29,7 +29,56 @@ class 数组 extends LeetCode {
         杨辉三角II.run();
         旋转数组.run();
         数组形式的整数加法.run();
+        子数组最大平均数I.run();
 
+    }
+
+    /**
+     * 643. 子数组最大平均数 I
+     * <P>
+     * 给定 n 个整数，找出平均数最大且长度为 k 的连续子数组，并输出该最大平均数。
+     * 示例：
+     * 输入：[1,12,-5,-6,50,3], k = 4
+     * 输出：12.75
+     * 解释：最大平均数 (12-5-6+50)/4 = 51/4 = 12.75
+     * </P>
+     */
+    final static class 子数组最大平均数I extends 数组 {
+
+        static void run() {
+
+            子数组最大平均数I 子数组最大平均数I = new 子数组最大平均数I();
+
+            System.out.println(子数组最大平均数I
+                .findMaxAverage(new int[] { 1, 12, -5, -6, 50, 3 }, 4));
+            System.out.println(子数组最大平均数I.findMaxAverage(new int[] { 5 }, 1));
+            System.out.println(
+                子数组最大平均数I.findMaxAverage(new int[] { 0, 1, 1, 3, 3 }, 4));
+            System.out.println(
+                子数组最大平均数I.findMaxAverage(new int[] { 0, 4, 0, 3, 2 }, 1));
+        }
+
+        public double findMaxAverage(int[] nums, int k) {
+            int sum = 0;
+            for (int i = 0; i < k; i++) {
+                sum += nums[i];
+            }
+
+            // int maxSum = sum;
+            // for (int i = k; i < nums.length; i++) {
+            //     sum = sum - nums[i - k] + nums[i];
+            //     maxSum = Math.max(maxSum, sum);
+            // }
+
+            int maxSum = sum;
+            for (int i = 0; i < nums.length - k; i++) {
+                sum = maxSum - nums[i] + nums[k - i];
+                // System.out.println(sum);
+
+                maxSum = Math.max(maxSum, sum);
+            }
+            return maxSum * 1.0 / k;
+        }
     }
 
     /***
