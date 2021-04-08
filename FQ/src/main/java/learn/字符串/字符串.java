@@ -17,6 +17,9 @@ public class 字符串 {
 
     private static void test() {
         String s0 = "kvill";
+        String s00 = "kvill";
+        System.out.println(s0 == s00);
+
         String s1 = new String("kvill");
         String s2 = new String("kvill");
         System.out.println(s0 == s1); // false
