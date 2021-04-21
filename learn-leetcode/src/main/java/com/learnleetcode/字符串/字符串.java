@@ -283,7 +283,7 @@ public class 字符串 extends LeetCode {
      * [28]实现 strStr()
      * 方法一：子串逐一比较 - 线性时间复杂度
      **/
-    static class 实现strStr {
+    static class 实现strStr extends 字符串 {
         public int strStr(String haystack, String needle) {
             int L = needle.length(), n = haystack.length();
 

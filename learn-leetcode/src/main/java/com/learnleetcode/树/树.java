@@ -440,7 +440,7 @@ public class 树 extends LeetCode {
     /**
      * 112. 路径总和
      **/
-    static class 路径总和 {
+    static class 路径总和 extends 树 {
         public static TreeNode getTreeNode() {
             return new TreeNode(5,
                 new TreeNode(4,
@@ -514,7 +514,7 @@ public class 树 extends LeetCode {
 
     /**
      * 111. 二叉树的最小深度
-     * 
+     *
      * <pre>
      * 给定一个二叉树，找出其最小深度。
      *
@@ -548,8 +548,8 @@ public class 树 extends LeetCode {
                 return 1;
             }
             //2.如果左孩子和由孩子其中一个为空，那么需要返回比较大的那个孩子的深度        
-            int m1 = minDepth(root.left);
-            int m2 = minDepth(root.right);
+            int m1 = this.minDepth(root.left);
+            int m2 = this.minDepth(root.right);
 
             //这里其中一个节点为空，说明m1和m2有一个必然为0，所以可以返回m1 + m2 + 1;
             if (root.left == null || root.right == null) {
@@ -593,7 +593,7 @@ public class 树 extends LeetCode {
 
     /**
      * 110. 平衡二叉树
-     * 
+     *
      * <pre>
      * 给定一个二叉树，判断它是否是高度平衡的二叉树。
      * 本题中，一棵高度平衡二叉树定义为：
@@ -615,7 +615,7 @@ public class 树 extends LeetCode {
         }
 
         boolean isBalanced(TreeNode root) {
-            return balanced(root) != -1;
+            return this.balanced(root) != -1;
         }
 
         int balanced(TreeNode node) {
@@ -626,8 +626,8 @@ public class 树 extends LeetCode {
             // 左边高度
             // 右边高度
             // 左右高度差是否大于1
-            if ((leftHeight = balanced(node.left)) == -1
-                || (rightHeight = balanced(node.right)) == -1
+            if ((leftHeight = this.balanced(node.left)) == -1
+                || (rightHeight = this.balanced(node.right)) == -1
                 || Math.abs(leftHeight - rightHeight) > 1) {
                 return -1;
             }
@@ -638,7 +638,7 @@ public class 树 extends LeetCode {
 
     /**
      * 108. 将有序数组转换为二叉搜索树
-     * 
+     *
      * <pre>
      * 将一个按照升序排列的有序数组，转换为一棵高度平衡二叉搜索树。
      *
@@ -695,6 +695,19 @@ public class 树 extends LeetCode {
      */
     static class 对称二叉树 {
 
+        public static void main(String[] args) {
+            run();
+        }
+
+        static void run() {
+            对称二叉树 对称二叉树 = new 对称二叉树();
+            System.out.println(对称二叉树.isSymmetric(对称二叉树.getTreeNode()));
+        }
+
+        TreeNode getTreeNode() {
+            return new TreeNode(1, new TreeNode(2), null);
+        }
+
         public boolean isSymmetric(TreeNode root) {
             return this.check(root, root);
         }
@@ -706,8 +719,10 @@ public class 树 extends LeetCode {
                 return false;
             } else {
                 // 左和右值必须相等，递归
-                return (p.val == q.val) && this.check(p.left, q.right)
-                    && this.check(p.right, q.left);
+                boolean l = this.check(p.left, q.right);
+                boolean r = this.check(p.right, q.left);
+
+                return (p.val == q.val) && l && r;
             }
         }
 
@@ -715,7 +730,7 @@ public class 树 extends LeetCode {
 
     /**
      * 100. 相同的树
-     * 
+     *
      * <pre>
      * 给定两个二叉树，编写一个函数来检验它们是否相同。
      *
@@ -728,7 +743,7 @@ public class 树 extends LeetCode {
      *
      *         [1,2,3],   [1,2,3]
      * 输出: true
-     * 
+     *
      * 示例 2:
      * 输入:      1          1
      *           /           \
@@ -737,7 +752,7 @@ public class 树 extends LeetCode {
      *         [1,2],     [1,null,2]
      *
      * 输出: false
-     * 
+     *
      * 示例 3:
      * 输入:       1         1
      *           / \       / \
@@ -749,6 +764,10 @@ public class 树 extends LeetCode {
      * </pre>
      */
     final static class 相同的树 extends 树 {
+
+        public static void main(String[] args) {
+            run();
+        }
 
         static void run() {
             相同的树 相同的树 = new 相同的树();
@@ -774,8 +793,8 @@ public class 树 extends LeetCode {
 
             // 两个数的左节点是否相等
             // 两个数的右节点是否相等
-            boolean l = isSameTree(p.left, q.left);
-            boolean r = isSameTree(p.right, q.right);
+            boolean l = this.isSameTree(p.left, q.left);
+            boolean r = this.isSameTree(p.right, q.right);
 
             return q.val == p.val && l && r;
 
@@ -784,7 +803,7 @@ public class 树 extends LeetCode {
 
     /**
      * 107. 二叉树的层次遍历 II
-     * 
+     *
      * <pre>
      * 给定一个二叉树，返回其节点值自底向上的层次遍历。 （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）
      *
@@ -855,8 +874,8 @@ public class 树 extends LeetCode {
 
             list.get(index - 1).add(node.val);
 
-            dfs(node.left, list, index + 1);
-            dfs(node.right, list, index + 1);
+            this.dfs(node.left, list, index + 1);
+            this.dfs(node.right, list, index + 1);
         }
 
         /**
@@ -934,7 +953,13 @@ public class 树 extends LeetCode {
     /**
      * 103. 二叉树的锯齿形层次遍历（蛇形）
      */
-    static class 二叉树的锯齿形层次遍历 {
+    static class 二叉树的锯齿形层次遍历 extends 树 {
+
+        public static void main(String[] args) {
+            二叉树的锯齿形层次遍历 二叉树的锯齿形层次遍历 = new 二叉树的锯齿形层次遍历();
+            System.out.println(二叉树的锯齿形层次遍历.zigzagLevelOrder(getTreeNode()));
+            System.out.println(二叉树的锯齿形层次遍历.zigzagLevelOrder(getTreeNode2()));
+        }
 
         private static TreeNode getTreeNode2() {
             TreeNode root = new TreeNode(1);
@@ -968,7 +993,7 @@ public class 树 extends LeetCode {
             return root;
         }
 
-        public static List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
 
             List<List<Integer>> result = new LinkedList<>();
 
