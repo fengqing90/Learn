@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<!--	<parent>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-parent</artifactId>
+			<version>2.4.5</version>
+			<relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;
+		</parent>-->
+	<groupId>cn.fengqing</groupId>
+	<artifactId>learn-thrift</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>learn-thrift</name>
+	<description>Demo project for Spring Boot</description>
+	<properties>
+		<java.version>1.8</java.version>
+	</properties>
+	<dependencies>
+		<!--		<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter</artifactId>
+				</dependency>
+
+				<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-test</artifactId>
+					<scope>test</scope>
+				</dependency>-->
+		<dependency>
+			<groupId>org.apache.thrift</groupId>
+			<artifactId>libthrift</artifactId>
+			<version>0.14.1</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.thrift.tools</groupId>
+				<artifactId>maven-thrift-plugin</artifactId>
+				<version>0.1.11</version>
+				<configuration>
+					<generator>java</generator>
+					<!--<outputDirectory>src/main/java</outputDirectory> -->
+					<thriftSourceRoot>${basedir}/src/main/resources/thrift</thriftSourceRoot>
+				</configuration>
+				<executions>
+					<execution>
+						<id>thrift-sources</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+					<!--<execution>-->
+					<!--<id>thrift-test-sources</id>-->
+					<!--<phase>generate-test-sources</phase>-->
+					<!--<goals>-->
+					<!--<goal>testCompile</goal>-->
+					<!--</goals>-->
+					<!--</execution>-->
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
