@@ -40,6 +40,9 @@ build/
 /learn-jpa/mvnw
 /learn-jpa/mvnw.cmd
 
+*/mvnw
+*/mvnw.cmd
+
 ### 不需要git的项目
 seata
 seata-samples
