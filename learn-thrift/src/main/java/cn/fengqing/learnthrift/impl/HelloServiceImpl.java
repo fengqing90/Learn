@@ -16,6 +16,9 @@ import cn.fengqing.thrift.service.HelloService;
 public class HelloServiceImpl implements HelloService.Iface {
     @Override
     public String helloString(String para) throws TException {
+        System.out.println(
+            new SimpleDateFormat("yyyy-MM-dd HH:mm:sss").format(new Date())
+                + "接收到消息。param=" + para);
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:sss").format(new Date())
             + " : " + para;
     }
