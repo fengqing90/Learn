@@ -3,6 +3,7 @@ package cn.fq.oauth.web;
 import java.io.IOException;
 import java.util.Date;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,9 +13,11 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cn.fq.oauth.bean.ImageCode;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -29,6 +32,8 @@ public class OauthRestController {
 
     private RequestCache requestCache = new HttpSessionRequestCache();
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+
+    public static final String SESSION_KEY = "SESSION_KEY_IMAGE_CODE";
 
     @RequestMapping("/ping")
     public Object test() {
@@ -52,5 +57,13 @@ public class OauthRestController {
             }
         }
         return "访问的服务需要身份认证，请登录。";
+    }
+
+    @GetMapping("/code/image")
+    public void createImageCode(HttpServletRequest request,
+            HttpServletResponse response) throws IOException {
+        ImageCode imageCode = ImageCode.createImageCode();
+        request.getSession().setAttribute(SESSION_KEY, imageCode);
+        ImageIO.write(imageCode.getImage(), "JPEG", response.getOutputStream());
     }
 }

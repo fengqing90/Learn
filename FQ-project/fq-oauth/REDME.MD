@@ -1,4 +1,9 @@
 #MyOauth
+
+![image_text](https://img2018.cnblogs.com/blog/1580998/202001/1580998-20200106131330689-2043178712.png)
+
+---
+
 ## 1. 表单登录 ##
 ~~~
 http.formLogin().and().authorizeRequests().anyRequest().authenticated(); 
@@ -21,4 +26,13 @@ http.formLogin().loginPage("/auth/require")// 设置登录路由
     .anyRequest().authenticated()// 其他需要认证
 
     .and().csrf().disable();// 禁用跨脚本攻击csrf
+~~~
+
+###4. 验证码登录
+![Image text](https://img2018.cnblogs.com/blog/1580998/202001/1580998-20200107125258622-1037197645.png)
+
+主要添加 ValidateCodeFilter、ImageCode
+~~~
+http.addFilterBefore(this.validateCodeFilter,
+    UsernamePasswordAuthenticationFilter.class)// 添加图片验证，在UsernamePasswordAuthenticationFilter之前，顺序见: org.springframework.security.config.annotation.web.builders.FilterComparator.FilterComparator（） 
 ~~~
