@@ -31,7 +31,7 @@ public class MyUserDetailsService implements UserDetailsService {
         log.info("【登录】[{}]....", username);
 
         //这里密码应该从数据库中取出,暂时先使用加密生成
-        String password = this.passwordEncoder.encode("123456");
+        String password = this.passwordEncoder.encode("1");
 
         // return new User(username, password, true // 账户是否可用
         //     , true      // 账户是否过期 
