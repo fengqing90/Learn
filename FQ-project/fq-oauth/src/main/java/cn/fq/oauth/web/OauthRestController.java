@@ -25,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @RestController
-@RequestMapping("/auth")
 public class OauthRestController {
 
     private RequestCache requestCache = new HttpSessionRequestCache();
@@ -36,7 +35,7 @@ public class OauthRestController {
         return new Date();
     }
 
-    @RequestMapping("/require")
+    @RequestMapping("/auth/require")
     public Object requireAuth(HttpServletRequest request,
             HttpServletResponse response) throws IOException {
         // 获取前一次的跳转请求
@@ -46,6 +45,7 @@ public class OauthRestController {
             String targetUrl = savedRequest.getRedirectUrl();
             log.info("【登录】引发跳转的URL是：[{}]", targetUrl);
 
+            // 如果是未登录访问的html页面,直接跳转 /signin.html 登录页面
             if (StringUtils.endsWithIgnoreCase(targetUrl, ".html")) {
                 this.redirectStrategy.sendRedirect(request, response,
                     "/signin.html");
