@@ -6,15 +6,14 @@ spring:
     username: root
     password: sdfjo29@2
     url: jdbc:mysql://10.255.33.35:3321/fengqing
-    driver-class-name: com.mysql.jdbc.Driver
 
 
 logging:
   level:
     root: INFO
     org.springframework.web: debug
-    org.springframework.security: debug
+    org.springframework.security: trace
     org.springframework.boot.autoconfigure: info
-  #  pattern:
-  #    console: "%d{HH:mm:ss.SSS} %5p %cyan(%-40.40logger{39}) 【%-50m】 (%F:%L\\) [%t] %n"
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %5p %cyan(%-40.40logger{39}) 【%-50m】 (%F:%L\\) [%t] %n"
 
