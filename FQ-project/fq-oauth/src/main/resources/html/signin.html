@@ -7,6 +7,7 @@
 <body>
 <h2 align="center">标准登录页面</h2>
 <h3 align="center">表单登录</h3>
+
 <form action="/auth/form" method="post">
     <table border="0" align="center">
         <tr>
@@ -23,8 +24,12 @@
         </tr>
         <tr>
             <td><input type="checkbox" name="remember-me"> 记住我</td>
-            <td colspan="2" align="center">
+            <td colspan="2">
                 <button type="submit">登录</button>
+                <form action="/logout" method="POST">
+                    <security:csrfInput/>
+                    <input type="submit" value="注销">
+                </form>
             </td>
         </tr>
     </table>

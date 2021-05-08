@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import cn.fq.oauth.bean.Result;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -35,10 +36,12 @@ public class MyAuthenticationFailureHandler
             HttpServletResponse response, AuthenticationException exception)
             throws IOException, ServletException {
         log.info("【登录】失败！[{}]", exception.getMessage());
+        log.info("【登录】失败-详细信息：{}",
+            this.objectMapper.writeValueAsString(exception));
         //这里处理登录失败后就会输出错误信息
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        response.setContentType("application/json;charset-UTF-8");
-        response.getWriter()
-            .write(this.objectMapper.writeValueAsString(exception));
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().write(this.objectMapper
+            .writeValueAsString(Result.build(exception.getMessage())));
     }
 }

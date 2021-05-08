@@ -34,9 +34,9 @@ public class MyAuthenticationSuccessHandler
             HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
 
-        log.info("【登录】成功！");
+        log.info("【登录】username=[{}],成功！", authentication.getName());
 
-        response.setContentType("application/json;charset-UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         response.getWriter()
             .write(objectMapper.writeValueAsString(authentication));
     }

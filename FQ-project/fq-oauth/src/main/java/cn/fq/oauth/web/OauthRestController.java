@@ -45,6 +45,11 @@ public class OauthRestController {
         return "身份已认证：" + new Date();
     }
 
+    @RequestMapping("/requireAuth2")
+    public Object requireAuth2() {
+        return "身份已认证：" + new Date();
+    }
+
     @RequestMapping("/auth/require")
     public Object requireAuth(HttpServletRequest request,
             HttpServletResponse response) throws IOException {

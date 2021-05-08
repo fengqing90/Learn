@@ -7,7 +7,6 @@ spring:
     password: sdfjo29@2
     url: jdbc:mysql://10.255.33.35:3321/fengqing
 
-
 logging:
   level:
     root: INFO
@@ -17,3 +16,7 @@ logging:
   pattern:
     console: "%d{HH:mm:ss.SSS} %5p %cyan(%-40.40logger{39}) 【%-50m】 (%F:%L\\) [%t] %n"
 
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true

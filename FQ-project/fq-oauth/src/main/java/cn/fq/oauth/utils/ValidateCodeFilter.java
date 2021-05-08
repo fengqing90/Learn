@@ -55,21 +55,21 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
         String codeInRequest = request.getParameter("imageCode");
 
         if (!StringUtils.hasText(codeInRequest)) {
-            throw new ValidateCodeException("code in request is null");
+            throw new ValidateCodeException("请输入验证码");
         }
 
         if (codeInSession == null) {
-            throw new ValidateCodeException("code in session is null");
+            throw new ValidateCodeException("未生成验证码");
         }
 
         if (codeInSession.isExpired()) {
             request.getSession()
                 .removeAttribute(OauthRestController.SESSION_KEY);
-            throw new ValidateCodeException("code has expired");
+            throw new ValidateCodeException("验证码已过期");
         }
 
         if (!codeInRequest.trim().equals(codeInSession.getCode())) {
-            throw new ValidateCodeException("code is not right");
+            throw new ValidateCodeException("验证码不正确");
         }
 
         // 验证通过，清除session中的图片验证码

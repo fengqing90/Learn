@@ -5,10 +5,12 @@ import org.springframework.security.core.userdetails.User;
 
 /**
  * User类是Spring内置的一个类，实现了UserDetails接口，而这个接口是UserDetailSerice的子接口
- *
+ * 
+ * @see cn.fq.oauth.bean.entity.SysUser
  * @author fengqing
  * @date 2021/5/6 14:55
  */
+@Deprecated
 public class MyOauthUser extends User {
 
     public MyOauthUser(String username, String password) {
