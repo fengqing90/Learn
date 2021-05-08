@@ -12,10 +12,10 @@ import org.springframework.security.core.userdetails.User;
 public class MyOauthUser extends User {
 
     public MyOauthUser(String username, String password) {
-        super(username, password, true // 账户是否可用
-            , true// 账户是否过期 
-            , true // 密码是否过期
-            , true // 账户是否锁定
+        super(username, password, true  // 账户是否可用
+            , true             // 账户是否过期 
+            , true           // 密码是否过期
+            , true             // 账户是否锁定
             , AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
     }
 }

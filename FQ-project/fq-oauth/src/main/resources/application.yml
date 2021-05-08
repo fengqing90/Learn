@@ -7,5 +7,5 @@ logging:
     org.springframework.web: debug
     org.springframework.security: debug
     org.springframework.boot.autoconfigure: info
-#  pattern:
-#    console: "%d{HH:mm:ss.SSS} %5p %cyan(%-40.40logger{39}) 【%-50m】 (%F:%L\\) [%t] %n"
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %5p %cyan(%-40.40logger{39}) 【%-50m】 (%F:%L\\) [%t] %n"

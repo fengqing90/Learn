@@ -34,5 +34,14 @@ http.formLogin().loginPage("/auth/require")// 设置登录路由
 主要添加 ValidateCodeFilter、ImageCode
 ~~~
 http.addFilterBefore(this.validateCodeFilter,
-    UsernamePasswordAuthenticationFilter.class)// 添加图片验证，在UsernamePasswordAuthenticationFilter之前，顺序见: org.springframework.security.config.annotation.web.builders.FilterComparator.FilterComparator（） 
+    UsernamePasswordAuthenticationFilter.class)// 添加图片验证，在UsernamePasswordAuthenticationFilter之前，顺序见: org.springframework.security.config.annotation.web.builders.FilterComparator.FilterComparator() 
 ~~~
+
+###5. 记住我功能
+基本原理
+![Image text](https://img2018.cnblogs.com/blog/1580998/202001/1580998-20200107165220671-894516268.png)
+
+springsecruity基本原理
+![Image text](https://img2018.cnblogs.com/blog/1580998/202001/1580998-20200107165234881-1805567454.png)
+
+>会根据参数中是否有“remember-me” 进行判断是否进行 remember操作。（AbstractRememberMeServices）
