@@ -1,6 +1,7 @@
 package cn.fq.oauth.utils;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -35,9 +37,20 @@ public class MyAuthenticationSuccessHandler
             throws IOException, ServletException {
 
         log.info("【登录】username=[{}],成功！", authentication.getName());
+        log.info("【登录】成功-详细信息：{}",
+            this.objectMapper.writeValueAsString(authentication));
 
-        response.setContentType("application/json;charset=UTF-8");
-        response.getWriter()
-            .write(objectMapper.writeValueAsString(authentication));
+        // response.setContentType("application/json;charset=UTF-8");
+        // response.getWriter()
+        //     .write(objectMapper.writeValueAsString(authentication));
+        // 静态html页面不能post请求
+        // request.getRequestDispatcher("/index.html").forward(request, response);
+
+        new DefaultRedirectStrategy().sendRedirect(request, response,
+            "/index.html?userName=" + authentication.getName()
+                + "&authentication="
+                + URLEncoder.encode(
+                    this.objectMapper.writeValueAsString(authentication),
+                    "UTF-8"));
     }
 }

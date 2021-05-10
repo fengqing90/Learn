@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import cn.fq.oauth.bean.entity.SysUser;
+import cn.fq.oauth.mapper.SysRoleMapper;
 import cn.fq.oauth.mapper.SysUserMapper;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,20 +30,27 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Resource
     private SysUserMapper sysUserMapper;
+    @Resource
+    private SysRoleMapper sysRoleMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
         log.info("【登录】[{}]....", username);
 
+        // 用户
         SysUser user = this.sysUserMapper.findByUsername(username);
         if (user == null) {
             throw new AuthenticationServiceException(
                 "username=[" + username + "]，不存在！");
         }
 
+        // 角色
+        user.setRoles(this.sysRoleMapper.findByUid(user.getId()));
+
         //这里密码应该从数据库中取出,暂时先使用加密生成
         String password = this.passwordEncoder.encode(user.getPassword());
+        user.setPassword(password);
 
         // return new User(username, password, true // 账户是否可用
         //     , true      // 账户是否过期 
@@ -51,6 +59,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         //     , AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
 
         // return new MyOauthUser(username, password);
-        return new SysUser(username, password);
+        return user;
     }
 }

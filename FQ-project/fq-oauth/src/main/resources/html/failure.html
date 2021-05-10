@@ -5,9 +5,37 @@
     <title>登录失败</title>
 </head>
 <body>
-登录失败
-<div id="loginFailer">
 
+<p align="center">登录失败</p>
+<div id="loginFailer" align="center">
+    <script language="JavaScript">
+        function GetRequest() {
+            var url = location.search; //获取url中"?"符后的字串
+            var theRequest = new Object();
+            if (url.indexOf("?") != -1) {
+                var str = url.substr(1);
+                strs = str.split("&");
+                for (var i = 0; i < strs.length; i++) {
+                    theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+                }
+            }
+            return theRequest;
+        }
+
+        document.write("========================");
+        document.write("</br>");
+
+        let data = GetRequest();
+        console.dir(data);
+
+        for (let key in data) {
+            document.write(
+                key + "<b style=font-size: 16px;> : " + data[key] + "</b>"
+            );
+            document.write("</br>");
+        }
+
+    </script>
 </div>
 </body>
 </html>

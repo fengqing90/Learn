@@ -16,8 +16,6 @@ import cn.fq.oauth.bean.entity.SysRole;
 @Mapper
 public interface SysRoleMapper {
 
-    @Select("select r.id,r.role_name roleName ,r.role_desc roleDesc "
-        + "FROM sys_role r,sys_user_role ur "
-        + "WHERE r.id=ur.rid AND ur.uid=#{uid}")
+    @Select("select r.id,r.role_name roleName ,r.role_desc roleDesc FROM sys_role r,sys_user_role ur WHERE r.id=ur.rid AND ur.uid=#{uid}")
     List<SysRole> findByUid(Integer uid);
 }

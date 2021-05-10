@@ -60,16 +60,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 3、自定义登录
         http//////
-            .formLogin().loginPage("/login.html")   // 设置登录路由
-            .loginProcessingUrl("/login")           // 登录处理url
-            .successForwardUrl("/index.html")
+            .formLogin().loginPage("/login.html")   // 登录
+            .loginProcessingUrl("/login")
+            // .successForwardUrl("/index.html")       // 成功forward跳转到index.html，如果配置了successHandler 需要再里面单独处理
+            // .failureForwardUrl("/failure.html")     // 失败forward跳转到failure.html，如果配置了 failureHandler 需要再里面单独处理
             .successHandler(this.mySuccessHandler)  // 登录成功处理
-            .failureForwardUrl("/failure.html")
             .failureHandler(this.myFailHandler)     // 登录失败处理
             .permitAll()
 //////
             .and().logout()                         // 登出
-            .logoutUrl("/logout").logoutSuccessUrl("/index.html")
+            .logoutUrl("/logout").logoutSuccessUrl("/login.html")
             .invalidateHttpSession(true)            // 登出时销毁session
             .permitAll()
 //////
@@ -81,9 +81,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .addFilterBefore(this.validateCodeFilter,
                 UsernamePasswordAuthenticationFilter.class)// 添加图片验证，在UsernamePasswordAuthenticationFilter之前，顺序见: org.springframework.security.config.annotation.web.builders.FilterComparator.FilterComparator（） 
             .authorizeRequests() // 身份认证设置
-            .antMatchers("/*.html").permitAll()                 // 匹配 login.html 不需要认证
-            .antMatchers("/ping", "/code/image").permitAll()    // 匹配/auth/*  不需要认证
-            .anyRequest().authenticated()// 其他需要认证
+            .antMatchers("/login.html", "/403.html", "/failure.html",
+                "/favicon.ico")
+            .permitAll()                 // 匹配 login.html 不需要认证
+            .antMatchers("/ping", "/code/image", "/error").permitAll()    // 匹配/auth/*  不需要认证
+            .antMatchers("/**").hasAnyRole("USER", "ADMIN").anyRequest()
+            .authenticated()// 其他需要认证
 //////
             .and().csrf().disable();// 禁用跨脚本攻击csrf
     }

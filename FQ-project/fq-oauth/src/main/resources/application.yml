@@ -6,7 +6,6 @@ spring:
     username: root
     password: sdfjo29@2
     url: jdbc:mysql://10.255.33.35:3321/fengqing
-
 logging:
   level:
     root: INFO
