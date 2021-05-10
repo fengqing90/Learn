@@ -88,6 +88,57 @@ public class 树 extends LeetCode {
         将有序数组转换为二叉搜索树.run();
     }
 
+    /***
+     * 872. 叶子相似的树
+     * https://leetcode-cn.com/problems/leaf-similar-trees/
+     */
+    final static class 叶子相似的树 extends 树 {
+
+        public static void main(String[] args) {
+
+            叶子相似的树 叶子相似的树 = new 叶子相似的树();
+
+            System.out.println(叶子相似的树.leafSimilar(null, null));
+        }
+
+        public boolean leafSimilar(TreeNode root1, TreeNode root2) {
+            if (root1 == null || root2 == null) {
+                return false;
+            }
+            List<Integer> list1 = new ArrayList<>();
+            List<Integer> list2 = new ArrayList<>();
+            find(root1, list1);
+            find(root2, list2);
+
+            if (list1.size() != list2.size()) {
+                return false;
+            }
+            for (int i = 0; i < list1.size(); i++) {
+                if (list1.get(i) != list2.get(i)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void find(TreeNode node, List<Integer> list) {
+
+            if (node == null) {
+                return;
+            }
+
+            if (node.left == null && node.right == null) {
+                list.add(node.val);
+                return;
+            }
+
+            find(node.left, list);
+
+            find(node.right, list);
+        }
+    }
+
     /**
      * 783. 二叉搜索树节点最小距离
      **/
