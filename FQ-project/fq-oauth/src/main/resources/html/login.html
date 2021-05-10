@@ -26,13 +26,14 @@
             <td><input type="checkbox" name="remember-me"> 记住我</td>
             <td colspan="2">
                 <button type="submit">登录</button>
-                <form action="/logout" method="POST">
-                    <security:csrfInput/>
-                    <input type="submit" value="注销">
-                </form>
             </td>
         </tr>
     </table>
 </form>
+
+<form action="/logout" method="POST">
+    <input type="submit" value="注销">
+</form>
+
 </body>
 </html>
