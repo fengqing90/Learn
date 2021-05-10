@@ -22,6 +22,59 @@ class 数学 extends LeetCode {
     }
 
     /**
+     * 633. 平方数之和
+     * https://leetcode-cn.com/problems/sum-of-square-numbers/
+     */
+    final static class 平方数之和 extends 数学 {
+
+        public static void main(String[] args) {
+
+            平方数之和 平方数之和 = new 平方数之和();
+
+            System.out.println(平方数之和.judgeSquareSum(17));
+
+            System.out.println(平方数之和.judgeSquareSum2(2));
+        }
+
+        public boolean judgeSquareSum(int c) {
+            // 获取平方根等到c的最大数,忽略小数点后的数
+            int max = (int) Math.sqrt(c);
+
+            // 从0开始计算 
+            for (int a = 0; a < max; a++) {
+                // 已知c、a 计算b
+                int b = (int) Math.sqrt(c - a * a);
+                // 尝试计算 a * a + b * b == c
+                if (a * a + b * b == c) {
+                    System.out
+                        .println(a + "*" + a + " + " + b + "*" + b + " = " + c);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public boolean judgeSquareSum2(int c) {
+            int a = 0, b = (int) Math.sqrt(c);
+
+            while (a <= b) {
+                int tmp = a * a + b * b;
+                if (tmp == c) {
+                    System.out
+                        .println(a + "*" + a + " + " + b + "*" + b + " = " + c);
+                    return true;
+                }
+                if (tmp < c) {
+                    a++;
+                } else {
+                    b--;
+                }
+            }
+            return false;
+        }
+    }
+
+    /**
      * 204. 计数质数
      */
     final static class 计数质数 extends 数学 {
@@ -96,7 +149,7 @@ class 数学 extends LeetCode {
 
     /**
      * 202. 快乐数
-     * 
+     *
      * <pre>
      * 编写一个算法来判断一个数 n 是不是快乐数。
      *
@@ -123,11 +176,11 @@ class 数学 extends LeetCode {
         }
 
         public boolean isHappy(int n) {
-            int slow = n, fast = squareSum(n);
+            int slow = n, fast = this.squareSum(n);
             while (slow != fast) {
-                slow = squareSum(slow);
-                fast = squareSum(fast);
-                fast = squareSum(fast);
+                slow = this.squareSum(slow);
+                fast = this.squareSum(fast);
+                fast = this.squareSum(fast);
             }
             return slow == 1;
         }
@@ -145,7 +198,7 @@ class 数学 extends LeetCode {
 
     /**
      * 172. 阶乘后的零
-     * 
+     *
      * <pre>
      * 给定一个整数 n，返回 n! 结果尾数中零的数量。
      *
@@ -153,7 +206,7 @@ class 数学 extends LeetCode {
      * 输入: 3
      * 输出: 0
      * 解释: 3! = 6, 尾数中没有零。
-     * 
+     *
      * 示例 2:
      * 输入: 5
      * 输出: 1
@@ -179,7 +232,7 @@ class 数学 extends LeetCode {
 
     /**
      * 171. Excel表列序号
-     * 
+     *
      * <pre>
      * 给定一个Excel表格中的列名称，返回其相应的列序号。
      *
@@ -190,7 +243,7 @@ class 数学 extends LeetCode {
      *     ...
      *     Z -> 26
      *     AA -> 27
-     *     AB -> 28 
+     *     AB -> 28
      *     ...
      * </pre>
      */
@@ -212,19 +265,19 @@ class 数学 extends LeetCode {
 
     /**
      * 168. Excel表列名称
-     * 
+     *
      * <pre>
      * 给定一个正整数，返回它在 Excel 表中相对应的列名称。
      *
      * 例如：
-    *     1 -> A
-    *     2 -> B
-    *     3 -> C
-    *     ...
-    *     26 -> Z
-    *     27 -> AA
-    *     28 -> AB 
-    *     ...
+     *     1 -> A
+     *     2 -> B
+     *     3 -> C
+     *     ...
+     *     26 -> Z
+     *     27 -> AA
+     *     28 -> AB
+     *     ...
      * </pre>
      */
     static class Excel表列名称 {
@@ -246,7 +299,9 @@ class 数学 extends LeetCode {
         }
     }
 
-    /** [69]x 的平方根 **/
+    /**
+     * [69]x 的平方根
+     **/
     static class x的平方根 {
 
         static void run() {
@@ -405,18 +460,18 @@ class 数学 extends LeetCode {
 
     /**
      * 9. 回文数
-     * 
+     *
      * <pre>
      * 判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。
      * 示例 1:
      * 输入: 121
      * 输出: true
-     * 
+     *
      * 示例 2:
      * 输入: -121
      * 输出: false
      * 解释: 从左向右读, 为 -121 。 从右向左读, 为 121- 。因此它不是一个回文数。
-     * 
+     *
      * 示例 3:
      * 输入: 10
      * 输出: false
