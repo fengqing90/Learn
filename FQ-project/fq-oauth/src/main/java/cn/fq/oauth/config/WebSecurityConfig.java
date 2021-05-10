@@ -59,24 +59,32 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // http.httpBasic().and().authorizeRequests().anyRequest().authenticated();
 
         // 3、自定义登录
-        http.addFilterBefore(this.validateCodeFilter,
-            UsernamePasswordAuthenticationFilter.class)// 添加图片验证，在UsernamePasswordAuthenticationFilter之前，顺序见: org.springframework.security.config.annotation.web.builders.FilterComparator.FilterComparator（） 
-//////
-            .formLogin().loginPage("/signin.html")  // 设置登录路由（未登录的请求会转发到 /auth/require 处理）
-            .loginProcessingUrl("/auth/form")       // 登录处理url
+        http//////
+            .formLogin().loginPage("/login.html")   // 设置登录路由
+            .loginProcessingUrl("/login")           // 登录处理url
+            .successForwardUrl("/index.html")
             .successHandler(this.mySuccessHandler)  // 登录成功处理
+            .failureForwardUrl("/failure.html")
             .failureHandler(this.myFailHandler)     // 登录失败处理
+            .permitAll()
+//////
+            .and().logout()                         // 登出
+            .logoutUrl("/logout").logoutSuccessUrl("/index.html")
+            .invalidateHttpSession(true)            // 登出时销毁session
+            .permitAll()
 //////
             .and().rememberMe()                     // 开启记住我功能
             .tokenRepository(this.persistentTokenRepository)
             .tokenValiditySeconds(60)               // token有效时间 
 //////
-            .and().authorizeRequests() // 身份认证设置
-            .antMatchers("/signin.html", "403.html").permitAll()        // 匹配 signin.html 不需要认证
-            .antMatchers("/auth/*", "/ping", "/code/image").permitAll()    // 匹配/auth/*  不需要认证
+            .and()                                  // 权限验证
+            .addFilterBefore(this.validateCodeFilter,
+                UsernamePasswordAuthenticationFilter.class)// 添加图片验证，在UsernamePasswordAuthenticationFilter之前，顺序见: org.springframework.security.config.annotation.web.builders.FilterComparator.FilterComparator（） 
+            .authorizeRequests() // 身份认证设置
+            .antMatchers("/*.html").permitAll()                 // 匹配 login.html 不需要认证
+            .antMatchers("/ping", "/code/image").permitAll()    // 匹配/auth/*  不需要认证
             .anyRequest().authenticated()// 其他需要认证
 //////
             .and().csrf().disable();// 禁用跨脚本攻击csrf
     }
-
 }

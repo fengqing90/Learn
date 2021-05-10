@@ -36,7 +36,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
             HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         if (request.getMethod().equals(HttpMethod.POST.name())
-            && request.getRequestURI().equals("/auth/form")) {
+            && request.getRequestURI().equals("/login")) {
             try {
                 this.validate(request);
             } catch (ValidateCodeException e) {

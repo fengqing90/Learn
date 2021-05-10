@@ -60,10 +60,10 @@ public class OauthRestController {
             String targetUrl = savedRequest.getRedirectUrl();
             log.info("【登录】引发跳转的URL是：[{}]", targetUrl);
 
-            // 如果是未登录访问的html页面,直接跳转 /signin.html 登录页面
+            // 如果是未登录访问的html页面,直接跳转 /login.html 登录页面
             if (StringUtils.endsWithIgnoreCase(targetUrl, ".html")) {
                 this.redirectStrategy.sendRedirect(request, response,
-                    "/signin.html");
+                    "/login.html");
             }
         }
         return "访问的服务需要身份认证，请登录。";
