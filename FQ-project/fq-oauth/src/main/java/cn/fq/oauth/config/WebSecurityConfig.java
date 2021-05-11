@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -85,10 +86,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests() // 身份认证设置
             .antMatchers("/login.html", "/403.html", "/failure.html",
                 "/favicon.ico")
-            .permitAll()                 // 匹配 login.html 不需要认证
+            .permitAll()                            // 匹配 login.html 不需要认证
             .antMatchers("/ping", "/code/image", "/error").permitAll()    // 匹配/auth/*  不需要认证
             .antMatchers("/**").hasAnyRole("USER")                // 所有匹配都需要ADMIN权限
-            .anyRequest().authenticated()// 其他需要认证
+            .anyRequest().authenticated()           // 其他需要认证
+
+            .and().sessionManagement()              // 前后端分离，可以直接禁用改成无状态
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 //////
             .and().csrf().disable();// 禁用跨脚本攻击csrf
     }

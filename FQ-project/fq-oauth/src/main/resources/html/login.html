@@ -8,7 +8,7 @@
 <h2 align="center">标准登录页面</h2>
 <h3 align="center">表单登录</h3>
 
-<form action="/login" method="post">
+<form action="/fq-oauth/login" method="post">
     <table border="0" align="center">
         <tr>
             <td>用户名:</td>
@@ -20,7 +20,7 @@
         </tr>
         <tr>
             <td>图形验证码</td>
-            <td><input type="text" name="imageCode" value="1111"><img src="/code/image" alt="图形验证码"></td>
+            <td><input type="text" name="imageCode" value="1111"><img src="/fq-oauth/code/image" alt="图形验证码"></td>
         </tr>
         <tr>
             <td><input type="checkbox" name="remember-me" checked="checked"> 记住我</td>
@@ -31,7 +31,7 @@
     </table>
 </form>
 
-<form action="/logout" method="POST">
+<form action="/fq-oauth/logout" method="POST">
     <input type="submit" value="注销">
 </form>
 

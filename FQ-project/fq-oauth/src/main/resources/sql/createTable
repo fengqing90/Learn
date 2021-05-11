@@ -23,6 +23,8 @@ CREATE TABLE `sys_role` (
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 INSERT INTO `sys_role`(`ID`, `ROLE_NAME`, `ROLE_DESC`) VALUES (1, 'ROLE_ADMIN', 'ROLE_ADMIN');
+INSERT INTO `sys_role`(`ID`, `ROLE_NAME`, `ROLE_DESC`) VALUES (2, 'ROLE_FQ', 'ROLE_FQ');
+INSERT INTO `sys_role`(`ID`, `ROLE_NAME`, `ROLE_DESC`) VALUES (3, 'ROLE_USER', 'ROLE_USER');
 
 
 
@@ -57,3 +59,5 @@ CREATE TABLE `sys_user_role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `sys_user_role`(`UID`, `RID`) VALUES (1, 1);
+INSERT INTO `sys_user_role`(`UID`, `RID`) VALUES (1, 2);
+INSERT INTO `sys_user_role`(`UID`, `RID`) VALUES (1, 3);
