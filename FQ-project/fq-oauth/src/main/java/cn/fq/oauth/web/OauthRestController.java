@@ -3,10 +3,13 @@ package cn.fq.oauth.web;
 import java.io.IOException;
 import java.util.Date;
 
+import javax.annotation.security.RolesAllowed;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
@@ -45,9 +48,15 @@ public class OauthRestController {
         return "身份已认证：" + new Date();
     }
 
-    @RequestMapping("/requireAuth2")
-    public Object requireAuth2() {
-        return "身份已认证：" + new Date();
+    /**
+     * 3种权限写法
+     */
+    @Secured("ROLE_FQ")
+    @RolesAllowed("ROLE_FQ")
+    @PreAuthorize("ROLE_FQ")
+    @RequestMapping("/requireAuth4ROLE_FQ")
+    public Object requireAuth4ROLE_FQ() {
+        return "已有[ROLE_FQ]权限，身份已认证：" + new Date();
     }
 
     @RequestMapping("/auth/require")

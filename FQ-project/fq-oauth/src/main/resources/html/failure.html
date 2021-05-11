@@ -30,7 +30,7 @@
 
         for (let key in data) {
             document.write(
-                key + "<b style=font-size: 16px;> : " + data[key] + "</b>"
+                key + "<b style=font-size: 16px;> : " + decodeURI(data[key]) + "</b>"
             );
             document.write("</br>");
         }

@@ -5,6 +5,7 @@ import javax.servlet.Filter;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Configuration
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Resource
@@ -85,8 +87,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/favicon.ico")
             .permitAll()                 // 匹配 login.html 不需要认证
             .antMatchers("/ping", "/code/image", "/error").permitAll()    // 匹配/auth/*  不需要认证
-            .antMatchers("/**").hasAnyRole("USER", "ADMIN").anyRequest()
-            .authenticated()// 其他需要认证
+            .antMatchers("/**").hasAnyRole("USER")                // 所有匹配都需要ADMIN权限
+            .anyRequest().authenticated()// 其他需要认证
 //////
             .and().csrf().disable();// 禁用跨脚本攻击csrf
     }
