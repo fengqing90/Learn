@@ -1,6 +1,7 @@
 #官网步骤
 官网started：https://thrift.apache.org/
 
+---
 #Client 和 Server
 是一对，写的简单的helloworld
 
