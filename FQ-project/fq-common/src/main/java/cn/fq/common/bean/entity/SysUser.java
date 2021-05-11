@@ -1,4 +1,4 @@
-package cn.fq.oauth.bean.entity;
+package cn.fq.common.bean.entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,9 +29,12 @@ public class SysUser implements UserDetails {
         this.password = password;
     }
 
+    public SysUser() {
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        return this.roles;
     }
 
     @Override

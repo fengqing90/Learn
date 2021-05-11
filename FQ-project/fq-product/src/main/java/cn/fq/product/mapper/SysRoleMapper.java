@@ -1,4 +1,4 @@
-package cn.fq.oauth.mapper;
+package cn.fq.product.mapper;
 
 import java.util.List;
 

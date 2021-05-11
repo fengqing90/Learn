@@ -22,3 +22,9 @@ mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
+
+
+rsa:
+  key:
+    privateKeyFile: C:\W\Workspace\Eclipse Workspace\Learn\FQ-PROJECT\private.key
+    publicKeyFile: C:\W\Workspace\Eclipse Workspace\Learn\FQ-PROJECT\rsa_public.pub

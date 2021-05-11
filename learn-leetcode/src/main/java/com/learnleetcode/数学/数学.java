@@ -18,7 +18,6 @@ class 数学 extends LeetCode {
         Excel表列序号.run();
         阶乘后的零.run();
         快乐数.run();
-        计数质数.run();
     }
 
     /**
@@ -79,11 +78,12 @@ class 数学 extends LeetCode {
      */
     final static class 计数质数 extends 数学 {
 
-        static void run() {
+        public static void main(String[] args) {
 
             计数质数 计数质数 = new 计数质数();
 
             System.out.println(计数质数.countPrimes(100)); // 2, 3, 5, 7
+            System.out.println(计数质数.countPrimes2(100)); // 2, 3, 5, 7
         }
 
         public int countPrimes(int n) {

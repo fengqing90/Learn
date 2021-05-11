@@ -1,4 +1,4 @@
-package cn.fq.oauth.bean.entity;
+package cn.fq.common.bean.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 

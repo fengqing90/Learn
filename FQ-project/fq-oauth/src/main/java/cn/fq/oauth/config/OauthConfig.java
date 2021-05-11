@@ -3,6 +3,7 @@ package cn.fq.oauth.config;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
+import cn.fq.common.utils.RsaKeyProperties;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -20,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Configuration
+@EnableConfigurationProperties(RsaKeyProperties.class)
 public class OauthConfig {
     @Resource
     private DataSource dataSource;

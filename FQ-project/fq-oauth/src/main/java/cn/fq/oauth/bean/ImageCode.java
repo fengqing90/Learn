@@ -58,7 +58,8 @@ public class ImageCode {
 
         StringBuilder sRand = new StringBuilder();
         for (int i = 0; i < 4; i++) {
-            String rand = String.valueOf(random.nextInt(10));
+            // String rand = String.valueOf(random.nextInt(10));
+            String rand = "1";
             sRand.append(rand);
             g.setColor(new Color(20 + random.nextInt(110),
                 20 + random.nextInt(110), 20 + random.nextInt(110)));
