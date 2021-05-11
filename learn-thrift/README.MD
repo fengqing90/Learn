@@ -12,8 +12,8 @@
 4. 启动Server和Client
 
 ---
-#JavaClient 和 JavaServer 是一对
-类似计算器，包含复杂idl内容。
+#JavaClient 和 JavaServer 
+是一对，类似计算器，包含复杂idl内容，官网例子。
 
 ---
 入门例子：https://segmentfault.com/a/1190000008606491  
