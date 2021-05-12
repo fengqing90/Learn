@@ -1,0 +1,31 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /fq-product
+
+spring:
+  spring:
+    application:
+      name: fq-product
+  datasource:
+    username: root
+    password: sdfjo29@2
+    url: jdbc:mysql://10.255.33.35:3321/fengqing
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: debug
+    org.springframework.security: trace
+    org.springframework.boot.autoconfigure: info
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %5p %cyan(%-40.40logger{39}) 【%-50m】 (%F:%L\\) [%t] %n"
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+
+rsa:
+  key:
+    publicKeyFile: C:\W\Workspace\Eclipse Workspace\Learn\FQ-PROJECT\rsa_public.pub

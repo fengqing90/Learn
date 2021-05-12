@@ -42,6 +42,8 @@ build/
 
 */mvnw
 */mvnw.cmd
+mvnw
+mvnw.cmd
 
 ### 不需要git的项目
 seata
