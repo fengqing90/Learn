@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import cn.fq.common.bean.entity.SysUser;
+import cn.fq.common.utils.JsonUtils;
 import cn.fq.oauth.mapper.SysRoleMapper;
 import cn.fq.oauth.mapper.SysUserMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -59,6 +60,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         //     , AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
 
         // return new MyOauthUser(username, password);
+        log.info("【登录】user = [{}]", JsonUtils.toString(user));
         return user;
     }
 }
