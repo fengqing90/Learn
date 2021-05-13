@@ -1,103 +1,71 @@
 package cn.fq.oauth.utils;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import cn.fq.common.bean.entity.SysRole;
 import cn.fq.common.bean.entity.SysUser;
-import cn.fq.common.utils.JwtUtils;
-import cn.fq.common.utils.RsaKeyProperties;
+import cn.fq.common.utils.JsonUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * TODO
- *
+ * 添加jwt方式认证，由于自己new出来的，类里面属性是默认，导致这方法里面的配置都会失效
+ * 不建议用
+ * 
  * @author fengqing
  * @date 2021/5/11 17:51
  */
+@Slf4j
+@Deprecated
 public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
-    private AuthenticationManager authenticationManager;
-    private RsaKeyProperties prop;
 
-    public JwtLoginFilter(AuthenticationManager authenticationManager,
-            RsaKeyProperties prop) {
+    private final AuthenticationManager authenticationManager;
+
+    public JwtLoginFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-        this.prop = prop;
+        this.setAuthenticationManager(authenticationManager);
     }
 
-    //重写springsecurity获取用户名和密码操作
+    /**
+     * 重写springsecurity获取用户名和密码操作
+     * 
+     * @param request
+     * @param response
+     * @return
+     * @throws AuthenticationException
+     */
+    @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
             HttpServletResponse response) throws AuthenticationException {
         try {
-            //从输入流中获取用户名和密码，而不是表单
-            SysUser sysUser = new ObjectMapper()
-                .readValue(request.getInputStream(), SysUser.class);
-            UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
-                sysUser.getUsername(), sysUser.getPassword());
-            return authenticationManager.authenticate(authRequest);
-        } catch (Exception e) {
-            try {
-                //处理失败请求
-                response.setContentType("application/json;charset=utf-8");
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                PrintWriter out = response.getWriter();
-                Map map = new HashMap<>();
-                map.put("code", HttpServletResponse.SC_UNAUTHORIZED);
-                map.put("msg", "用户名或者密码错误");
-                out.write(new ObjectMapper().writeValueAsString(map));
-                out.flush();
-                out.close();
-            } catch (Exception e1) {
-                e1.printStackTrace();
+
+            if (request.getRequestURI().endsWith("/login")) {
+                return super.attemptAuthentication(request, response);
             }
 
-            throw new RuntimeException(e);
-        }
-    }
+            //从输入流中获取用户名和密码，而不是表单
+            SysUser sysUser = JsonUtils.toBean(request.getInputStream(),
+                SysUser.class);
 
-    //重写用户名密码授权成功操作----返回token凭证
-    protected void successfulAuthentication(HttpServletRequest request,
-            HttpServletResponse response, FilterChain chain,
-            Authentication authResult) throws IOException, ServletException {
-        //从authResult获取认证成功的用户信息
-        SysUser resultUser = new SysUser();
-        SysUser authUser = (SysUser) authResult.getPrincipal();
-        resultUser.setUsername(authUser.getUsername());
-        resultUser.setId(authUser.getId());
-        resultUser.setStatus(authUser.getStatus());
-        resultUser.setRoles((List<SysRole>) authResult.getAuthorities());
-        String token = JwtUtils.generateTokenExpireInMinutes(resultUser,
-            prop.getPrivateKey(), 3600 * 24);
-        //将token写入header
-        response.addHeader("Authorization", "Bearer " + token);
-        try {
-            //登录成功時，返回json格式进行提示
-            response.setContentType("application/json;charset=utf-8");
-            response.setStatus(HttpServletResponse.SC_OK);
-            PrintWriter out = response.getWriter();
-            Map<String, Object> map = new HashMap<>();
-            map.put("code", HttpServletResponse.SC_OK);
-            map.put("message", "登陆成功！");
-            out.write(new ObjectMapper().writeValueAsString(map));
-            out.flush();
-            out.close();
-        } catch (Exception e1) {
-            e1.printStackTrace();
+            if (sysUser == null) {
+                throw new AuthenticationServiceException("读取user为null");
+            }
+
+            UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
+                sysUser.getUsername(), sysUser.getPassword());
+            return this.getAuthenticationManager().authenticate(authRequest);
+
+        } catch (IOException e) {
+            throw new AuthenticationServiceException(
+                "读取user失败" + e.getMessage(), e);
         }
     }
 }
