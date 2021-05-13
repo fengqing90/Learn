@@ -46,7 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             //允许不登陆就可以访问的方法，多个用逗号分隔
             .authorizeRequests().antMatchers("/product/list").hasAnyRole("USER")
             //其他的需要授权后访问
-            .anyRequest().authenticated().and()
+            .antMatchers("/error").permitAll().anyRequest().authenticated()
+            .and()
             //增加自定义验证认证过滤器
             .addFilter(new JwtVerifyFilter(authenticationManager(), this.prop))
             // 前后端分离是无状态的，不用session了，直接禁用。
@@ -57,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         //UserDetailsService类
-        auth.userDetailsService(userDetailsServiceImpl)
+        auth.userDetailsService(this.userDetailsServiceImpl)
             //加密策略
             .passwordEncoder(passwordEncoder());
     }
