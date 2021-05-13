@@ -79,7 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //////
             .and().rememberMe()                     // 开启记住我功能
             .tokenRepository(this.persistentTokenRepository)
-            .tokenValiditySeconds(60)               // token有效时间 
+            .tokenValiditySeconds(60)               // token有效时间
 //////
             .and()                                          //  添加自定义权限验证
             // .addFilter(new JwtLoginFilter(authenticationManager()))                            //  1.添加jwt方式认证，由于自己new出来的，类里面属性是默认，导致这方法里面的配置都会失效
@@ -99,7 +99,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and().sessionManagement()              // 前后端分离，可以直接禁用改成无状态
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 //////
-            .and().cors() // 
+            .and().cors() //
             .and().csrf().disable();// 禁用跨脚本攻击csrf
     }
 }
