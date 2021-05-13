@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -44,6 +45,8 @@ public class MyAuthenticationFailureHandler
         if (exception instanceof BadCredentialsException) {
             message = message + "-密码错误";
         }
+        // 移除context
+        SecurityContextHolder.clearContext();
 
         log.info("【登录】失败！[{}]", message);
         log.info("【登录】失败-详细信息：{}",

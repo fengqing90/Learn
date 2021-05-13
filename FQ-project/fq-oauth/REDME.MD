@@ -126,3 +126,5 @@ springsecruity基本原理
 - 头部：规范信息，编码格式
 - 载荷：token，用户名、角色、过期时间
 - 签名：将头部与载荷用base64编码，用“.”相连，加入盐，再用头部编码类型编码，得到签名。
+
+流程：表单登录 -> 加密user信息，生成token，设置并返回token -> JwtVerifyFilter 验证token，保存authentication
