@@ -30,6 +30,22 @@ public class JwtUtils {
      *        载荷中的数据
      * @param privateKey
      *        私钥
+     * @return JWT
+     */
+    public static String generateToken(Object userInfo, PrivateKey privateKey) {
+        return Jwts.builder()
+            .claim(JWT_PAYLOAD_USER_KEY, JsonUtils.toString(userInfo))
+            .setId(createJTI()).signWith(privateKey, SignatureAlgorithm.RS256)
+            .compact();
+    }
+
+    /**
+     * 私钥加密token
+     *
+     * @param userInfo
+     *        载荷中的数据
+     * @param privateKey
+     *        私钥
      * @param expire
      *        过期时间，单位分钟
      * @return JWT
@@ -75,7 +91,6 @@ public class JwtUtils {
     private static Jws<Claims> parserToken(String token, PublicKey publicKey) {
         return Jwts.parserBuilder().setSigningKey(publicKey).build()
             .parseClaimsJws(token);
-        // return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(token);
     }
 
     private static String createJTI() {
@@ -94,8 +109,10 @@ public class JwtUtils {
      */
     public static <T> Payload<T> getInfoFromToken(String token,
             PublicKey publicKey, Class<T> userType) {
+
         Jws<Claims> claimsJws = parserToken(token, publicKey);
         Claims body = claimsJws.getBody();
+
         Payload<T> claims = new Payload<>();
         claims.setId(body.getId());
         claims.setUserInfo(JsonUtils

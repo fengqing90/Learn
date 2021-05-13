@@ -1,6 +1,7 @@
 package cn.fq.common.utils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +69,15 @@ public class JsonUtils {
         }
     }
 
+    public static <T> T toBean(InputStream inputStream, Class<T> tClass) {
+        try {
+            return mapper.readValue(inputStream, tClass);
+        } catch (IOException e) {
+            log.error("json解析出错：" + inputStream, e);
+            return null;
+        }
+    }
+
     /**
      * 解析list的json数据
      */
@@ -106,4 +116,5 @@ public class JsonUtils {
             return null;
         }
     }
+
 }
