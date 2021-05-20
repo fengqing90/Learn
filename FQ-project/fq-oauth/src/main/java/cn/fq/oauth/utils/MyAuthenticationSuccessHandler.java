@@ -80,6 +80,6 @@ public class MyAuthenticationSuccessHandler
         resultUser.setRoles((List<SysRole>) authentication.getAuthorities());
 
         return "Bearer " + JwtUtils.generateTokenExpireInMinutes(resultUser,
-            this.prop.getPrivateKey(), 1);
+            this.prop.getPrivateKey(), 300);
     }
 }

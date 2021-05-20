@@ -47,9 +47,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests().antMatchers("/product/list").hasAnyRole("USER")
             //其他的需要授权后访问
             .antMatchers("/error").permitAll().anyRequest().authenticated()
-            .and()
             //增加自定义验证认证过滤器
-            .addFilter(new JwtVerifyFilter(authenticationManager(), this.prop))
+            .and()
+            .addFilter(
+                new JwtVerifyFilter(this.authenticationManager(), this.prop))
             // 前后端分离是无状态的，不用session了，直接禁用。
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -60,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //UserDetailsService类
         auth.userDetailsService(this.userDetailsServiceImpl)
             //加密策略
-            .passwordEncoder(passwordEncoder());
+            .passwordEncoder(this.passwordEncoder());
     }
 
 }

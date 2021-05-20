@@ -3,16 +3,20 @@ server:
   servlet:
     context-path: /fq-oauth
 
-
 spring:
   datasource:
     username: root
     password: sdfjo29@2
-    url: jdbc:mysql://10.255.33.35:3321/fengqing
+    url: jdbc:mysql://10.255.33.35:3321/oauth2?userSSL=true&useUnicode=true&characterEncoding=UTF8&serverTimezone=Asia/Shanghai
+  main:
+    allow-bean-definition-overriding: true  #这个表示允许我们覆盖OAuth2放在容器中的bean对象，一定要配置
+
+
 logging:
   level:
     root: INFO
     org.springframework.web: debug
+    org.springframework.jdbc: debug
     org.springframework.security: trace
     org.springframework.boot.autoconfigure: info
   pattern:

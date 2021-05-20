@@ -13,6 +13,7 @@ import cn.fq.common.bean.entity.SysRole;
  * @author fengqing
  * @date 2021/5/8 16:57
  */
+// @Repository
 @Mapper
 public interface SysRoleMapper {
 

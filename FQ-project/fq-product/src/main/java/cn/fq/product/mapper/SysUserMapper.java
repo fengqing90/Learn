@@ -9,6 +9,7 @@ import cn.fq.common.bean.entity.SysUser;
  * @author fengqing
  * @date 2021/5/8 17:13
  */
+// @Repository
 @Mapper
 public interface SysUserMapper {
 

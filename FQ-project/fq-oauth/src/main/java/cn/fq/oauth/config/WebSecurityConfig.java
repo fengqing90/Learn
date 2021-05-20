@@ -2,18 +2,24 @@ package cn.fq.oauth.config;
 
 import javax.annotation.Resource;
 import javax.servlet.Filter;
+import javax.sql.DataSource;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import cn.fq.common.utils.RsaKeyProperties;
@@ -26,31 +32,57 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableConfigurationProperties(RsaKeyProperties.class)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Resource
     private AuthenticationFailureHandler myFailHandler;
     @Resource
     private AuthenticationSuccessHandler mySuccessHandler;
-
     @Resource
     private UserDetailsService userDetailsServiceImpl;
-    @Resource
-    private PersistentTokenRepository persistentTokenRepository;
-    @Resource
-    private PasswordEncoder passwordEncoder;
+    // @Resource
+    // private PersistentTokenRepository persistentTokenRepository;
+    // @Resource
+    // private PasswordEncoder passwordEncoder;
     @Resource
     private Filter validateCodeFilter;
-
     @Resource
     private RsaKeyProperties prop;
+    @Resource
+    private DataSource dataSource;
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    /**
+     * 配置TokenRepository
+     */
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        // jdbcTokenRepository.setCreateTableOnStartup(true);
+        jdbcTokenRepository.setDataSource(this.dataSource);
+        return jdbcTokenRepository;
+
+        // return new InMemoryTokenRepositoryImpl();
+    }
+
+    /** TODO “AuthenticationManager对象在OAuth2认证服务中要使用，提取放入IOC容器中” why？？？ **/
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
 
         auth.userDetailsService(this.userDetailsServiceImpl)
-            .passwordEncoder(this.passwordEncoder);
+            .passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -78,8 +110,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .permitAll()
 //////
             .and().rememberMe()                     // 开启记住我功能
-            .tokenRepository(this.persistentTokenRepository)
-            .tokenValiditySeconds(60)               // token有效时间
+            .tokenRepository(persistentTokenRepository())
+            .tokenValiditySeconds(18000)               // token有效时间
 //////
             .and()                                          //  添加自定义权限验证
             // .addFilter(new JwtLoginFilter(authenticationManager()))                            //  1.添加jwt方式认证，由于自己new出来的，类里面属性是默认，导致这方法里面的配置都会失效
@@ -92,7 +124,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/login.html", "/403.html", "/failure.html",
                 "/favicon.ico")
             .permitAll()                            // 匹配 login.html 不需要认证
-            .antMatchers("/ping", "/code/image", "/error").permitAll()    // 匹配/auth/*  不需要认证
+            .antMatchers("/ping", "/code/image", "/error", "/oauth/authorize")
+            .permitAll()    // 匹配/auth/*  不需要认证
             .antMatchers("/**").hasAnyRole("USER")                // 所有匹配都需要ADMIN权限
             .anyRequest().authenticated()           // 其他需要认证
 
