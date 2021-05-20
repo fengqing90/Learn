@@ -1,10 +1,11 @@
 package com.example.jpa.services;
 
-import com.example.jpa.model.AccountUser;
-import com.example.jpa.model.UserType;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.example.jpa.model.AccountUser;
+import com.example.jpa.model.UserType;
 
 /**
  * KEP-TODO
@@ -15,11 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class AccountUserServiceImpl extends AbstractBaseService<AccountUser, Long> implements IAccountUserService {
-
+public class AccountUserServiceImpl extends
+        AbstractBaseService<AccountUser, Long> implements IAccountUserService {
 
     public AccountUser testFindOne(Long id) {
-        return this.baseRepository.findOne(id);
+        return this.baseRepository.getOne(id);
     }
 
     public AccountUser testFindOne4Example(Long id) {
@@ -29,8 +30,7 @@ public class AccountUserServiceImpl extends AbstractBaseService<AccountUser, Lon
         accountUser.setId(id);
 
         Example<AccountUser> example = Example.of(accountUser);
-        return this.baseRepository.findOne(example);
+        return this.baseRepository.findOne(example).get();
     }
 
-    
 }

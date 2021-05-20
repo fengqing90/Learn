@@ -4,22 +4,24 @@
  */
 package com.example.jpa.services;
 
-import com.example.jpa.model.BaseModel;
-import com.example.jpa.repository.BaseRepository;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.Assert;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
+import com.example.jpa.model.BaseModel;
+import com.example.jpa.repository.BaseRepository;
 
 /**
  * @ClassName AbstractBaseService
  * @Author FengQing
  * @Date 2019/6/28 13:50
  */
-public abstract class AbstractBaseService<T extends BaseModel, ID extends Serializable> implements IBaseService {
+public abstract class AbstractBaseService<T extends BaseModel, ID extends Serializable>
+        implements IBaseService {
 
     @Autowired
     protected BaseRepository<T> baseRepository;
@@ -48,12 +50,12 @@ public abstract class AbstractBaseService<T extends BaseModel, ID extends Serial
 
     protected List<T> update(List<T> entities) {
         Assert.notNull(entities, "对象");
-        return this.baseRepository.save(entities);
+        return this.baseRepository.saveAll(entities);
     }
 
     public T get(Long id) {
         Assert.notNull(id, "主键");
-        return this.baseRepository.findOne(id);
+        return this.baseRepository.getOne(id);
     }
 
     public T load(Long id) {
