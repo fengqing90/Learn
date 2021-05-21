@@ -26,6 +26,50 @@ public class 哈希表 extends LeetCode {
     }
 
     /**
+     * 205. 同构字符串
+     * https://leetcode-cn.com/problems/isomorphic-strings/
+     */
+    final static class 同构字符串 extends 哈希表 {
+
+        public static void main(String[] args) {
+
+            同构字符串 同构字符串 = new 同构字符串();
+
+            System.out.println(同构字符串.isIsomorphic("abb", "cee"));
+            System.out.println(同构字符串.isIsomorphic2("abb", "cee"));
+        }
+
+        public boolean isIsomorphic2(String s, String t) {
+            if (s.length() == 0)
+                return true;
+            HashMap<Character, Character> map = new HashMap<>();
+            for (int i = 0; i < s.length(); i++) {
+                char sc = s.charAt(i);
+                char tc = t.charAt(i);
+
+                if (map.containsKey(sc)) {
+                    if (map.get(sc) != tc)
+                        return false;
+                } else {
+                    if (map.containsValue(tc))
+                        return false;
+                    map.put(sc, tc);
+                }
+            }
+            return true;
+        }
+
+        public boolean isIsomorphic(String s, String t) {
+            for (int i = 0; i < s.length(); i++) {
+                if (s.indexOf(s.charAt(i)) != t.indexOf(t.charAt(i))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    /**
      * 290. 单词规律
      * 
      * <pre>
