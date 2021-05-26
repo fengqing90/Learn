@@ -1,9 +1,7 @@
 package cn.fq.product.config;
 
 import javax.annotation.Resource;
-import javax.sql.DataSource;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,8 +9,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 
 import cn.fq.product.utils.MyOAuth2AuthenticationProcessingFilter;
@@ -28,37 +24,6 @@ import cn.fq.product.utils.MyOAuth2AuthenticationProcessingFilter;
 public class OauthResourceConfig extends ResourceServerConfigurerAdapter {
     @Resource
     private TokenStore tokenStore;
-
-    /**
-     * 【标记-1】盐
-     */
-    private final String SIGNING_KEY = "salt";
-
-    /**
-     * 【标记-1】
-     * 指定token的持久化策略
-     * 其下有
-     * <li>RedisTokenStore保存到redis</li>
-     * <li>JdbcTokenStore保存到数据库</li>
-     * <li>InMemoryTokenStore保存到内存中等实现类</li>
-     * 这里我们选择保存在数据库中
-     */
-    @Bean
-    public TokenStore tokenStore(DataSource oauth2DataSource) {
-
-        // return new JdbcTokenStore(oauth2DataSource);
-        return new JwtTokenStore(this.accessTokenConverter());
-    }
-
-    /**
-     * 【标记-1】 获取token后的转换
-     */
-    @Bean
-    public JwtAccessTokenConverter accessTokenConverter() {
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setSigningKey(this.SIGNING_KEY);  //对称秘钥，资源服务器使用该秘钥来验证
-        return converter;
-    }
 
     /**
      * 【主标记-1】资源服务令牌解析服务,如果配置了远程获取token 就无需配TokenStore

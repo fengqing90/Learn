@@ -13,6 +13,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import cn.fq.common.utils.RsaKeyProperties;
 import cn.fq.product.utils.JwtVerifyFilter;
@@ -44,7 +47,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             //关闭跨站请求防护
             .cors().and().csrf().disable()
             //允许不登陆就可以访问的方法，多个用逗号分隔
-            .authorizeRequests().antMatchers("/product/list").hasAnyRole("USER")
+            .authorizeRequests() //
+            .antMatchers("/**").hasAnyRole("USER")
             //其他的需要授权后访问
             .antMatchers("/error").permitAll().anyRequest().authenticated()
             //增加自定义验证认证过滤器
@@ -64,4 +68,34 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .passwordEncoder(this.passwordEncoder());
     }
 
+    /**
+     * 【标记-1】
+     * 指定token的持久化策略
+     * 其下有
+     * <li>RedisTokenStore保存到redis</li>
+     * <li>JdbcTokenStore保存到数据库</li>
+     * <li>InMemoryTokenStore保存到内存中等实现类</li>
+     * 这里我们选择保存在数据库中
+     */
+    @Bean
+    public TokenStore tokenStore() {
+
+        // return new JdbcTokenStore(oauth2DataSource);
+        return new JwtTokenStore(this.accessTokenConverter());
+    }
+
+    /**
+     * 【标记-1】盐
+     */
+    private final String SIGNING_KEY = "salt";
+
+    /**
+     * 【标记-1】 获取token后的转换
+     */
+    @Bean
+    public JwtAccessTokenConverter accessTokenConverter() {
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        converter.setSigningKey(this.SIGNING_KEY);  //对称秘钥，资源服务器使用该秘钥来验证
+        return converter;
+    }
 }
