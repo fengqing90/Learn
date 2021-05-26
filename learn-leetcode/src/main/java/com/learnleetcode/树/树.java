@@ -465,7 +465,12 @@ public class 树 extends LeetCode {
     /**
      * 226. 翻转二叉树
      **/
-    static class 翻转二叉树 {
+    static class 翻转二叉树 extends 树 {
+
+        public static void main(String[] args) {
+            翻转二叉树 翻转二叉树 = new 翻转二叉树();
+            System.out.println(翻转二叉树.invertTree(getTreeNode()));
+        }
 
         public static TreeNode getTreeNode() {
             return new TreeNode(4,
@@ -473,7 +478,7 @@ public class 树 extends LeetCode {
                 new TreeNode(7, new TreeNode(6), new TreeNode(9)));
         }
 
-        public static TreeNode invertTree(TreeNode root) {
+        public TreeNode invertTree(TreeNode root) {
 
             if (root == null) {
                 return null;

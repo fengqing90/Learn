@@ -61,6 +61,30 @@ public class 链表 extends LeetCode {
     }
 
     /**
+     * 206. 反转链表
+     * https://leetcode-cn.com/problems/reverse-linked-list/
+     **/
+    final static class 反转链表 extends 链表 {
+
+        public static void main(String[] args) {
+
+            反转链表 反转链表 = new 反转链表();
+
+            System.out.println(反转链表.reverseList(new ListNode(1, new ListNode(2,
+                new ListNode(3, new ListNode(4, new ListNode(5)))))));
+        }
+
+        /** 将值调换位置 **/
+        public ListNode reverseList(ListNode head) {
+            ListNode ans = null;
+            for (ListNode x = head; x != null; x = x.next) {
+                ans = new ListNode(x.val, ans);
+            }
+            return ans;
+        }
+    }
+
+    /**
      * 203. 移除链表元素
      */
     final static class 移除链表元素 extends 链表 {

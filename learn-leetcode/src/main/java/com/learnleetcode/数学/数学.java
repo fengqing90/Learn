@@ -21,6 +21,27 @@ class 数学 extends LeetCode {
     }
 
     /**
+     * 231. 二的幂
+     * https://leetcode-cn.com/problems/power-of-two/
+     */
+    final static class 二的幂 extends 数学 {
+
+        public static void main(String[] args) {
+
+            二的幂 二的幂 = new 二的幂();
+            System.out.println(二的幂.isPowerOfTwo(2));
+        }
+
+        public boolean isPowerOfTwo(int n) {
+            if (n <= 0) {
+                return false;
+            }
+
+            return (n & (n - 1)) == 0;
+        }
+    }
+
+    /**
      * 633. 平方数之和
      * https://leetcode-cn.com/problems/sum-of-square-numbers/
      */
