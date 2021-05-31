@@ -1,6 +1,8 @@
 package com.learnleetcode.链表;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import com.learnleetcode.LeetCode;
@@ -58,6 +60,59 @@ public class 链表 extends LeetCode {
         合并两个有序链表.run();
         移除链表元素.run();
 
+    }
+
+    /**
+     * 242. 有效的字母异位词
+     * https://leetcode-cn.com/problems/valid-anagram/
+     */
+    final static class 有效的字母异位词 extends 链表 {
+
+        public static void main(String[] args) {
+
+            有效的字母异位词 有效的字母异位词 = new 有效的字母异位词();
+            System.out.println(有效的字母异位词.isAnagram("anagram", "nagaram"));
+        }
+
+        public boolean isAnagram(String s, String t) {
+            if (s.length() != t.length()) {
+                return false;
+            }
+            Map<Character, Integer> table = new HashMap<Character, Integer>();
+            for (int i = 0; i < s.length(); i++) {
+                char ch = s.charAt(i);
+                table.put(ch, table.getOrDefault(ch, 0) + 1);
+            }
+            for (int i = 0; i < t.length(); i++) {
+                char ch = t.charAt(i);
+                table.put(ch, table.getOrDefault(ch, 0) - 1);
+                if (table.get(ch) < 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    /**
+     * 237. 删除链表中的节点
+     * https://leetcode-cn.com/problems/delete-node-in-a-linked-list/
+     */
+    final static class 删除链表中的节点 extends 链表 {
+
+        public static void main(String[] args) {
+
+            删除链表中的节点 删除链表中的节点 = new 删除链表中的节点();
+            ListNode node = new ListNode(1, new ListNode(2,
+                new ListNode(3, new ListNode(4, new ListNode(5)))));
+            删除链表中的节点.deleteNode(node.next.next);
+            System.out.println(node);
+        }
+
+        public void deleteNode(ListNode node) {
+            node.val = node.next.val;
+            node.next = node.next.next;
+        }
     }
 
     /**
