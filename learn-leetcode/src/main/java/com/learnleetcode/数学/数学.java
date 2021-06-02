@@ -1,6 +1,8 @@
 package com.learnleetcode.数学;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.learnleetcode.LeetCode;
 
@@ -18,6 +20,103 @@ class 数学 extends LeetCode {
         Excel表列序号.run();
         阶乘后的零.run();
         快乐数.run();
+    }
+
+    /**
+     * 268. 丢失的数字
+     * https://leetcode-cn.com/problems/missing-number/
+     */
+    final static class 丢失的数字 extends 数学 {
+
+        public static void main(String[] args) {
+
+            数学.丢失的数字 丢失的数字 = new 数学.丢失的数字();
+
+            System.out.println(丢失的数字.missingNumber(new int[] { 3, 0, 1 }));
+
+        }
+
+        public int missingNumber(int[] nums) {
+            Set<Integer> numSet = new HashSet<Integer>();
+            for (int num : nums)
+                numSet.add(num);
+
+            int expectedNumCount = nums.length + 1;
+            for (int number = 0; number < expectedNumCount; number++) {
+                if (!numSet.contains(number)) {
+                    return number;
+                }
+            }
+            return -1;
+        }
+
+        public int missingNumber2(int[] nums) {
+            int missing = nums.length;
+            for (int i = 0; i < nums.length; i++) {
+                System.out.println("i ^ nums[i];i=" + i + ",nums[i]=" + nums[i]
+                    + " | " + (i ^ nums[i]));
+                missing ^= i ^ nums[i];
+                System.out.println("missing =" + missing);
+            }
+            return missing;
+        }
+    }
+
+    /**
+     * 263. 丑数
+     * https://leetcode-cn.com/problems/ugly-number/
+     */
+    final static class 丑数 extends 数学 {
+
+        public static void main(String[] args) {
+
+            数学.丑数 丑数 = new 数学.丑数();
+
+            System.out.println(丑数.isUgly(38));
+        }
+
+        public boolean isUgly(int n) {
+
+            if (n <= 0)
+                return false;
+            while (n % 2 == 0)
+                n /= 2;
+            while (n % 3 == 0)
+                n /= 3;
+            while (n % 5 == 0)
+                n /= 5;
+            return n == 1;
+
+        }
+    }
+
+    /**
+     * 258. 各位相加
+     * https://leetcode-cn.com/problems/add-digits/
+     */
+    final static class 各位相加 extends 数学 {
+
+        public static void main(String[] args) {
+
+            各位相加 各位相加 = new 各位相加();
+
+            System.out.println(各位相加.addDigits(38));
+        }
+
+        /**
+         * 能够被9整除的整数，各位上的数字加起来也必然能被9整除，所以，连续累加起来，最终必然就是9。<br>
+         * 不能被9整除的整数，各位上的数字加起来，结果对9取模，和初始数对9取摸，是一样的，所以，连续累加起来，最终必然就是初始数对9取摸。
+         */
+        public int addDigits(int num) {
+            // if (0 == num % 9) {
+            //     return 9;
+            // }
+            // return num % 9;
+            // 上面的两句综合一下，就是楼主说的这一句：
+            // return (num - 1) % 9 + 1;
+
+            return (num - 1) % 9 + 1;
+        }
     }
 
     /**

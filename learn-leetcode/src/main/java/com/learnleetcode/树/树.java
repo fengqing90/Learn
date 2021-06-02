@@ -353,19 +353,27 @@ public class 树 extends LeetCode {
     /**
      * 257. 二叉树的所有路径
      **/
-    static class 二叉树的所有路径 {
-        public static TreeNode getTreeNode() {
+    static class 二叉树的所有路径 extends 树 {
+        public static void main(String[] args) {
+
+            二叉树的所有路径 二叉树的所有路径 = new 二叉树的所有路径();
+
+            System.out
+                .println(二叉树的所有路径.binaryTreePaths(二叉树的所有路径.getTreeNode()));
+        }
+
+        public TreeNode getTreeNode() {
             return new TreeNode(1, new TreeNode(2, null, new TreeNode(5)),
                 new TreeNode(3));
         }
 
-        public static List<String> binaryTreePaths(TreeNode root) {
+        public List<String> binaryTreePaths(TreeNode root) {
             List<String> paths = new ArrayList<String>();
             constructPaths(root, "", paths);
             return paths;
         }
 
-        public static void constructPaths(TreeNode root, String path,
+        public void constructPaths(TreeNode root, String path,
                 List<String> paths) {
             if (root != null) {
                 StringBuffer pathSB = new StringBuffer(path);
