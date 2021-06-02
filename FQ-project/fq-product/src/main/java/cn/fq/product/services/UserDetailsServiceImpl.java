@@ -9,7 +9,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import cn.fq.common.annotation.DataSource;
 import cn.fq.common.bean.entity.SysUser;
+import cn.fq.common.enums.DataSourceType;
 import cn.fq.product.mapper.SysRoleMapper;
 import cn.fq.product.mapper.SysUserMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Resource
     private SysRoleMapper sysRoleMapper;
 
+    @DataSource(DataSourceType.OAUTH2)
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
