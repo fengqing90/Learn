@@ -28,7 +28,65 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class FutureTest {
 
     public static void main(String[] args) throws Exception {
-        otherStaticMethod();
+        while (true) {
+            otherStaticMethod();
+            TimeUnit.SECONDS.sleep(1);
+            System.out.println("****************************************");
+        }
+    }
+
+    public static void otherStaticMethod() throws Exception {
+        System.out.println(new Date());
+        Set<String> data = new HashSet<>();
+        final CompletableFuture<String> futureOne = CompletableFuture
+            .supplyAsync(() -> {
+                try {
+                    Thread.sleep(2000);
+                    System.out.println(new Date() + " "
+                        + Thread.currentThread().getName() + "：futureOne");
+                } catch (Exception e) {
+                    System.out.println("futureOne InterruptedException");
+                }
+                return "futureOneResult";
+            });
+        futureOne.thenAccept(data::add);
+
+        CompletableFuture<String> futureTwo = CompletableFuture
+            .supplyAsync(() -> getString4futureTwo_3(5));
+
+        Delayer.within(futureTwo, 3, TimeUnit.SECONDS)
+            .exceptionally(throwable -> {
+                return null;
+            }).thenAccept(data::add);
+
+        getString4futureTwo_3(4);
+        System.out.println(new Date() + " getString4futureTwo_3");
+
+        CompletableFuture future = CompletableFuture.allOf(futureOne,
+            futureTwo);
+        System.out.println(new Date() + " " + future.get());
+        System.out.println(
+            new Date() + " @" + Thread.currentThread().getName() + "：" + data);
+//        CompletableFuture completableFuture = CompletableFuture.anyOf(futureOne, futureTwo);
+//        System.out.println(completableFuture.get());
+
+    }
+
+    private static String getString4futureTwo_3(long l) {
+        try {
+            TimeUnit.SECONDS.sleep(l);
+            getString4futureTwo_1(1);
+            System.out.println(new Date() + " "
+                + Thread.currentThread().getName() + "：futureTwo");
+        } catch (Exception e) {
+            System.out.println("futureTwo InterruptedException");
+        }
+        return "futureTwoResult";
+    }
+
+    private static void getString4futureTwo_1(int i)
+            throws InterruptedException {
+        TimeUnit.SECONDS.sleep(i);
     }
 
     private static void test1()
@@ -68,52 +126,6 @@ public class FutureTest {
         System.out.println(completableFuture.get());
         System.out.println(future.get());
         executorService.shutdown();
-    }
-
-    public static void otherStaticMethod() throws Exception {
-        System.out.println(new Date());
-
-        Set<String> data = new HashSet<>();
-        final CompletableFuture<String> futureOne = CompletableFuture
-            .supplyAsync(() -> {
-                try {
-                    Thread.sleep(1000);
-                    System.out.println(
-                        Thread.currentThread().getName() + "：futureOne");
-                } catch (Exception e) {
-                    System.out.println("futureOne InterruptedException");
-                }
-                return "futureOneResult";
-            });
-        futureOne.thenAccept(data::add);
-
-        CompletableFuture<String> futureTwo = CompletableFuture
-            .supplyAsync(() -> {
-                try {
-                    Thread.sleep(4000);
-                    System.out.println(
-                        Thread.currentThread().getName() + "：futureTwo");
-                } catch (Exception e) {
-                    System.out.println("futureTwo InterruptedException");
-                }
-                return "futureTwoResult";
-            });
-
-        Delayer.within(futureTwo, 3, TimeUnit.SECONDS)
-            .exceptionally(throwable -> {
-                return null;
-            }).thenAccept(data::add);
-
-        // futureTwo.exceptionally(e -> null).thenAccept(data::add);
-        CompletableFuture future = CompletableFuture.allOf(futureOne,
-            futureTwo);
-        // System.out.println(future.get());
-        System.out.println(future.get());
-        System.out.println("@" + Thread.currentThread().getName() + "：" + data);
-        System.out.println(new Date());
-//        CompletableFuture completableFuture = CompletableFuture.anyOf(futureOne, futureTwo);
-//        System.out.println(completableFuture.get());
-
     }
 
     ExecutorService es = Executors.newFixedThreadPool(4);
