@@ -13,7 +13,6 @@ import com.learnleetcode.LeetCode;
 /**
  * 数组
  *
- * @author fengqing
  * @date 2020/10/19 10:02
  */
 class 数组 extends LeetCode {
@@ -31,6 +30,36 @@ class 数组 extends LeetCode {
         数组形式的整数加法.run();
         子数组最大平均数I.run();
 
+    }
+
+    /**
+     * 283. 移动零
+     * https://leetcode-cn.com/problems/contains-duplicate/
+     */
+    final static class 移动零 extends 数组 {
+
+        public static void main(String[] args) {
+            System.out.println(Runtime.getRuntime().availableProcessors()//获取逻辑核心数，如6核心12线程，那么返回的是12
+            );
+            移动零 移动零 = new 移动零();
+
+            int[] nums = { 1, 1, 1, 3, 3, 4, 3, 2, 4, 2 };
+            移动零.moveZeroes(nums);
+            System.out.println(ArrayUtils.toString(nums));
+
+        }
+
+        public void moveZeroes(int[] nums) {
+            int index = 0;
+            for (int num : nums) {
+                if (num != 0) {
+                    nums[index++] = num;
+                }
+            }
+            for (int i = index; i < nums.length; i++) {
+                nums[i] = 0;
+            }
+        }
     }
 
     /**

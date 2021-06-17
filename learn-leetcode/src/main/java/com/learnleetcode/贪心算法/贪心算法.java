@@ -18,9 +18,9 @@ import com.learnleetcode.LeetCode;
  */
 public class 贪心算法 extends LeetCode {
     public static void main(String[] args) {
-        根据身高重建队列.run();
-
-        单调递增的数字.run();
+        // 根据身高重建队列.run();
+        //
+        // 单调递增的数字.run();
     }
 
     /**
