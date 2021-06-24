@@ -2,12 +2,12 @@ package learn.future;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -27,59 +27,102 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 public class FutureTest {
 
+    static ExecutorService exe = Executors
+        .newCachedThreadPool(new Delayer.DaemonThreadFactory());
+
     public static void main(String[] args) throws Exception {
-        while (true) {
-            otherStaticMethod();
-            TimeUnit.SECONDS.sleep(1);
-            System.out.println("****************************************");
-        }
+        Thread s1 = new Thread(() -> {
+            while (true) {
+                // System.out.println("****************************************");
+                try {
+                    otherStaticMethod();
+                    // TimeUnit.SECONDS.sleep(1);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                // System.out.println("****************************************");
+            }
+        }, "S1");
+        s1.start();
+
+        Thread s2 = new Thread(() -> {
+            while (true) {
+                // System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+                try {
+                    otherStaticMethod();
+                    // TimeUnit.SECONDS.sleep(1);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                // System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            }
+        }, "S2");
+        s2.start();
+        //
+        // new Thread(() -> {
+        //     while (true) {
+        //         try {
+        //             otherStaticMethod();
+        //         } catch (Exception e) {
+        //             e.printStackTrace();
+        //         }
+        //     }
+        // }, "S3").start();
+        //
+        // new Thread(() -> {
+        //     while (true) {
+        //         try {
+        //             otherStaticMethod();
+        //         } catch (Exception e) {
+        //             e.printStackTrace();
+        //         }
+        //     }
+        // }, "S4").start();
     }
 
     public static void otherStaticMethod() throws Exception {
-        System.out.println(new Date());
-        Set<String> data = new HashSet<>();
-        final CompletableFuture<String> futureOne = CompletableFuture
+        // System.out.println(new Date());
+        Set<String> data = new CopyOnWriteArraySet<>();
+        CompletableFuture<String> futureOne = CompletableFuture
             .supplyAsync(() -> {
                 try {
-                    Thread.sleep(2000);
-                    System.out.println(new Date() + " "
-                        + Thread.currentThread().getName() + "：futureOne");
+                    // System.out.println("supplyAsync 是否为守护线程 "
+                    //     + Thread.currentThread().isDaemon());
                 } catch (Exception e) {
-                    System.out.println("futureOne InterruptedException");
                 }
                 return "futureOneResult";
             });
-        futureOne.thenAccept(data::add);
+        CompletableFuture<Void> futureOne_1 = futureOne.thenAccept(data::add);
 
         CompletableFuture<String> futureTwo = CompletableFuture
-            .supplyAsync(() -> getString4futureTwo_3(5));
+            .supplyAsync(() -> getString4futureTwo_3(2));
 
-        Delayer.within(futureTwo, 3, TimeUnit.SECONDS)
-            .exceptionally(throwable -> {
+        CompletableFuture<Void> futureTwo_2 = Delayer
+            .within(futureTwo, 3, TimeUnit.SECONDS).exceptionally(throwable -> {
+                System.out.println(Thread.currentThread() + "  ： futureTwo 超时");
                 return null;
             }).thenAccept(data::add);
 
-        getString4futureTwo_3(4);
-        System.out.println(new Date() + " getString4futureTwo_3");
+        // CompletableFuture f = CompletableFuture.allOf(futureOne, futureTwo);
+        CompletableFuture f = CompletableFuture.anyOf(futureOne, futureTwo);
+        Object join = f.join();
+        f.get();
+        System.out.println("@@@@@@@@@@@@" + join);
+        System.out.println("4：" + new Date() + " @ "
+            + Thread.currentThread().getName() + " ：" + data);
 
-        CompletableFuture future = CompletableFuture.allOf(futureOne,
-            futureTwo);
-        System.out.println(new Date() + " " + future.get());
-        System.out.println(
-            new Date() + " @" + Thread.currentThread().getName() + "：" + data);
-//        CompletableFuture completableFuture = CompletableFuture.anyOf(futureOne, futureTwo);
-//        System.out.println(completableFuture.get());
+        if (data.size() == 0) {
+            System.out.println("data is null");
+            System.exit(0);
+        }
 
     }
 
     private static String getString4futureTwo_3(long l) {
         try {
-            TimeUnit.SECONDS.sleep(l);
-            getString4futureTwo_1(1);
-            System.out.println(new Date() + " "
-                + Thread.currentThread().getName() + "：futureTwo");
+            // TimeUnit.SECONDS.sleep(l);
+            // getString4futureTwo_1(1);
         } catch (Exception e) {
-            System.out.println("futureTwo InterruptedException");
         }
         return "futureTwoResult";
     }
@@ -138,29 +181,30 @@ public class FutureTest {
         // CountDownLatch cb = new CyclicBarrier(4, new Runnable() {
         //     @Override
         //     public void run() {
-        //         System.out.println("1111");
+        // System.out.println("1111");
         //     }
         // });
         List<Future<List<Integer>>> result = new ArrayList<>(4);
 
         Callable<List<Integer>> idNo = () -> this.getRelationByIdNo(cb, "IdNo");
 
-        Future<List<Integer>> idNoResult = es.submit(idNo);
+        Future<List<Integer>> idNoResult = this.es.submit(idNo);
         result.add(idNoResult);
 
         Callable<List<Integer>> mobile = () -> this.getRelationByMobile(cb,
             "mobile");
-        Future<List<Integer>> mobileResult = es.submit(mobile);
+        Future<List<Integer>> mobileResult = this.es.submit(mobile);
         result.add(mobileResult);
 
         Callable<List<Integer>> contactMobiles = () -> this
             .getRelationByContactMobiles(cb, new String[] { "contactMobiles" });
-        Future<List<Integer>> contactMobilesResult = es.submit(contactMobiles);
+        Future<List<Integer>> contactMobilesResult = this.es
+            .submit(contactMobiles);
         result.add(contactMobilesResult);
 
         Callable<List<Integer>> companyName = () -> this
             .getRelationByCompanyName(cb, "companyName");
-        Future<List<Integer>> companyNameResult = es.submit(companyName);
+        Future<List<Integer>> companyNameResult = this.es.submit(companyName);
         result.add(companyNameResult);
 
         cb.await(3, TimeUnit.SECONDS);
@@ -188,7 +232,7 @@ public class FutureTest {
         // CountDownLatch cb = new CyclicBarrier(4, new Runnable() {
         //     @Override
         //     public void run() {
-        //         System.out.println("1111");
+        // System.out.println("1111");
         //     }
         // });
 
