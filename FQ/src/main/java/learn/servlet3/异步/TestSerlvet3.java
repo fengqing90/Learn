@@ -1,4 +1,4 @@
-package learn.servlet3;
+package learn.servlet3.异步;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,6 +18,9 @@ import learn.aop.RecordLog;
 import learn.ioc_di.Interface.WeatherService;
 import learn.util.SpringUtil;
 
+/**
+ * https://liayun.blog.csdn.net/article/details/115019809
+ */
 @WebServlet(asyncSupported = true, urlPatterns = "/servlet/Test")
 public class TestSerlvet3 extends HttpServlet {
 
@@ -32,6 +35,7 @@ public class TestSerlvet3 extends HttpServlet {
         resp.setContentType("text/html;charset=UTF-8");
         PrintWriter out = resp.getWriter();
         out.println("进入Servlet的时间:" + new Date() + ".");
+        out.println("主线程开始..." + Thread.currentThread());
         out.print("</br>");
         out.flush();
 

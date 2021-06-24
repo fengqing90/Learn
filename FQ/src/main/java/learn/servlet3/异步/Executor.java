@@ -1,4 +1,4 @@
-package learn.servlet3;
+package learn.servlet3.异步;
 
 import java.io.PrintWriter;
 import java.util.Date;
@@ -23,6 +23,7 @@ public class Executor implements Runnable {
             SysLogService services = (SysLogService) SpringUtil
                 .getBean("SysLogService");
             out.println("业务处理完毕的时间：" + new Date() + ".");
+            out.println("副线程结束..." + Thread.currentThread());
             out.flush();
             this.ctx.complete();
         } catch (Exception e) {
