@@ -14,6 +14,110 @@ import com.learnleetcode.LeetCode;
  * @date 2021/6/10 15:07
  */
 public class Ali extends LeetCode {
+
+    /**
+     * 【ali】55. 跳跃游戏
+     * https://leetcode-cn.com/problems/jump-game/
+     */
+    final static class 跳跃游戏 extends Ali {
+
+        public static void main(String[] args) {
+
+            跳跃游戏 跳跃游戏 = new 跳跃游戏();
+
+            System.out.println(跳跃游戏.canJump(new int[] { 3, 2, 1, 0, 4 }));
+        }
+
+        public boolean canJump(int[] nums) {
+            int maxPosition = 0;
+            int max = 0;
+            int cur = 0;
+            while (cur <= maxPosition && cur < nums.length) {
+                max = Math.max(nums[cur] + cur, max);
+                if (cur == maxPosition) {
+                    maxPosition = max;
+                    max = 0;
+                }
+                cur++;
+            }
+            return cur == nums.length;
+        }
+    }
+
+    /**
+     * 【ali】 45. 跳跃游戏 II
+     * https://leetcode-cn.com/problems/jump-game-ii/
+     */
+    final static class 跳跃游戏II extends Ali {
+
+        public static void main(String[] args) {
+
+            跳跃游戏II 跳跃游戏II = new 跳跃游戏II();
+
+            System.out.println(跳跃游戏II.jump(new int[] { 2, 3, 1, 1, 4 }));
+            System.out.println("****************");
+            System.out.println(跳跃游戏II.jump2(new int[] { 2, 3, 1, 1, 4 }));
+        }
+
+        // 思路是统计当前范围的最大值，基数
+        public int jump(int[] nums) {
+            if (nums == null || nums.length < 2) {
+                return 0;
+            }
+            int max = 0;
+            int maxPosition = 0;
+            int step = 0;
+            for (int i = 0; i < nums.length; i++) {
+                max = Math.max(max, nums[i] + i);
+                if (i == nums.length - 1) {
+                    break;
+                }
+                if (i == maxPosition) {
+                    maxPosition = max;
+                    step++;
+                    max = 0;
+                }
+            }
+            return step;
+        }
+
+        public int jump2(int[] nums) {
+            int position = nums.length - 1;
+            int steps = 0;
+            while (position > 0) {
+                for (int i = 0; i < position; i++) {
+                    // 找到第一个大于数组长度的位置，即最后一步跳到数组最后一步的位置
+                    if (i + nums[i] >= position) {
+                        // 替换最后跳到的位置,
+                        position = i;
+                        // 步数+1
+                        steps++;
+                        // 替换完后,跳出继续找能到到此位置的数
+                        break;
+                    }
+                }
+            }
+            return steps;
+        }
+
+        public int jump3(int[] nums) {
+            int maxPosition = 0;
+            int end = 0;
+            int steps = 0;
+            for (int i = 0; i < nums.length - 1; i++) {
+                // 找最大可跳到的位置
+                maxPosition = Math.max(maxPosition, i + nums[i]);
+
+                // 判读是否已经跳到此位置,如果是跳到此位置,更新下次最大可跳到位置.第一次直接进入
+                if (i == end) {
+                    end = maxPosition;
+                    steps++;
+                }
+            }
+            return steps;
+        }
+    }
+
     /**
      * 【ali】134.加油站
      * https://leetcode-cn.com/problems/gas-station/
