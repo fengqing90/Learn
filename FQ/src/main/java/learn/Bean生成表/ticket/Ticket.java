@@ -1,4 +1,4 @@
-package learn.Bean生成表;
+package learn.Bean生成表.ticket;
 
 import java.util.Date;
 

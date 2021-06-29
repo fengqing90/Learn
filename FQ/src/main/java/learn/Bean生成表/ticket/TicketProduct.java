@@ -1,4 +1,4 @@
-package learn.Bean生成表;
+package learn.Bean生成表.ticket;
 
 import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
 import com.gitee.sunchenbin.mybatis.actable.annotation.IsKey;
