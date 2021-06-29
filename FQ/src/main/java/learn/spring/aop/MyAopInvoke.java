@@ -27,7 +27,7 @@ public class MyAopInvoke implements AopInvoke {
     }
 
     private String getObject() {
-        System.out.println("执行：getObject() ");
+        System.out.println("执行获取值：getObject() ");
         return "Object";
     }
 }
@@ -54,10 +54,10 @@ class BeforeAopInvoke implements AopInvoke {
 class AfterAopInvoke implements AopInvoke {
 
     @Override
-    public Object invoke(AopInvoke myAopInvoke) throws Throwable {
+    public Object invoke(AopInvoke aopInvoke) throws Throwable {
         Object proceed;
         try {
-            proceed = myAopInvoke.proceed();
+            proceed = aopInvoke.proceed();
         } finally {
             System.out.println("AfterAopInvoke...");
         }
