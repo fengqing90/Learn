@@ -47,29 +47,30 @@ public class FanoutTest {
         Queue queue = QueueBuilder.durable("fanout.queue1").build();
 //        this.rabbitAdmin.declareQueue(queue);
         Exchange exchange = ExchangeBuilder.fanoutExchange("fanoutExchange")
-                .durable().build();
+            .durable(true).build();
 
 //        this.rabbitAdmin.declareExchange(exchange);
 
         Binding binding = BindingBuilder.bind(queue).to(exchange).with("")
-                .and(null);
+            .and(null);
 //        this.rabbitAdmin.declareBinding(binding);
         return binding;
     }
 
     @Bean
     public Binding fanoutBinding(Queue queue1, Exchange fanoutExchange) {
-        Binding binding = BindingBuilder.bind(queue1).to(fanoutExchange).with("")
-                .and(null);
+        Binding binding = BindingBuilder.bind(queue1).to(fanoutExchange)
+            .with("").and(null);
         return binding;
     }
 
     @Bean
-    public RabbitAdmin rabbitAdmin(ConnectionFactory producerRabbitConnectionFactory) {
-        RabbitAdmin rabbitAdmin = new RabbitAdmin(producerRabbitConnectionFactory);
+    public RabbitAdmin rabbitAdmin(
+            ConnectionFactory producerRabbitConnectionFactory) {
+        RabbitAdmin rabbitAdmin = new RabbitAdmin(
+            producerRabbitConnectionFactory);
         return rabbitAdmin;
     }
-
 
     @Bean
     public ConnectionFactory producerRabbitConnectionFactory() {
@@ -85,7 +86,8 @@ public class FanoutTest {
         connectionFactory.setChannelCacheSize(100);
 
         //其缓存模式为通道缓存
-        connectionFactory.setCacheMode(CachingConnectionFactory.CacheMode.CHANNEL);
+        connectionFactory
+            .setCacheMode(CachingConnectionFactory.CacheMode.CHANNEL);
         return connectionFactory;
     }
 
@@ -103,10 +105,10 @@ public class FanoutTest {
         connectionFactory.setChannelCacheSize(100);
 
         //其缓存模式为通道缓存
-        connectionFactory.setCacheMode(CachingConnectionFactory.CacheMode.CHANNEL);
+        connectionFactory
+            .setCacheMode(CachingConnectionFactory.CacheMode.CHANNEL);
         return connectionFactory;
     }
-
 
     public static void main(String[] args) {
         SpringApplication.run(FanoutTest.class, args);

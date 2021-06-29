@@ -17,11 +17,8 @@ public class KeplerRabbitListenerContainerFactory
 //    protected static final UcMonitorLogger LOGGER = UcMonitorLoggerFactory
 //        .getUcMonitorLogger(KeplerRabbitListenerContainerFactory.class);
 
-    @Override
     protected void initializeContainer(
             SimpleMessageListenerContainer instance) {
-
-        super.initializeContainer(instance);
 
         Map<String, AccountListennerConfig> mapping = AccountListennerConfig
             .getAllMapping();
@@ -34,8 +31,8 @@ public class KeplerRabbitListenerContainerFactory
                 if (config != null) {
                     instance.setMaxConcurrentConsumers(
                         config.getMaxConcurrentConsumers());
-                    instance
-                    .setConcurrentConsumers(config.getConcurrentConsumers());
+                    instance.setConcurrentConsumers(
+                        config.getConcurrentConsumers());
                 } else {
 //                    LOGGER.
                 }
