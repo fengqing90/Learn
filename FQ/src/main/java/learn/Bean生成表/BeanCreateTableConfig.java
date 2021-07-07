@@ -40,11 +40,13 @@ public class BeanCreateTableConfig {
         protected void initPropertySources() {
             Map<String, Object> source = new HashMap<>();
             source.put("actable.table.auto", "create");
+            // source.put("actable.table.auto", "add");
             source.put("actable.database.type", "mysql");
             source.put("mybatis.mapper-locations",
                 "classpath*:com/gitee/sunchenbin/mybatis/actable/mapping/*/*.xml");
 
-            source.put("actable.model.pack", "learn.Bean生成表.stockflow");
+            // source.put("actable.model.pack", "learn.Bean生成表.stockflow");
+            source.put("actable.model.pack", "learn.Bean生成表.jd");
             source.put("spring.datasource.url",
                 "jdbc:mysql://10.255.33.34:3306/xiaowuxian_platform?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8");
             source.put("spring.datasource.username", "test");
