@@ -13,7 +13,93 @@ import com.learnleetcode.LeetCode;
  * @author fengqing
  * @date 2021/6/10 15:07
  */
+
 public class Ali extends LeetCode {
+
+    /**
+     * 121. 买卖股票的最佳时机
+     * https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/
+     */
+    final static class 买卖股票的最佳时机 extends Ali {
+        public static void main(String[] args) {
+
+            买卖股票的最佳时机 买卖股票的最佳时机 = new 买卖股票的最佳时机();
+
+            System.out
+                .println(买卖股票的最佳时机.maxProfit(new int[] { 7, 1, 5, 3, 6, 4 }));
+        }
+
+        int maxProfit(int[] prices) {
+
+            return 0;
+        }
+
+    }
+
+    /**
+     * 91. 解码方法
+     * https://leetcode-cn.com/problems/decode-ways/
+     */
+    final static class 解码方法 extends Ali {
+
+        public static void main(String[] args) {
+
+            解码方法 解码方法 = new 解码方法();
+
+            System.out.println(解码方法.numDecodings("2299"));
+            System.out.println(解码方法.numDecodings2("2299"));
+        }
+
+        // 直接使用动态规划
+        // 如果 最后两个数小于27 ，可以 拆分为两个
+        public int numDecodings2(String s) {
+            int len = s.length();
+            if (len == 0 || s.charAt(0) == '0')
+                return 0;
+            // 转int
+            int[] nums = new int[s.length()];
+            for (int i = 0; i < s.length(); i++) {
+                nums[i] = s.charAt(i) - '0';
+            }
+            System.out.println("nums:" + Arrays.toString(nums));
+            int[] dp = new int[len + 1];
+            dp[0] = 1;
+            dp[1] = 1;
+            for (int i = 2; i <= len; i++) {
+                int x = nums[i - 2] * 10 + nums[i - 1];
+                if (x < 27 && x > 9) {
+                    dp[i] += dp[i - 2];
+                }
+                if (nums[i - 1] != 0) {
+                    dp[i] += dp[i - 1];
+                }
+            }
+            return dp[len];
+        }
+
+        public int numDecodings(String s) {
+            int n = s.length();
+            s = " " + s;
+            char[] cs = s.toCharArray();
+            int[] f = new int[n + 1];
+            f[0] = 1;
+            for (int i = 1; i <= n; i++) {
+                // a : 代表「当前位置」单独形成 item
+                // b : 代表「当前位置」与「前一位置」共同形成 item
+                int a = cs[i] - '0', b = (cs[i - 1] - '0') * 10 + (cs[i] - '0');
+                // 如果 a 属于有效值，那么 f[i] 可以由 f[i - 1] 转移过来
+                if (1 <= a && a <= 9)
+                    f[i] = f[i - 1];
+                // 如果 b 属于有效值，那么 f[i] 可以由 f[i - 2] 或者 f[i - 1] & f[i - 2] 转移过来
+                if (10 <= b && b <= 26)
+                    f[i] += f[i - 2];
+            }
+
+            System.out.println("f:" + Arrays.toString(f));
+            return f[n];
+        }
+
+    }
 
     /**
      * 【ali】55. 跳跃游戏

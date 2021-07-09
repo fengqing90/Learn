@@ -110,7 +110,7 @@ class 数组 extends LeetCode {
                 //取中间值
                 int mid = (l + r) >> 1;
                 //如果mid满足verification，则逼近右指针
-                if (verification(weights, D, mid)) {
+                if (this.verification(weights, D, mid)) {
                     //包括mid
                     r = mid;
                 } else {
@@ -297,21 +297,6 @@ class 数组 extends LeetCode {
                 nums[(i + k) % length] = temp[i];
             }
         }
-    }
-
-    final static class 买卖股票的最佳时机 extends 数组 {
-        static void run() {
-
-            买卖股票的最佳时机 买卖股票的最佳时机 = new 买卖股票的最佳时机();
-
-            System.out.println(买卖股票的最佳时机.maxProfit(null));
-        }
-
-        int maxProfit(int[] prices) {
-
-            return 0;
-        }
-
     }
 
     /***
