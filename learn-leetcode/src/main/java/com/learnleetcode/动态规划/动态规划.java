@@ -30,11 +30,12 @@ public class 动态规划 extends LeetCode {
             乘积最大子数组 乘积最大子数组 = new 乘积最大子数组();
 
             System.out.println(乘积最大子数组.maxProduct(new int[] { 2, 3, -2, 4 }));
+            System.out.println(乘积最大子数组.maxProduct(new int[] { -2, 0, -1 }));
         }
 
         public int maxProduct(int[] nums) {
             // 初始化
-            int mmax = 1, max = 1, min = 1;
+            int mmax = Integer.MIN_VALUE, max = 1, min = 1;
 
             // 转移方程
             for (int i = 0; i < nums.length; i++) {
