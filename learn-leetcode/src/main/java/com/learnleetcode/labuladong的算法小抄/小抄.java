@@ -37,9 +37,85 @@ public class 小抄 extends LeetCode {
         }
     }
 
+    public static void main(String[] args) {
+        System.out.println(Math.sqrt(6));
+        System.out.println((int) Math.sqrt(6));
+        System.out.println((int) Math.sqrt(7));
+        System.out.println((int) Math.sqrt(8));
+        System.out.println((int) Math.sqrt(14));
+    }
+
+    /**
+     * 877. 石子游戏
+     * https://leetcode-cn.com/problems/stone-game/
+     * 如果我们把这四堆石头按索引的奇偶分为两组，即第 1、3 堆和第 2、4
+     * 堆，那么这两组石头的数量一定不同，也就是说一堆多一堆少。因为石头的总数是奇数，不能被平分。
+     * 而作为第一个拿石头的人，你可以控制自己拿到所有偶数堆，或者所有的奇数堆。
+     * 你最开始可以选择第 1 堆或第 4 堆。如果你想要偶数堆，你就拿第 4 堆，这样留给对手的选择只有第 1、3 堆，他不管怎么拿，第 2
+     * 堆又会暴露出来，你就可以拿。同理，如果你想拿奇数堆，你就拿第 1 堆，留给对手的只有第 2、4 堆，他不管怎么拿，第 3 堆又给你暴露出来了。
+     * 也就是说，你可以在第一步就观察好，奇数堆的石头总数多，还是偶数堆的石头总数多，然后步步为营，就一切尽在掌控之中了。
+     */
+    final static class 石子游戏 extends 小抄 {
+
+        public static void main(String[] args) {
+
+            石子游戏 石子游戏 = new 石子游戏();
+
+            System.out.println(石子游戏.stoneGame(null));
+        }
+
+        public boolean stoneGame(int[] piles) {
+            return true;
+        }
+    }
+
+    /**
+     * 292. Nim 游戏
+     * https://leetcode-cn.com/problems/nim-game/
+     */
+    final static class Nim游戏 extends 小抄 {
+
+        public static void main(String[] args) {
+
+            Nim游戏 Nim游戏 = new Nim游戏();
+
+            System.out.println(Nim游戏.canWinNim(5));
+            System.out.println(Nim游戏.canWinNim2(5));
+
+            System.out.println(Nim游戏.canWinNim(17));
+            System.out.println(Nim游戏.canWinNim2(17));
+
+            System.out.println(Nim游戏.canWinNim(1348820612));
+            System.out.println(Nim游戏.canWinNim2(1348820612));
+        }
+
+        public boolean canWinNim(int n) {
+            return n % 4 != 0;
+        }
+
+        public boolean canWinNim2(int n) {
+            if (n < 4) {
+                return true;
+            }
+            if (n == 4) {
+                return false;
+            }
+            boolean[] dp = new boolean[n];
+            dp[0] = true;
+            dp[1] = true;
+            dp[2] = true;
+            for (int i = 3; i < n; i++) {
+                dp[i] = !(dp[i - 1] && dp[i - 2] && dp[i - 3]);
+            }
+
+            return dp[n - 1];
+        }
+    }
+
     /**
      * 322. 零钱兑换
      * https://leetcode-cn.com/problems/coin-change/
+     * 题解:https://leetcode-cn.com/problems/coin-change/solution/javadi-gui-ji-yi-hua-sou-suo-dong-tai-gui-hua-by-s/
      */
     final static class 零钱兑换 extends 小抄 {
 
