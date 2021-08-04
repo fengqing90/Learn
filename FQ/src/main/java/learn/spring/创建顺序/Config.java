@@ -13,6 +13,9 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.http.HttpMessageConvertersAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
@@ -33,6 +36,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Configuration
 @EnableAspectJAutoProxy(exposeProxy = true)
+@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class,
+    HttpMessageConvertersAutoConfiguration.class })
 @Import({ MyImportBeanDefinitionRegistrar.class }) // @Import快速地导入组件，id默认是组件的全类名
 public class Config extends AbstractConfig implements
         // ImportBeanDefinitionRegistrar, 结合@Import使用 优先处理
