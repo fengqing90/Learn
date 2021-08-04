@@ -13,7 +13,7 @@
 			<!--			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %p %l  ||%r| %m%n"/>-->
 			<!-- <PatternLayout pattern="%d{HH:mm:ss.SSS} %p \(%F:%L\)#%M [%t] %msg %n"/>-->
 			<!--			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t]-%r %p \(%F:%L\)#%-30M ||| %m%n"/>-->
-			<PatternLayout pattern="%d{HH:mm:ss.SSS}-%r %5p %-10c{1} [%t] %-50m \(%F:%L\)#%M %n"/>
+			<PatternLayout pattern="%d{HH:mm:ss.SSS}-%r %5p [%-10c{1}] %-50m \(%F:%L\)#%M [%t] %n"/>
 		</Console>
 	</Appenders>
 	<Loggers>

@@ -18,48 +18,41 @@ public class Condition5 implements Runnable {
 
     @Override
     public void run() {
-        if (Thread.currentThread().getName().equals("Thread-0")) {
-            //线程0,执行synchronized method0()
-            method0();
-        } else if (Thread.currentThread().getName().equals("Thread-1")) {
-            //线程1,执行synchronized method1()
-            method1();
-        } else
-            method2();
-    }
-
-    private synchronized void method0() {
-        System.out.println(
-            "线程名：" + Thread.currentThread().getName() + "，synchronized 0，运行开始");
         try {
-            Thread.sleep(4000);
+            if (Thread.currentThread().getName().equals("Thread-0")) {
+                //线程0,执行synchronized method0()
+                method0();
+            } else if (Thread.currentThread().getName().equals("Thread-1")) {
+                //线程1,执行synchronized method1()
+                method1();
+            } else
+                method2();
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private synchronized void method0() throws InterruptedException {
+        System.out.println(
+            "线程名：" + Thread.currentThread().getName() + "，synchronized 0，运行开始");
+        Thread.sleep(4000);
         System.out.println(
             "线程名：" + Thread.currentThread().getName() + "，synchronized 0，运行结束");
     }
 
-    private synchronized void method1() {
+    private synchronized void method1() throws InterruptedException {
         System.out.println(
             "线程名：" + Thread.currentThread().getName() + "，synchronized 1，运行开始");
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(4000);
         System.out.println(
             "线程名：" + Thread.currentThread().getName() + "，synchronized 1，运行结束");
     }
 
-    private synchronized void method2() {
+    private synchronized void method2() throws InterruptedException {
         System.out.println(
             "线程名：" + Thread.currentThread().getName() + "，synchronized 2，运行开始");
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(4000);
         System.out.println(
             "线程名：" + Thread.currentThread().getName() + "，synchronized 2，运行结束");
     }

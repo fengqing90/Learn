@@ -14,10 +14,14 @@ public class ClassForNameTest {
     public void test1() {
         try {
             Class<?> aClass = ClassLoader.getSystemClassLoader()
-                    .loadClass("learn.类加载.ClassForName");
-            // aClass.newInstance();
-            System.out
-                .println("#########-------------结束符------------##########");
+                .loadClass("learn.类加载.ClassForName");
+
+            Class<?> bClass = Class.forName("learn.类加载.ClassForName");
+
+            System.out.println(aClass == bClass);
+
+            System.out.println("#########-------------结束符------------##########"
+                + aClass.newInstance());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -26,10 +30,10 @@ public class ClassForNameTest {
     @Test
     public void test2() {
         try {
-            Class.forName("learn.类加载.ClassForName");
-            System.out
-                .println("#########-------------结束符------------##########");
-        } catch (ClassNotFoundException e) {
+            Class<?> aClass = Class.forName("learn.类加载.ClassForName");
+            System.out.println("#########-------------结束符------------##########"
+                + aClass.newInstance());
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -37,11 +41,11 @@ public class ClassForNameTest {
     @Test
     public void test3() {
         try {
-            this.getClass().getClassLoader()
+            Class<?> aClass = this.getClass().getClassLoader()
                 .loadClass("learn.类加载.ClassForName");
-            System.out
-                .println("#########-------------结束符------------##########");
-        } catch (ClassNotFoundException e) {
+            System.out.println("#########-------------结束符------------##########"
+                + aClass.newInstance());
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
