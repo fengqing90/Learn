@@ -1,4 +1,4 @@
-package learn.queue;
+package learn.队列;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -16,7 +16,7 @@ public class BlockingQueueTest {
 
     private static final int MAX_NUM = 10;
     private static final BlockingQueue<String> QUEUE = new LinkedBlockingQueue<>(
-        MAX_NUM);
+            MAX_NUM);
 
     public void produce(String str) {
         try {
